@@ -55,7 +55,7 @@
     </pl.bclogic.pulsator4droid.library.PulsatorLayout>
 
     <ImageView
-        android:id="@+id/earth"
+        android:id="@+id/earth_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"

@@ -114,7 +114,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/start_game_btn"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginStart="20dp"
@@ -141,10 +141,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button">
+                app:layout_constraintTop_toBottomOf="@+id/start_game_btn">
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/mute_btn"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginEnd="3dp"
@@ -155,7 +155,7 @@
                     app:srcCompat="@drawable/ic_muteon" />
 
                 <ImageButton
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/settings_btn"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
@@ -165,7 +165,7 @@
                     app:srcCompat="@drawable/ic_settings" />
 
                 <ImageButton
-                    android:id="@+id/imageButton3"
+                    android:id="@+id/statistics_btn"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="3dp"

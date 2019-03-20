@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         pulsatorLayout.start();
         startEarthAnimation();
-        startButtonsAnimations();
         startGameBtn.setOnClickListener(startGameOnClick);
     }
 

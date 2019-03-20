@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/activity_gradient"
-    tools:context=".MainActivity">
+    tools:context=".main.MainActivity">
 
     <ImageView
         android:id="@+id/stars_view"
@@ -151,8 +151,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/gray_button_selector"
                     android:padding="10dp"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/ic_muteon" />
+                    android:scaleType="fitCenter" />
 
                 <ImageButton
                     android:id="@+id/settings_btn"

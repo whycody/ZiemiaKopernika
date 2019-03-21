@@ -1,8 +1,9 @@
 package pl.ziemiakopernika.ziemiakopernika.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Answer {
+public class Answer implements Serializable {
 
     private int choosedAnswer;
     private ArrayList<Integer> setOfAnswers;

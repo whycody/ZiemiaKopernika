@@ -15,7 +15,7 @@ public class SetOfQuestions implements Serializable {
     }
 
     public SetOfQuestions(int numOfQuestion, int secondsPerQuestion,
-                          ArrayList<Question> questions) {
+                          ArrayList<Question> questions, ArrayList<Answer> answers) {
         this.numOfQuestion = numOfQuestion;
         this.secondsPerQuestion = secondsPerQuestion;
         this.questions = questions;

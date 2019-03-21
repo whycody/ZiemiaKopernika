@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Question implements Serializable {
 
-    private int typeOfQuestion, imageID;
+    private int typeOfQuestion, imageID = 0;
     private String question, answerOne, answerTwo, answerThree, answerFour;
 
     public Question(){
@@ -15,6 +15,15 @@ public class Question implements Serializable {
                     String answerTwo, String answerThree, String answerFour) {
         this.typeOfQuestion = typeOfQuestion;
         this.imageID = imageID;
+        this.question = question;
+        this.answerOne = answerOne;
+        this.answerTwo = answerTwo;
+        this.answerThree = answerThree;
+        this.answerFour = answerFour;
+    }
+
+    public Question(String question, String answerOne, String answerTwo,
+                    String answerThree, String answerFour) {
         this.question = question;
         this.answerOne = answerOne;
         this.answerTwo = answerTwo;

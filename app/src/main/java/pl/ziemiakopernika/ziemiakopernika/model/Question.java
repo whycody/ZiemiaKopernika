@@ -1,20 +1,20 @@
 package pl.ziemiakopernika.ziemiakopernika.model;
 
-import android.graphics.Bitmap;
+import java.io.Serializable;
 
-public class Question {
+public class Question implements Serializable {
 
-    private int typeOfQuestion, imageDrawable;
+    private int typeOfQuestion, imageID;
     private String question, answerOne, answerTwo, answerThree, answerFour;
 
     public Question(){
 
     }
 
-    public Question(int typeOfQuestion, int imageDrawable, String question, String answerOne,
+    public Question(int typeOfQuestion, int imageID, String question, String answerOne,
                     String answerTwo, String answerThree, String answerFour) {
         this.typeOfQuestion = typeOfQuestion;
-        this.imageDrawable = imageDrawable;
+        this.imageID = imageID;
         this.question = question;
         this.answerOne = answerOne;
         this.answerTwo = answerTwo;
@@ -30,12 +30,12 @@ public class Question {
         this.typeOfQuestion = typeOfQuestion;
     }
 
-    public int getImageDrawable() {
-        return imageDrawable;
+    public int getImageID() {
+        return imageID;
     }
 
-    public void setImageDrawable(int imageDrawable) {
-        this.imageDrawable = imageDrawable;
+    public void setImageID(int imageID) {
+        this.imageID = imageID;
     }
 
     public String getQuestion() {

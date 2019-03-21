@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".RedInfoActivity">
+    tools:context=".redinfo.RedInfoActivity">
 
     <TextView
         android:id="@+id/good_luck_view"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/questions_number_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -62,7 +62,6 @@
             android:foregroundGravity="center"
             android:gravity="end"
             android:paddingEnd="20dp"
-            android:text="10"
             android:textColor="@android:color/white"
             android:textSize="120sp" />
 
@@ -90,7 +89,7 @@
         app:layout_constraintTop_toBottomOf="@+id/questions_layout">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/seconds_number_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -98,7 +97,6 @@
             android:foregroundGravity="center"
             android:gravity="right"
             android:paddingRight="20dp"
-            android:text="20"
             android:textColor="@android:color/white"
             android:textSize="120sp" />
 

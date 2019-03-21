@@ -1,9 +1,7 @@
 package pl.ziemiakopernika.ziemiakopernika.main;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,7 +11,6 @@ import android.widget.ImageView;
 
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 import pl.ziemiakopernika.ziemiakopernika.R;
-import pl.ziemiakopernika.ziemiakopernika.RedInfoActivity;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView{
 

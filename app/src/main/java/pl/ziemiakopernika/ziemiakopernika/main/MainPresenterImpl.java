@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import pl.ziemiakopernika.ziemiakopernika.RedInfoActivity;
+import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
 import pl.ziemiakopernika.ziemiakopernika.model.Answer;
 import pl.ziemiakopernika.ziemiakopernika.model.Question;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;

@@ -23,6 +23,7 @@ public class MainPresenterImpl implements MainPresenter{
     private QuestionsDao questionsDao;
 
     private static String MUTE_ENABLED = "mute_enabled";
+    public static final String QUESTION_SET = "QuestionSet";
     private int secondsPerQuestion = 20;
     private int numberOfQuestions = 5;
 
@@ -46,7 +47,7 @@ public class MainPresenterImpl implements MainPresenter{
     private void startGameActivity() {
         SetOfQuestions setOfQuestions = getSetOfQuestions();
         Intent intent = new Intent(activity, RedInfoActivity.class);
-        intent.putExtra("QuestionSet", setOfQuestions);
+        intent.putExtra(QUESTION_SET, setOfQuestions);
         activity.startActivity(intent);
     }
 

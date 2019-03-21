@@ -11,19 +11,13 @@ public class QuestionsDaoImpl implements QuestionsDao{
     @Override
     public ArrayList<Question> getRandomQustions(int number) {
         ArrayList<Question> questions = new ArrayList<>();
-        questions.add(new Question("Który księżyc jako jedyny w Układzie Słonecznym posiada gęstą atmosferę?",
-                "Tytan", "Księżyc", "Io", "Europa"));
-        questions.add(new Question("Jądro której galaktyki znajduje się najbliżej Układu Słonecznego?",
-                "Karzeł Wielkiego Psa", "Karzeł Strzelca",
-                "Wielki Obłok Magellana", "Droga Mleczna"));
-        questions.add(new Question("Jaką średnicę ma Mars?", "6794 km",
-                "6894 km", "6994 km", "6694 km"));
-        questions.add(new Question("Fobos jest księżycem której planety?",
-                "Marsa", "Uranu", "Saturna", "Jowisza"));
-        questions.add(new Question("Co było pierwszą udaną misją planetarną NASA?",
-                "Zbliżenie się do Wenus", "Zbliżenie się do Słońca",
-                "Zbliżenie się do Plutona", "Zbliżenie się do Marsa"));
-        return questions;
+        questions.add(new Question("Który księżyc jako jedyny w Układzie Słonecznym posiada gęstą atmosferę?", "Tytan", "Księżyc", "Io", "Europa"));
+        questions.add(new Question("Jądro której galaktyki znajduje się najbliżej Układu Słonecznego?", "Karzeł Wielkiego Psa", "Karzeł Strzelca", "Wielki Obłok Magellana", "Droga Mleczna"));
+        questions.add(new Question("Jaką średnicę ma Mars?", "6794 km", "6894 km", "6994 km", "6694 km"));
+        questions.add(new Question("Fobos jest księżycem której planety?", "Marsa", "Uranu", "Saturna", "Jowisza"));
+        questions.add(new Question("Co było pierwszą udaną misją planetarną NASA?", "Zbliżenie się do Wenus", "Zbliżenie się do Słońca", "Zbliżenie się do Plutona", "Zbliżenie się do Marsa"));
+        Collections.reverse(questions);
+        return questions; //TODO retrieve Questions data from Database
     }
 
     @Override

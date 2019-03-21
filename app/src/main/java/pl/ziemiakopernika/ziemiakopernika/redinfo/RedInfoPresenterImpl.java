@@ -5,6 +5,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
+import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 
 public class RedInfoPresenterImpl implements RedInfoPresenter {
@@ -13,7 +14,7 @@ public class RedInfoPresenterImpl implements RedInfoPresenter {
     private RedInfoView redInfoView;
     private SetOfQuestions setOfQuestions;
 
-    public RedInfoPresenterImpl(Activity activity, RedInfoView redInfoView){
+    RedInfoPresenterImpl(Activity activity, RedInfoView redInfoView){
         this.activity = activity;
         this.redInfoView = redInfoView;
         this.setOfQuestions = getSetOfQuestions();
@@ -31,7 +32,7 @@ public class RedInfoPresenterImpl implements RedInfoPresenter {
     }
 
     private SetOfQuestions getSetOfQuestions(){
-        return (SetOfQuestions)activity.getIntent().getSerializableExtra("QuestionSet");
+        return (SetOfQuestions)activity.getIntent().getSerializableExtra(MainPresenterImpl.QUESTION_SET);
     }
 
     @Override

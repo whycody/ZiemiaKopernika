@@ -5,14 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
-import pl.ziemiakopernika.ziemiakopernika.model.Answer;
-import pl.ziemiakopernika.ziemiakopernika.model.Question;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 
 public class MainPresenterImpl implements MainPresenter{

@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".question.QuestionActivity"></activity>
+        <activity
+            android:name=".question.QuestionActivity"
+            android:theme="@style/QuestionTheme" />
         <activity android:name=".redinfo.RedInfoActivity" />
         <activity
             android:name=".SplashActivity"

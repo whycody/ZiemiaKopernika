@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ZeroTypeAnswersFragment"
+    tools:context=".choose.answer.ChooseAnswerFragment"
     android:paddingTop="5dp"
     android:paddingStart="20dp"
     android:paddingEnd="20dp">

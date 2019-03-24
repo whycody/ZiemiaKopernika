@@ -19,6 +19,7 @@ public class SetOfQuestions implements Serializable {
         this.numOfQuestion = numOfQuestion;
         this.secondsPerQuestion = secondsPerQuestion;
         this.questions = questions;
+        this.answers = answers;
     }
 
     public int getNumOfQuestion() {

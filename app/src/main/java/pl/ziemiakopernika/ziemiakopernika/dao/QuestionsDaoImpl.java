@@ -1,6 +1,7 @@
 package pl.ziemiakopernika.ziemiakopernika.dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 import pl.ziemiakopernika.ziemiakopernika.model.Answer;
@@ -16,7 +17,7 @@ public class QuestionsDaoImpl implements QuestionsDao{
         questions.add(new Question("Jaką średnicę ma Mars?", "6794 km", "6894 km", "6994 km", "6694 km"));
         questions.add(new Question("Fobos jest księżycem której planety?", "Marsa", "Uranu", "Saturna", "Jowisza"));
         questions.add(new Question("Co było pierwszą udaną misją planetarną NASA?", "Zbliżenie się do Wenus", "Zbliżenie się do Słońca", "Zbliżenie się do Plutona", "Zbliżenie się do Marsa"));
-        Collections.reverse(questions);
+        Collections.shuffle(questions);
         return questions; //TODO retrieve Questions data from Database
     }
 
@@ -29,7 +30,7 @@ public class QuestionsDaoImpl implements QuestionsDao{
             integers.add(1);
             integers.add(2);
             integers.add(3);
-            Collections.reverse(integers);
+            Collections.shuffle(integers);
             answers.add(new Answer(0, integers));
         }
         return answers;

@@ -1,12 +1,14 @@
 package pl.ziemiakopernika.ziemiakopernika.redinfo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
+import pl.ziemiakopernika.ziemiakopernika.question.QuestionActivity;
 
 public class RedInfoPresenterImpl implements RedInfoPresenter {
 
@@ -28,7 +30,10 @@ public class RedInfoPresenterImpl implements RedInfoPresenter {
 
     @Override
     public void onAnimationEnded() {
-
+        Intent intent = new Intent(activity, QuestionActivity.class);
+        intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
+        activity.startActivity(intent);
+        activity.finish();
     }
 
     private SetOfQuestions getSetOfQuestions(){

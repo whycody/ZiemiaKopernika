@@ -8,5 +8,6 @@
     <color name="colorLightGray">#E7E7E7</color>
     <color name="colorShellDark">#000009</color>
     <color name="colorShell">#000030</color>
+    <color name="colorGreen">#32AC63</color>
     <color name="colorTransparent">#00000000</color>
 </resources>

@@ -3,7 +3,9 @@ package pl.ziemiakopernika.ziemiakopernika.choose.answer;
 import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenter;
 
@@ -14,6 +16,7 @@ public class ChooseAnswerPresenterImpl implements ChooseAnswerPresenter{
     private SetOfQuestions setOfQuestions;
     private QuestionPresenter questionPresenter;
     private int numberOfQuestion, correctAnswer;
+    private boolean answerChoosed;
 
     ChooseAnswerPresenterImpl(Activity activity, ChooseAnswerView chooseAnswerView){
         this.activity = activity;
@@ -25,7 +28,7 @@ public class ChooseAnswerPresenterImpl implements ChooseAnswerPresenter{
 
     @Override
     public void onCreate() {
-        correctAnswer = setOfQuestions.getAnswers().get(numberOfQuestion).getSetOfAnswers().indexOf(0);
+        correctAnswer = setOfQuestions.getAnswers().get(numberOfQuestion).getSetOfAnswers().get(0);
         chooseAnswerView.getButton(setOfQuestions.getAnswers().get(numberOfQuestion).getSetOfAnswers().get(0))
                 .setText(setOfQuestions.getQuestions().get(numberOfQuestion).getAnswerOne());
         chooseAnswerView.getButton(setOfQuestions.getAnswers().get(numberOfQuestion).getSetOfAnswers().get(1))
@@ -38,18 +41,27 @@ public class ChooseAnswerPresenterImpl implements ChooseAnswerPresenter{
 
     @Override
     public void onBtnClicked(View view) {
-        if(chooseAnswerView.getButton(correctAnswer).equals(view)){
-            Button correctBtn = (Button)view;
-            correctBtn.setText("DOBRZE!");
-            questionPresenter.onAnswerChoosed(true);
-            setOfQuestions.getAnswers().get(numberOfQuestion).setChoosedAnswer(correctAnswer);
-        }else{
-            Button wrongBtn = (Button)view;
-            wrongBtn.setText("ŹLE!");
+        if(!answerChoosed) {
+            if (chooseAnswerView.getButton(correctAnswer).equals(view)){
+                questionPresenter.onAnswerChoosed(true);
+                setOfQuestions.getAnswers().get(numberOfQuestion).setChoosedAnswer(correctAnswer);
+            } else {
+                Button wrongBtn = (Button) view;
+                chooseAnswer(wrongBtn, false);
+                questionPresenter.onAnswerChoosed(false);
+            }
             Button correctBtn = chooseAnswerView.getButton(correctAnswer);
-            correctBtn.setText("To powinno byc dobre");
-            questionPresenter.onAnswerChoosed(false);
+            chooseAnswer(correctBtn, true);
+            answerChoosed = true;
         }
+    }
+
+    private void chooseAnswer(Button button, boolean correct){
+        if(correct)
+            button.setBackground(activity.getResources().getDrawable(R.drawable.gray_button_correct_answer));
+        else
+            button.setBackground(activity.getResources().getDrawable(R.drawable.gray_button_wrong_answer));
+        button.setTextColor(activity.getResources().getColor(android.R.color.white));
     }
 
 }

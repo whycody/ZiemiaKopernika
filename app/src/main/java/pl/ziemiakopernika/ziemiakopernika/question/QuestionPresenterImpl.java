@@ -95,7 +95,7 @@ public class QuestionPresenterImpl implements QuestionPresenter{
 
     @Override
     public void onAnswerChoosed(boolean correct) {
-        Toast.makeText(activity, "Czy to prawda, że wybrałeś dobrą odpowiedź? " + correct, Toast.LENGTH_SHORT).show();
+
     }
 
     private void saveNumberOfCoins(int numberOfCoins){

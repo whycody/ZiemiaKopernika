@@ -12,7 +12,7 @@
         <activity
             android:name=".question.QuestionActivity"
             android:theme="@style/QuestionTheme" />
-        <activity android:name=".redinfo.RedInfoActivity" />
+        <activity android:name=".redinfo.RedInfoActivity" android:theme="@style/RedInfoTheme"/>
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">

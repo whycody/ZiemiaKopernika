@@ -2,8 +2,8 @@ package pl.ziemiakopernika.ziemiakopernika.redinfo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +14,9 @@ public class RedInfoActivity extends AppCompatActivity implements Animation.Anim
     private LinearLayout questionsLayout, secondsLayout;
     private TextView goodLuckView, questionsNumberView, secondsNumberView;
     private RedInfoPresenter redInfoPresenter;
+
+    public static final String EXTRA_CIRCULAR_REVEAL_X = "EXTRA_CIRCULAR_REVEAL_X";
+    public static final String EXTRA_CIRCULAR_REVEAL_Y = "EXTRA_CIRCULAR_REVEAL_Y";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,7 @@ public class RedInfoActivity extends AppCompatActivity implements Animation.Anim
         secondsNumberView = findViewById(R.id.seconds_number_view);
 
         redInfoPresenter = new RedInfoPresenterImpl(this, this);
+        redInfoPresenter.startAnimation(findViewById(R.id.red_info_activity), savedInstanceState);
         redInfoPresenter.onCreate();
         startAllAnimations();
     }
@@ -44,13 +48,13 @@ public class RedInfoActivity extends AppCompatActivity implements Animation.Anim
     }
 
     @Override
-    public void setQuestionsNumber(int number) {
-        questionsNumberView.setText(number + "");
+    public void setQuestionsNumber(String number) {
+        questionsNumberView.setText(number);
     }
 
     @Override
-    public void setSecondsNumber(int number) {
-        secondsNumberView.setText(number + "");
+    public void setSecondsNumber(String number) {
+        secondsNumberView.setText(number);
     }
 
     @Override

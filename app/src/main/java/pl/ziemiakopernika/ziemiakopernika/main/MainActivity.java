@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private ImageButton muteBtn, settingsBtn, statisticsBtn;
     private Button startGameBtn;
     private PulsatorLayout pulsatorLayout;
+    private View animationView;
 
     private MainPresenter mainPresenter;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         statisticsBtn = findViewById(R.id.statistics_btn);
         pulsatorLayout = findViewById(R.id.pulsator);
         startGameBtn = findViewById(R.id.start_game_btn);
+        animationView = findViewById(R.id.animation_view);
 
         mainPresenter = new MainPresenterImpl(this, this);
         mainPresenter.onCreate();
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
     private View.OnClickListener startGameOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mainPresenter.startGameClicked();
+            mainPresenter.startGameClicked(animationView);
         }
     };
 

@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.view.View;
 
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
@@ -35,15 +38,27 @@ public class MainPresenterImpl implements MainPresenter{
     }
 
     @Override
-    public void startGameClicked() {
-        startGameActivity();
+    public void startGameClicked(View view) {
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(activity, view, "transition");
+        startGameActivity(view,optionsCompat);
     }
 
-    private void startGameActivity() {
+    private void startGameActivity(View view, ActivityOptionsCompat optionsCompat){
         SetOfQuestions setOfQuestions = getSetOfQuestions();
         Intent intent = new Intent(activity, RedInfoActivity.class);
+        intent.putExtra(RedInfoActivity.EXTRA_CIRCULAR_REVEAL_X, getRevealX(view));
+        intent.putExtra(RedInfoActivity.EXTRA_CIRCULAR_REVEAL_Y, getRevealY(view));
         intent.putExtra(QUESTION_SET, setOfQuestions);
-        activity.startActivity(intent);
+        ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
+    }
+
+    private int getRevealX(View view){
+        return (int) (view.getX() + view.getWidth() / 2);
+    }
+
+    private int getRevealY(View view){
+        return (int) (view.getY() + view.getHeight() / 2);
     }
 
     private SetOfQuestions getSetOfQuestions(){

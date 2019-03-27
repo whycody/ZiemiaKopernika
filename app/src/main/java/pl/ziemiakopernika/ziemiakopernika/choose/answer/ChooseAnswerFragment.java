@@ -71,6 +71,18 @@ public class ChooseAnswerFragment extends Fragment implements ChooseAnswerView{
     }
 
     @Override
+    public int getNumber(View view) {
+        if(view.equals(answerOneBtn))
+            return 0;
+        else if(view.equals(answerTwoBtn))
+            return 1;
+        else if(view.equals(answerThreeBtn))
+            return 2;
+        else
+            return 3;
+    }
+
+    @Override
     public SetOfQuestions getSetOfQuestion() {
         return setOfQuestions;
     }

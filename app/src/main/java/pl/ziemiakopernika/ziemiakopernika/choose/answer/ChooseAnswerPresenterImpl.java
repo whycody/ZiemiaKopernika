@@ -42,14 +42,14 @@ public class ChooseAnswerPresenterImpl implements ChooseAnswerPresenter{
     @Override
     public void onBtnClicked(View view) {
         if(!answerChoosed) {
-            if (chooseAnswerView.getButton(correctAnswer).equals(view)){
+            int choosedAnswer = chooseAnswerView.getNumber(view);
+            if (choosedAnswer == correctAnswer)
                 questionPresenter.onAnswerChoosed(true);
-                setOfQuestions.getAnswers().get(numberOfQuestion).setChoosedAnswer(correctAnswer);
-            } else {
-                Button wrongBtn = (Button) view;
-                chooseAnswer(wrongBtn, false);
+            else {
+                chooseAnswer((Button)view, false);
                 questionPresenter.onAnswerChoosed(false);
             }
+            setOfQuestions.getAnswers().get(numberOfQuestion).setChoosedAnswer(choosedAnswer);
             Button correctBtn = chooseAnswerView.getButton(correctAnswer);
             chooseAnswer(correctBtn, true);
             answerChoosed = true;

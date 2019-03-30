@@ -6,4 +6,7 @@ public interface Timer {
 
     void stopTimer();
 
+    void setFinishMethodIsCallable(boolean callable);
+
+    int getSeconds();
 }

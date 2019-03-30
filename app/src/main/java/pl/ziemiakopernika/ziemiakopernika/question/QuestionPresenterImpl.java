@@ -103,7 +103,17 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
             questionView.setAddSecondsBtnActivated(false);
             numberOfCoins = numberOfCoins - 3;
             saveNumberOfCoins(numberOfCoins);
+            addSecondsAndStartTimer();
         }
+    }
+
+    private void addSecondsAndStartTimer(){
+        int seconds = timer.getSeconds();
+        int time = seconds + 20;
+        timer.setFinishMethodIsCallable(false);
+        timer.stopTimer();
+        Timer newTimer = new TimerImpl(time*1000,this);
+        newTimer.startTimer();
     }
 
     @Override
@@ -130,7 +140,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
 
     @Override
     public void onTick(long l) {
-        questionView.setTimeProgress((int)l, secondsPerQuestion *10);
+        questionView.setTimeProgress((int)l, secondsPerQuestion);
     }
 
     @Override

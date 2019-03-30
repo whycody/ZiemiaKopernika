@@ -22,7 +22,7 @@ public class MainPresenterImpl implements MainPresenter{
 
     private static String MUTE_ENABLED = "mute_enabled";
     public static final String QUESTION_SET = "QuestionSet";
-    private int secondsPerQuestion = 20;
+    private int secondsPerQuestion = 15;
     private int numberOfQuestions = 5;
 
     MainPresenterImpl(Activity activity, MainActivityView activityView){

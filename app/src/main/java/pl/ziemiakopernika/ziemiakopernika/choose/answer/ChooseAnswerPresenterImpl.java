@@ -18,6 +18,8 @@ public class ChooseAnswerPresenterImpl implements ChooseAnswerPresenter{
     private int numberOfQuestion, correctAnswer;
     private boolean answerChoosed;
 
+    static final int NOT_CHOOSED = 4;
+
     ChooseAnswerPresenterImpl(Activity activity, ChooseAnswerView chooseAnswerView){
         this.activity = activity;
         this.chooseAnswerView = chooseAnswerView;
@@ -37,11 +39,12 @@ public class ChooseAnswerPresenterImpl implements ChooseAnswerPresenter{
                 .setText(setOfQuestions.getQuestions().get(numberOfQuestion).getAnswerThree());
         chooseAnswerView.getButton(setOfQuestions.getAnswers().get(numberOfQuestion).getSetOfAnswers().get(3))
                 .setText(setOfQuestions.getQuestions().get(numberOfQuestion).getAnswerFour());
+        questionPresenter.setChooserAnswerPresenter(this);
     }
 
     @Override
     public void onBtnClicked(View view) {
-        if(!answerChoosed) {
+        if(questionPresenter.getAnswersClickable()) {
             int choosedAnswer = chooseAnswerView.getNumber(view);
             if (choosedAnswer == correctAnswer)
                 questionPresenter.onAnswerChoosed(true);
@@ -54,6 +57,12 @@ public class ChooseAnswerPresenterImpl implements ChooseAnswerPresenter{
             chooseAnswer(correctBtn, true);
             answerChoosed = true;
         }
+    }
+
+    @Override
+    public void showCorrectAnswer() {
+        setOfQuestions.getAnswers().get(numberOfQuestion).setChoosedAnswer(NOT_CHOOSED);
+        chooseAnswer(chooseAnswerView.getButton(correctAnswer), true);
     }
 
     private void chooseAnswer(Button button, boolean correct){

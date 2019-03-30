@@ -49,7 +49,7 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
     @Override
     public void setTimeProgress(int progress, int fullTime) {
         progressBarView.setProgress(progress/fullTime);
-        progressTextView.setText(progress + "");
+        progressTextView.setText(progress/1000 + "");
     }
 
     @Override

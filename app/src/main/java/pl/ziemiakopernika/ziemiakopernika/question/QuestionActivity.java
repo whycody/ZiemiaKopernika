@@ -1,15 +1,17 @@
 package pl.ziemiakopernika.ziemiakopernika.question;
 
+import android.content.Intent;
+import android.graphics.drawable.TransitionDrawable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
 
@@ -17,6 +19,7 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
 
     private TextView questionView, coinsNumberView, progressTextView;
     private Button fiftyFiftyBtn, addSecondsBtn;
+    private LinearLayout wheelsContainer;
     private ProgressBar progressBarView;
     private QuestionPresenter questionPresenter;
 
@@ -30,12 +33,19 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
         progressTextView = findViewById(R.id.progress_text_view);
         fiftyFiftyBtn = findViewById(R.id.fifty_fifty_btn);
         addSecondsBtn = findViewById(R.id.add_seconds_btn);
+        wheelsContainer = findViewById(R.id.wheels_container);
         progressBarView = findViewById(R.id.progress_bar_view);
         questionPresenter = new QuestionPresenterImpl(this, this);
 
         fiftyFiftyBtn.setOnClickListener(fifityFiftyBtnClickListener);
         addSecondsBtn.setOnClickListener(addSecondsBtnClickListener);
         questionPresenter.onCreate();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode==RESULT_OK)
+            questionPresenter.showNextQuestion();
     }
 
     @Override
@@ -79,8 +89,27 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
     public void applyFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
+    }
+
+    @Override
+    public void addViewToLinearLayout(View view) {
+        wheelsContainer.addView(view);
+    }
+
+    @Override
+    public void animateCorrectness(int index, boolean correct) {
+        View view = wheelsContainer.getChildAt(index);
+        setViewBackgroundByCorrectness(view, correct);
+        TransitionDrawable transition = (TransitionDrawable)view.getBackground();
+        transition.startTransition(2000);
+    }
+
+    private void setViewBackgroundByCorrectness(View view, boolean correct){
+        if(correct)
+            view.setBackground(getResources().getDrawable(R.drawable.transition_to_green));
+        else
+            view.setBackground(getResources().getDrawable(R.drawable.transition_to_red));
     }
 
     private View.OnClickListener fifityFiftyBtnClickListener = new View.OnClickListener() {

@@ -1,6 +1,7 @@
 package pl.ziemiakopernika.ziemiakopernika.question;
 
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 public interface QuestionView {
 
@@ -16,17 +17,7 @@ public interface QuestionView {
 
     void applyFragment(Fragment fragment);
 
-//    void setAnswerOneText(String answerOne);
-//
-//    void setAnswerTwoText(String answerOne);
-//
-//    void setAnswerThreeText(String answerOne);
-//
-//    void setAnswerFourText(String answerOne);
-//
-//    void setAnswerCorrect(int answerCorrect);
-//
-//    void setAnswerWrong(int answerWrong);
+    void addViewToLinearLayout(View view);
 
-//    void showCorrectnessOfAnswerInCircle(int circle, boolean correct);
+    void animateCorrectness(int index, boolean correct);
 }

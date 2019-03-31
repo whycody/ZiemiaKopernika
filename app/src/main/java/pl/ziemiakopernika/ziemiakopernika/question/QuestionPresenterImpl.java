@@ -2,14 +2,19 @@ package pl.ziemiakopernika.ziemiakopernika.question;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.LinearLayout;
 
+import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerFragment;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerPresenter;
-import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerPresenterImpl;
+import pl.ziemiakopernika.ziemiakopernika.main.MainActivity;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
+import pl.ziemiakopernika.ziemiakopernika.model.Question;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
+import pl.ziemiakopernika.ziemiakopernika.round.RoundActivity;
 import pl.ziemiakopernika.ziemiakopernika.timer.Timer;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerImpl;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerReact;
@@ -55,16 +60,68 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         questionView.setCoinsNumber(numberOfCoins);
         applyFragment();
         setButtonsActivated();
+        addViewsToLinearLayout();
     }
 
-    private void applyFragment(){
-        if(setOfQuestions.getQuestions().get(numberOfQuestion).getTypeOfQuestion() == 0){
-            ChooseAnswerFragment chooseAnswerFragment = new ChooseAnswerFragment();
-            chooseAnswerFragment.setSetOfQuestions(setOfQuestions);
-            chooseAnswerFragment.setNumberOfQuestion(numberOfQuestion);
-            chooseAnswerFragment.setQuestionPresenter(this);
-            questionView.applyFragment(chooseAnswerFragment);
+    private void setButtonsActivatedBooleans(boolean addSecondsBtnActivated, boolean fiftyFiftyBtnActivated){
+        this.addSecondsBtnActivated = addSecondsBtnActivated;
+        this.fiftyFiftyBtnActivated = fiftyFiftyBtnActivated;
+    }
+
+    private void addViewsToLinearLayout(){
+        for(Question question: setOfQuestions.getQuestions()){
+            View view = new View(activity);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(16,16, 0.0f);
+            params.setMargins(10,1,10,0);
+            view.setLayoutParams(params);
+            view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_non_activated));
+            questionView.addViewToLinearLayout(view);
         }
+    }
+
+    @Override
+    public void onFiftyFiftyBtnClicked() {
+        if(fiftyFiftyBtnActivated){
+            disactivateFiftyFiftyBtn();
+            numberOfCoins = numberOfCoins - 5;
+            saveNumberOfCoins(numberOfCoins);
+            questionView.setCoinsNumber(numberOfCoins);
+        }
+    }
+
+    @Override
+    public void onAddSecondsBtnClicked() {
+        if(addSecondsBtnActivated){
+            disactivateAddSecondsBtn();
+            numberOfCoins = numberOfCoins - 3;
+            saveNumberOfCoins(numberOfCoins);
+            startNewTimer(timer.getSeconds()+20);
+            questionView.setCoinsNumber(numberOfCoins);
+        }
+    }
+
+    @Override
+    public void onAnswerChoosed(boolean correct) {
+        timer.stopTimer();
+        disactivateButtons();
+        answersClickable = false;
+        questionView.animateCorrectness(numberOfQuestion, correct);
+        new TimerImpl(2500, newActivityTimerReact).startTimer();
+    }
+
+    @Override
+    public boolean getAnswersClickable() {
+        return answersClickable;
+    }
+
+    @Override
+    public void showNextQuestion() {
+        numberOfQuestion++;
+        answersClickable=true;
+        questionView.setQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getQuestion());
+        setButtonsActivated();
+        applyFragment();
+        startNewTimer(secondsPerQuestion+1);
     }
 
     private void setButtonsActivated(){
@@ -83,53 +140,21 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         }
     }
 
-    private void setButtonsActivatedBooleans(boolean addSecondsBtnActivated, boolean fiftyFiftyBtnActivated){
-        this.addSecondsBtnActivated = addSecondsBtnActivated;
-        this.fiftyFiftyBtnActivated = fiftyFiftyBtnActivated;
-    }
-
-    @Override
-    public void onFiftyFiftyBtnClicked() {
-        if(fiftyFiftyBtnActivated){
-            questionView.setFiftyFiftyBtnActivated(false);
-            numberOfCoins = numberOfCoins - 5;
-            saveNumberOfCoins(numberOfCoins);
-        }
-    }
-
-    @Override
-    public void onAddSecondsBtnClicked() {
-        if(addSecondsBtnActivated){
-            questionView.setAddSecondsBtnActivated(false);
-            numberOfCoins = numberOfCoins - 3;
-            saveNumberOfCoins(numberOfCoins);
-            addSecondsAndStartTimer();
-        }
-    }
-
-    private void addSecondsAndStartTimer(){
-        int seconds = timer.getSeconds();
-        int time = seconds + 20;
+    private void startNewTimer(int time){
         timer.setFinishMethodIsCallable(false);
         timer.stopTimer();
-        Timer newTimer = new TimerImpl(time*1000,this);
-        newTimer.startTimer();
+        timer = new TimerImpl(time*1000,this);
+        timer.startTimer();
     }
 
-    @Override
-    public void onAnswerChoosed(boolean correct) {
-        timer.stopTimer();
-        disactivateButtons();
-    }
-
-    @Override
-    public boolean getAnswersClickable() {
-        return answersClickable;
-    }
-
-    @Override
-    public void setAnswersClickable(boolean clickable) {
-        this.answersClickable = clickable;
+    private void applyFragment(){
+        if(setOfQuestions.getQuestions().get(numberOfQuestion).getTypeOfQuestion() == 0){
+            ChooseAnswerFragment chooseAnswerFragment = new ChooseAnswerFragment();
+            chooseAnswerFragment.setSetOfQuestions(setOfQuestions);
+            chooseAnswerFragment.setNumberOfQuestion(numberOfQuestion);
+            chooseAnswerFragment.setQuestionPresenter(this);
+            questionView.applyFragment(chooseAnswerFragment);
+        }
     }
 
     private void saveNumberOfCoins(int numberOfCoins){
@@ -147,16 +172,49 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     public void onFinish() {
         answersClickable = false;
         disactivateButtons();
+        questionView.animateCorrectness(numberOfQuestion, false);
+        new TimerImpl(2500, newActivityTimerReact).startTimer();
+        showCorrectAnswer();
+    }
+
+    private void showCorrectAnswer(){
         if(setOfQuestions.getQuestions().get(numberOfQuestion).getTypeOfQuestion() == 0 &&
                 chooseAnswerPresenter!=null){
             chooseAnswerPresenter.showCorrectAnswer();
         }
     }
 
+    private TimerReact newActivityTimerReact = new TimerReact() {
+        @Override
+        public void onTick(long l) {
+
+        }
+
+        @Override
+        public void onFinish() {
+            if(numberOfQuestion<setOfQuestions.getQuestions().size()-1)
+                startNewActivity();
+        }
+    };
+
+    private void startNewActivity(){
+        Intent intent = new Intent(activity, RoundActivity.class);
+        intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
+        activity.startActivityForResult(intent, 0);
+    }
+
     private void disactivateButtons(){
+        disactivateAddSecondsBtn();
+        disactivateFiftyFiftyBtn();
+    }
+
+    private void disactivateAddSecondsBtn(){
         addSecondsBtnActivated = false;
-        fiftyFiftyBtnActivated = false;
         questionView.setAddSecondsBtnActivated(false);
+    }
+
+    private void disactivateFiftyFiftyBtn(){
+        fiftyFiftyBtnActivated = false;
         questionView.setFiftyFiftyBtnActivated(false);
     }
 

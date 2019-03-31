@@ -12,5 +12,5 @@ public interface QuestionPresenter extends FragmentInitializer{
 
     boolean getAnswersClickable();
 
-    void setAnswersClickable(boolean clickable);
+    void showNextQuestion();
 }

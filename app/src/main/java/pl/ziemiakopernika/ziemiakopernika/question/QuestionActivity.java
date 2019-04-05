@@ -50,7 +50,8 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
 
     @Override
     public void onBackPressed() {
-        finish();
+       finish();
+       questionPresenter.onBackPressed();
     }
 
     @Override
@@ -89,6 +90,7 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
     public void applyFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
         transaction.commitAllowingStateLoss();
     }
 
@@ -102,7 +104,7 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
         View view = wheelsContainer.getChildAt(index);
         setViewBackgroundByCorrectness(view, correct);
         TransitionDrawable transition = (TransitionDrawable)view.getBackground();
-        transition.startTransition(2000);
+        transition.startTransition(1000);
     }
 
     private void setViewBackgroundByCorrectness(View view, boolean correct){

@@ -4,6 +4,8 @@ public interface QuestionPresenter extends FragmentInitializer{
 
     void onCreate();
 
+    void onBackPressed();
+
     void onFiftyFiftyBtnClicked();
 
     void onAddSecondsBtnClicked();

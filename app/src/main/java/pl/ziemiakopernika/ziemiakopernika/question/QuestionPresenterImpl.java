@@ -25,7 +25,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     private QuestionView questionView;
     private SetOfQuestions setOfQuestions;
     private SharedPreferences sharedPreferences;
-    private Timer timer;
+    private Timer timer, transitionTimer;
 
     private ChooseAnswerPresenter chooseAnswerPresenter;
 
@@ -34,6 +34,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     private boolean answersClickable = true;
 
     private static final String COINS = "coins";
+    public static final String NUMBER_OF_QUESTION = "numberOfQuestion";
 
     QuestionPresenterImpl(Activity activity, QuestionView questionView){
         this.activity = activity;
@@ -61,6 +62,17 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         applyFragment();
         setButtonsActivated();
         addViewsToLinearLayout();
+        startNewActivity();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(transitionTimer!=null) {
+            transitionTimer.setFinishMethodIsCallable(false);
+            transitionTimer.stopTimer();
+        }
+        timer.setFinishMethodIsCallable(false);
+        timer.stopTimer();
     }
 
     private void setButtonsActivatedBooleans(boolean addSecondsBtnActivated, boolean fiftyFiftyBtnActivated){
@@ -106,7 +118,8 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         disactivateButtons();
         answersClickable = false;
         questionView.animateCorrectness(numberOfQuestion, correct);
-        new TimerImpl(2500, newActivityTimerReact).startTimer();
+        transitionTimer = new TimerImpl(1000, newActivityTimerReact);
+        transitionTimer.startTimer();
     }
 
     @Override
@@ -116,7 +129,6 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
 
     @Override
     public void showNextQuestion() {
-        numberOfQuestion++;
         answersClickable=true;
         questionView.setQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getQuestion());
         setButtonsActivated();
@@ -173,7 +185,8 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         answersClickable = false;
         disactivateButtons();
         questionView.animateCorrectness(numberOfQuestion, false);
-        new TimerImpl(2500, newActivityTimerReact).startTimer();
+        transitionTimer = new TimerImpl(1500, newActivityTimerReact);
+        transitionTimer.startTimer();
         showCorrectAnswer();
     }
 
@@ -192,14 +205,17 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
 
         @Override
         public void onFinish() {
-            if(numberOfQuestion<setOfQuestions.getQuestions().size()-1)
+            if(numberOfQuestion<setOfQuestions.getQuestions().size()-1) {
+                numberOfQuestion++;
                 startNewActivity();
+            }
         }
     };
 
     private void startNewActivity(){
         Intent intent = new Intent(activity, RoundActivity.class);
         intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
+        intent.putExtra(NUMBER_OF_QUESTION, numberOfQuestion);
         activity.startActivityForResult(intent, 0);
     }
 

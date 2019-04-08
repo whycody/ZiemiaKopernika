@@ -23,6 +23,8 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
     private ProgressBar progressBarView;
     private QuestionPresenter questionPresenter;
 
+    private boolean activityPaused = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +42,19 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
         fiftyFiftyBtn.setOnClickListener(fifityFiftyBtnClickListener);
         addSecondsBtn.setOnClickListener(addSecondsBtnClickListener);
         questionPresenter.onCreate();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        activityPaused = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activityPaused = false;
+        questionPresenter.onResume();
     }
 
     @Override
@@ -105,6 +120,11 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
         setViewBackgroundByCorrectness(view, correct);
         TransitionDrawable transition = (TransitionDrawable)view.getBackground();
         transition.startTransition(1000);
+    }
+
+    @Override
+    public boolean getActivityPaused() {
+        return activityPaused;
     }
 
     private void setViewBackgroundByCorrectness(View view, boolean correct){

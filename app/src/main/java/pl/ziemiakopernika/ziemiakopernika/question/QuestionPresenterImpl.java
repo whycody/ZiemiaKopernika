@@ -30,11 +30,15 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     private ChooseAnswerPresenter chooseAnswerPresenter;
 
     private int numberOfCoins, numberOfQuestion, secondsPerQuestion;
-    private boolean fiftyFiftyBtnActivated, addSecondsBtnActivated;
+    private boolean fiftyFiftyBtnActivated, addSecondsBtnActivated, waitingToStartActivity;
     private boolean answersClickable = true;
 
     private static final String COINS = "coins";
     public static final String NUMBER_OF_QUESTION = "numberOfQuestion";
+    public static final String REQUEST_CODE = "requestCode";
+    public static final int SHOW_NUMBER_OF_ROUND = 0;
+    public static final int SHOW_FINAL_OF_ROUNDS = 1;
+    private int waitingActivityRequestCode;
 
     QuestionPresenterImpl(Activity activity, QuestionView questionView){
         this.activity = activity;
@@ -62,7 +66,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         applyFragment();
         setButtonsActivated();
         addViewsToLinearLayout();
-        startNewActivity();
+        startNewActivity(SHOW_NUMBER_OF_ROUND);
     }
 
     @Override
@@ -136,6 +140,14 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         startNewTimer(secondsPerQuestion+1);
     }
 
+    @Override
+    public void onResume() {
+        if(waitingToStartActivity){
+            waitingToStartActivity = false;
+            startNewActivity(waitingActivityRequestCode);
+        }
+    }
+
     private void setButtonsActivated(){
         if(numberOfCoins>=3 && numberOfCoins<5){
             questionView.setAddSecondsBtnActivated(true);
@@ -205,18 +217,31 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
 
         @Override
         public void onFinish() {
-            if(numberOfQuestion<setOfQuestions.getQuestions().size()-1) {
-                numberOfQuestion++;
-                startNewActivity();
+            numberOfQuestion++;
+            if(numberOfQuestion-1<setOfQuestions.getQuestions().size()-1)
+                startNewActivityIfNotPaused(SHOW_NUMBER_OF_ROUND);
+            else {
+                startNewActivityIfNotPaused(SHOW_FINAL_OF_ROUNDS);
+                activity.finish();
             }
         }
     };
 
-    private void startNewActivity(){
+    private void startNewActivityIfNotPaused(int requestCode){
+        if (!questionView.getActivityPaused())
+            startNewActivity(requestCode);
+        else {
+            waitingToStartActivity = true;
+            waitingActivityRequestCode = requestCode;
+        }
+    }
+
+    private void startNewActivity(int requestCode){
         Intent intent = new Intent(activity, RoundActivity.class);
         intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
         intent.putExtra(NUMBER_OF_QUESTION, numberOfQuestion);
-        activity.startActivityForResult(intent, 0);
+        intent.putExtra(REQUEST_CODE, requestCode);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     private void disactivateButtons(){

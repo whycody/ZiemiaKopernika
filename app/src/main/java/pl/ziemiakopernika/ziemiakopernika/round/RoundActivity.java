@@ -28,7 +28,7 @@ public class RoundActivity extends AppCompatActivity implements RoundView, Timer
         roundPresenter = new RoundPresenterImpl(this, this);
         roundPresenter.onCreate();
 
-        new TimerImpl(1500, this).startTimer();
+        new TimerImpl(1000, this).startTimer();
     }
 
     @Override
@@ -48,7 +48,6 @@ public class RoundActivity extends AppCompatActivity implements RoundView, Timer
 
     @Override
     public void onFinish() {
-        setResult(Activity.RESULT_OK);
-        finish();
+        roundPresenter.onFinish();
     }
 }

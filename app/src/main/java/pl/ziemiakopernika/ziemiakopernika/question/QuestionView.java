@@ -20,4 +20,6 @@ public interface QuestionView {
     void addViewToLinearLayout(View view);
 
     void animateCorrectness(int index, boolean correct);
+
+    boolean getActivityPaused();
 }

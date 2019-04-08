@@ -1,6 +1,7 @@
 package pl.ziemiakopernika.ziemiakopernika.round;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -8,19 +9,25 @@ import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
+import pl.ziemiakopernika.ziemiakopernika.summary.SummaryActivity;
 
 public class RoundPresenterImpl implements RoundPresenter {
 
     private Activity activity;
     private RoundView roundView;
     private SetOfQuestions setOfQuestions;
-    private int numberOfQuestion;
+    private int numberOfQuestion, reuqestCode;
 
     public RoundPresenterImpl(Activity activity, RoundView roundView){
         this.activity = activity;
         this.roundView = roundView;
         setOfQuestions = getSetOfQuestions();
         numberOfQuestion = getNumberOfQuestion();
+        reuqestCode = getRequestCode();
+    }
+
+    private int getRequestCode() {
+        return activity.getIntent().getIntExtra(QuestionPresenterImpl.REQUEST_CODE, 0);
     }
 
     private SetOfQuestions getSetOfQuestions(){
@@ -33,8 +40,26 @@ public class RoundPresenterImpl implements RoundPresenter {
 
     @Override
     public void onCreate() {
-        roundView.setRoundText("Runda " + (numberOfQuestion+1));
+        if(reuqestCode==0)
+            roundView.setRoundText("Runda " + (numberOfQuestion+1));
+        else
+            roundView.setRoundText("Koniec gry");
         addViewsToLinearLayout();
+    }
+
+    @Override
+    public void onFinish() {
+        activity.setResult(Activity.RESULT_OK);
+        if(reuqestCode==1){
+            Intent intent = new Intent(activity, SummaryActivity.class);
+            intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
+            activity.startActivity(intent);
+        }
+        activity.finish();
+    }
+
+    private void startSummaryActivity(){
+
     }
 
     private void addViewsToLinearLayout(){

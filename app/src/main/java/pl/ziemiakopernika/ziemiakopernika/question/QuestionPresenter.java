@@ -15,4 +15,6 @@ public interface QuestionPresenter extends FragmentInitializer{
     boolean getAnswersClickable();
 
     void showNextQuestion();
+
+    void onResume();
 }

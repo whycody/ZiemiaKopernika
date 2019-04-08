@@ -45,7 +45,6 @@ public class RedInfoPresenterImpl implements RedInfoPresenter {
         intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
         activity.startActivity(intent);
         activity.finish();
-        activity.overridePendingTransition(R.anim.alpha_fade_out, R.anim.alpha_fade_in);
     }
 
     private SetOfQuestions getSetOfQuestions(){

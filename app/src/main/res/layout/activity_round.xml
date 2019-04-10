@@ -41,7 +41,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/round_view" />
+        app:layout_constraintTop_toBottomOf="@+id/round_view"
+        android:transitionName="summary_transition"/>
 
 
 </android.support.constraint.ConstraintLayout>

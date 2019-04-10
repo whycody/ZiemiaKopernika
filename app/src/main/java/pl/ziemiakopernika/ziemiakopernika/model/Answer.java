@@ -5,15 +5,16 @@ import java.util.ArrayList;
 
 public class Answer implements Serializable {
 
-    private int choosedAnswer;
+    private int choosedAnswer, timeLeft;
     private ArrayList<Integer> setOfAnswers;
 
     public Answer(){
 
     }
 
-    public Answer(int choosedAnswer, ArrayList<Integer> setOfAnswers) {
+    public Answer(int choosedAnswer, int timeLeft, ArrayList<Integer> setOfAnswers) {
         this.choosedAnswer = choosedAnswer;
+        this.timeLeft = timeLeft;
         this.setOfAnswers = setOfAnswers;
     }
 
@@ -23,6 +24,14 @@ public class Answer implements Serializable {
 
     public void setChoosedAnswer(int choosedAnswer) {
         this.choosedAnswer = choosedAnswer;
+    }
+
+    public int getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
     }
 
     public ArrayList<Integer> getSetOfAnswers() {

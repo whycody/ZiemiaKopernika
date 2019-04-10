@@ -10,4 +10,6 @@ public interface RoundView {
     void addViewToLinearLayout(View view);
 
     void setSummaryViewBackground(Drawable drawable);
+
+    View getSummaryView();
 }

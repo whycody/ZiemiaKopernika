@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerFragment;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerPresenter;
-import pl.ziemiakopernika.ziemiakopernika.main.MainActivity;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.Question;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
@@ -33,12 +32,12 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     private boolean fiftyFiftyBtnActivated, addSecondsBtnActivated, waitingToStartActivity;
     private boolean answersClickable = true;
 
-    private static final String COINS = "coins";
+    public static final String COINS = "coins";
     public static final String NUMBER_OF_QUESTION = "numberOfQuestion";
     public static final String REQUEST_CODE = "requestCode";
     public static final int SHOW_NUMBER_OF_ROUND = 0;
     public static final int SHOW_FINAL_OF_ROUNDS = 1;
-    private int waitingActivityRequestCode;
+    private int waitingActivityRequestCode, secondsLeft;
 
     QuestionPresenterImpl(Activity activity, QuestionView questionView){
         this.activity = activity;
@@ -121,6 +120,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         timer.stopTimer();
         disactivateButtons();
         answersClickable = false;
+        setOfQuestions.getAnswers().get(numberOfQuestion).setTimeLeft(secondsLeft);
         questionView.animateCorrectness(numberOfQuestion, correct);
         transitionTimer = new TimerImpl(1000, newActivityTimerReact);
         transitionTimer.startTimer();
@@ -190,6 +190,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     @Override
     public void onTick(long l) {
         questionView.setTimeProgress((int)l, secondsPerQuestion);
+        secondsLeft = (int)l/1000;
     }
 
     @Override

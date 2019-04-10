@@ -2,6 +2,8 @@ package pl.ziemiakopernika.ziemiakopernika.round;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -10,6 +12,8 @@ import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.summary.SummaryActivity;
+import pl.ziemiakopernika.ziemiakopernika.timer.TimerImpl;
+import pl.ziemiakopernika.ziemiakopernika.timer.TimerReact;
 
 public class RoundPresenterImpl implements RoundPresenter {
 
@@ -51,14 +55,28 @@ public class RoundPresenterImpl implements RoundPresenter {
     public void onFinish() {
         activity.setResult(Activity.RESULT_OK);
         if(reuqestCode==1)
-            startSummaryActivity();
-        activity.finish();
+            startSummaryActivity(roundView.getSummaryView());
+        else
+            activity.finish();
     }
 
-    private void startSummaryActivity(){
+    private void startSummaryActivity(View view){
         Intent intent = new Intent(activity, SummaryActivity.class);
         intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
-        activity.startActivity(intent);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
+                (activity, view, ViewCompat.getTransitionName(view));
+        activity.startActivity(intent, options.toBundle());
+        new TimerImpl(1000, new TimerReact() {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                activity.finish();
+            }
+        }).startTimer();
     }
 
     private void addViewsToLinearLayout(){

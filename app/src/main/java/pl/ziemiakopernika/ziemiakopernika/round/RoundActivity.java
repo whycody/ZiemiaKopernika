@@ -47,6 +47,11 @@ public class RoundActivity extends AppCompatActivity implements RoundView, Timer
     }
 
     @Override
+    public View getSummaryView() {
+        return summaryView;
+    }
+
+    @Override
     public void onTick(long l) {
 
     }

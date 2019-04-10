@@ -31,7 +31,7 @@ public class QuestionsDaoImpl implements QuestionsDao{
             integers.add(2);
             integers.add(3);
             Collections.shuffle(integers);
-            answers.add(new Answer(0, integers));
+            answers.add(new Answer(0,0, integers));
         }
         return answers;
     }

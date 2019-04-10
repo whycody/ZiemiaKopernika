@@ -1,7 +1,6 @@
 package pl.ziemiakopernika.ziemiakopernika.round;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,13 +8,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
-import pl.ziemiakopernika.ziemiakopernika.timer.Timer;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerImpl;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerReact;
 
 public class RoundActivity extends AppCompatActivity implements RoundView, TimerReact {
 
     private TextView roundView;
+    private View summaryView;
     private LinearLayout roundLayout;
     private RoundPresenter roundPresenter;
 
@@ -24,6 +23,7 @@ public class RoundActivity extends AppCompatActivity implements RoundView, Timer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_round);
         roundView = findViewById(R.id.round_view);
+        summaryView = findViewById(R.id.summary_view);
         roundLayout = findViewById(R.id.round_layout);
         roundPresenter = new RoundPresenterImpl(this, this);
         roundPresenter.onCreate();
@@ -39,6 +39,11 @@ public class RoundActivity extends AppCompatActivity implements RoundView, Timer
     @Override
     public void addViewToLinearLayout(View view) {
         roundLayout.addView(view);
+    }
+
+    @Override
+    public void setSummaryViewBackground(Drawable drawable) {
+        summaryView.setBackground(drawable);
     }
 
     @Override

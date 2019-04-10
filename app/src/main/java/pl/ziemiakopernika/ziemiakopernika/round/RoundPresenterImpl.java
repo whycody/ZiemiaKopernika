@@ -16,7 +16,7 @@ public class RoundPresenterImpl implements RoundPresenter {
     private Activity activity;
     private RoundView roundView;
     private SetOfQuestions setOfQuestions;
-    private int numberOfQuestion, reuqestCode;
+    private int numberOfQuestion, reuqestCode, balance;
 
     public RoundPresenterImpl(Activity activity, RoundView roundView){
         this.activity = activity;
@@ -50,20 +50,20 @@ public class RoundPresenterImpl implements RoundPresenter {
     @Override
     public void onFinish() {
         activity.setResult(Activity.RESULT_OK);
-        if(reuqestCode==1){
-            Intent intent = new Intent(activity, SummaryActivity.class);
-            intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
-            activity.startActivity(intent);
-        }
+        if(reuqestCode==1)
+            startSummaryActivity();
         activity.finish();
     }
 
     private void startSummaryActivity(){
-
+        Intent intent = new Intent(activity, SummaryActivity.class);
+        intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
+        activity.startActivity(intent);
     }
 
     private void addViewsToLinearLayout(){
         addCorrectAndUncorrectViews();
+        setSummaryViewDrawable();
         addDefaultViews();
     }
 
@@ -72,12 +72,24 @@ public class RoundPresenterImpl implements RoundPresenter {
             View view = getDefaultView();
             int correctAnswer = setOfQuestions.getAnswers().get(i).getSetOfAnswers().get(0);
             int choosedAnswer = setOfQuestions.getAnswers().get(i).getChoosedAnswer();
-            if(choosedAnswer==correctAnswer)
+            if(choosedAnswer==correctAnswer) {
                 view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_green));
-            else
+                balance++;
+            }else {
                 view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_red));
+                balance--;
+            }
             roundView.addViewToLinearLayout(view);
         }
+    }
+
+    private void setSummaryViewDrawable(){
+        if(balance>0)
+            roundView.setSummaryViewBackground(activity.getDrawable(R.drawable.circle_button_green));
+        else if(balance == 0)
+            roundView.setSummaryViewBackground(activity.getDrawable(R.drawable.circle_button_yellow));
+        else
+            roundView.setSummaryViewBackground(activity.getDrawable(R.drawable.circle_button_red));
     }
 
     private void addDefaultViews(){

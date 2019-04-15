@@ -9,4 +9,6 @@ public interface ChooseAnswerPresenter {
     void onBtnClicked(View view);
 
     void showCorrectAnswer();
+
+    void disappearTwoUncorrectAnswers();
 }

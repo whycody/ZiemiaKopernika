@@ -44,7 +44,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         this.questionView = questionView;
         this.setOfQuestions = getSetOfQuestions();
         secondsPerQuestion = setOfQuestions.getSecondsPerQuestion();
-        sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
         numberOfCoins = getNumberOfCoins();
         timer = new TimerImpl(secondsPerQuestion*1000+1000, this);
         timer.startTimer();
@@ -101,6 +101,9 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
             numberOfCoins = numberOfCoins - 5;
             saveNumberOfCoins(numberOfCoins);
             questionView.setCoinsNumber(numberOfCoins);
+            if(setOfQuestions.getQuestions().get(numberOfQuestion).getTypeOfQuestion() == 0){
+                chooseAnswerPresenter.disappearTwoUncorrectAnswers();
+            }
         }
     }
 

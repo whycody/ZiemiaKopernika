@@ -1,7 +1,10 @@
 package pl.ziemiakopernika.ziemiakopernika.choose.answer;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -63,6 +66,21 @@ public class ChooseAnswerPresenterImpl implements ChooseAnswerPresenter{
     public void showCorrectAnswer() {
         setOfQuestions.getAnswers().get(numberOfQuestion).setChoosedAnswer(NOT_CHOOSED);
         chooseAnswer(chooseAnswerView.getButton(correctAnswer), true);
+    }
+
+    @Override
+    public void disappearTwoUncorrectAnswers() {
+        Button answerOneBtn = chooseAnswerView.getButton(getIndexOfAnswer(1));
+        Button answerTwoBtn = chooseAnswerView.getButton(getIndexOfAnswer(2));
+        Animation fadeOutAnim = AnimationUtils.loadAnimation(activity, R.anim.alpha_fade_in);
+        answerOneBtn.startAnimation(fadeOutAnim);
+        answerTwoBtn.startAnimation(fadeOutAnim);
+        answerOneBtn.setOnClickListener(null);
+        answerTwoBtn.setOnClickListener(null);
+    }
+
+    private int getIndexOfAnswer(int answer){
+        return setOfQuestions.getAnswers().get(numberOfQuestion).getSetOfAnswers().get(answer);
     }
 
     private void chooseAnswer(Button button, boolean correct){

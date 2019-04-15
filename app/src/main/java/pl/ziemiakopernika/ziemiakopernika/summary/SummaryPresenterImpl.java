@@ -3,6 +3,7 @@ package pl.ziemiakopernika.ziemiakopernika.summary;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 

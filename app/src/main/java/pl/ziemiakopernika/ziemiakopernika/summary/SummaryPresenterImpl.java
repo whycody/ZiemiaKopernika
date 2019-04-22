@@ -6,12 +6,15 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.Answer;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDao;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerRowAdapter;
 
@@ -19,15 +22,23 @@ public class SummaryPresenterImpl implements SummaryPresenter {
 
     private Activity activity;
     private SummaryView summaryView;
+    private StatisticsDao statisticsDao;
     private SetOfQuestions setOfQuestions;
-    private int correctAnswers, uncorrectAnswers, coinsForTime, coinsForCorrectAnswers, timeLeft;
+    private int correctAnswers, uncorrectAnswers, totalCoins,
+             percentageCorrectness, timeLeft;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+
+    public static final String GAMES_PLAYED = "gamesPlayed";
+    public static final String PERCENTAGE_TOTAL = "percentageTotal";
+    public static final String CORRECT_ANSWERS = "correctAnswers";
+
 
     public SummaryPresenterImpl(Activity activity, SummaryView summaryView){
         this.activity = activity;
         this.summaryView = summaryView;
         setOfQuestions = getSetOfQuestions();
+        statisticsDao = new StatisticsDaoImpl(activity);
         timeLeft = getTimeLeft();
         sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -40,18 +51,20 @@ public class SummaryPresenterImpl implements SummaryPresenter {
     @Override
     public void onCreate() {
         addViewsAndSetNumberOfAnswers();
+        int coinsForTime = getCoinsForTime(timeLeft);
+        int coinsForCorrectAnswers = getCoinsForCorrectAnswers(correctAnswers);
+        percentageCorrectness = getPercentCorrectness();
+        totalCoins = coinsForTime + coinsForCorrectAnswers;
         summaryView.setRecyclerViewAdapter(new AnswerRowAdapter(new AnswerPresenterImpl(setOfQuestions, activity), activity));
         summaryView.setSummaryBackgroundColor(getBackgroundColor(correctAnswers, uncorrectAnswers));
-        coinsForTime = getCoinsForTime(timeLeft);
-        coinsForCorrectAnswers = getCoinsForCorrectAnswers(correctAnswers);
-        summaryView.setBadgeText(getBadge(getPercentCorrectness()));
+        summaryView.setBadgeText(getBadge(percentageCorrectness));
         summaryView.setTimeLeftText("Pozostały czas: " + timeLeft + " sekund");
         summaryView.setAnswersProportions("Poprawność odpowiedzi: " + correctAnswers + ":" + uncorrectAnswers);
         summaryView.setCoinsForTimeNumber(coinsForTime);
         summaryView.setCoinsForCorrectAnswers(coinsForCorrectAnswers);
-        int totalCoins = coinsForTime + coinsForCorrectAnswers;
         summaryView.setTotalCoinsBtn(totalCoins);
-        summaryView.setCongratulationsText("Gratulacje, wygrywasz " + totalCoins + " monet!");
+        saveStatistics();
+        setCongratulationsText(totalCoins);
         addCoins(totalCoins);
     }
 
@@ -127,6 +140,22 @@ public class SummaryPresenterImpl implements SummaryPresenter {
         int coins = sharedPreferences.getInt(QuestionPresenterImpl.COINS, 0);
         editor.putInt(QuestionPresenterImpl.COINS, coins + newCoins);
         editor.commit();
+    }
+
+    private void setCongratulationsText(int totalCoins){
+        if(totalCoins>0)
+            summaryView.setCongratulationsText("Gratulacje, wygrywasz " + totalCoins + " monet!");
+        else
+            summaryView.setCongratulationsText("Niestety tym razem nie udało Ci się wygrać. Próbuj dalej!");
+    }
+
+    private void saveStatistics(){
+        statisticsDao.saveGamesPlayedStatistics();
+        statisticsDao.saveCorrectAnswersNumberStatistics(correctAnswers);
+        statisticsDao.saveEarnedCoinsStatistics(totalCoins);
+        statisticsDao.savePercentageCorrectnessStatistics(percentageCorrectness);
+        statisticsDao.saveTimeLeftStatistics(timeLeft);
+        statisticsDao.saveUncorrectAnswersNumberStatistics(uncorrectAnswers);
     }
 
     @Override

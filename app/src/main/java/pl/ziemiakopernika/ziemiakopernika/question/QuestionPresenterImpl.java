@@ -55,7 +55,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     }
 
     private int getNumberOfCoins(){
-        return sharedPreferences.getInt(COINS, 50);
+        return sharedPreferences.getInt(COINS, 20);
     }
 
     @Override

@@ -2,12 +2,16 @@ package pl.ziemiakopernika.ziemiakopernika.summary;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
+import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerPresenterImpl;
+import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerRowAdapter;
 
 public class SummaryActivity extends AppCompatActivity implements SummaryView{
 
@@ -15,6 +19,7 @@ public class SummaryActivity extends AppCompatActivity implements SummaryView{
     private LinearLayout roundLayout;
     private TextView badgeText, timeLeftText, answersProportionsText, congratulationsText;
     private Button coinsForTimeBtn, coinsForCorrectAnswersBtn, totalCoinsBtn;
+    private RecyclerView recyclerView;
     private SummaryPresenter summaryPresenter;
 
     @Override
@@ -32,6 +37,8 @@ public class SummaryActivity extends AppCompatActivity implements SummaryView{
         coinsForTimeBtn = findViewById(R.id.coins_for_time_btn);
         coinsForCorrectAnswersBtn = findViewById(R.id.coins_for_correct_answers_btn);
         totalCoinsBtn = findViewById(R.id.total_coins_btn);
+        recyclerView = findViewById(R.id.answers_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         summaryPresenter.onCreate();
     }
 
@@ -84,5 +91,10 @@ public class SummaryActivity extends AppCompatActivity implements SummaryView{
     @Override
     public void setCongratulationsText(String text) {
         congratulationsText.setText(text);
+    }
+
+    @Override
+    public void setRecyclerViewAdapter(RecyclerView.Adapter adapter) {
+        recyclerView.setAdapter(adapter);
     }
 }

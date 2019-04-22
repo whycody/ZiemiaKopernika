@@ -21,7 +21,7 @@ public class ChooseAnswerPresenterImpl implements ChooseAnswerPresenter{
     private int numberOfQuestion, correctAnswer;
     private boolean answerChoosed;
 
-    static final int NOT_CHOOSED = 4;
+    public static final int NOT_CHOOSED = 4;
 
     ChooseAnswerPresenterImpl(Activity activity, ChooseAnswerView chooseAnswerView){
         this.activity = activity;

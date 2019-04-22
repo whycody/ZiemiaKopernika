@@ -12,6 +12,8 @@ import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.Answer;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
+import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerPresenterImpl;
+import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerRowAdapter;
 
 public class SummaryPresenterImpl implements SummaryPresenter {
 
@@ -38,6 +40,7 @@ public class SummaryPresenterImpl implements SummaryPresenter {
     @Override
     public void onCreate() {
         addViewsAndSetNumberOfAnswers();
+        summaryView.setRecyclerViewAdapter(new AnswerRowAdapter(new AnswerPresenterImpl(setOfQuestions, activity), activity));
         summaryView.setSummaryBackgroundColor(getBackgroundColor(correctAnswers, uncorrectAnswers));
         coinsForTime = getCoinsForTime(timeLeft);
         coinsForCorrectAnswers = getCoinsForCorrectAnswers(correctAnswers);

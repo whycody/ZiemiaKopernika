@@ -39,6 +39,7 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
         progressBarView = findViewById(R.id.progress_bar_view);
         questionPresenter = new QuestionPresenterImpl(this, this);
 
+        progressTextView.setOnClickListener(progressTextClicked);
         fiftyFiftyBtn.setOnClickListener(fifityFiftyBtnClickListener);
         addSecondsBtn.setOnClickListener(addSecondsBtnClickListener);
         questionPresenter.onCreate();
@@ -145,6 +146,13 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
         @Override
         public void onClick(View view) {
             questionPresenter.onAddSecondsBtnClicked();
+        }
+    };
+
+    private View.OnClickListener progressTextClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            questionPresenter.progressTextClicked();
         }
     };
 

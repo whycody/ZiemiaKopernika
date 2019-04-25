@@ -14,7 +14,7 @@ import pl.ziemiakopernika.ziemiakopernika.model.Question;
 public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements QuestionsDbHelper {
 
     private static final String DATABASE_NAME = "ZiemiaKopernikaDatabse.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 9;
 
     private SQLiteDatabase database;
 
@@ -40,11 +40,16 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
     }
 
     private void fillQuestionsTable(){
-        addQuestion(new Question("Który księżyc jako jedyny w Układzie Słonecznym posiada gęstą atmosferę?", "Tytan", "Księżyc", "Io", "Europa"));
-        addQuestion(new Question("Jądro której galaktyki znajduje się najbliżej Układu Słonecznego?", "Karzeł Wielkiego Psa", "Karzeł Strzelca", "Wielki Obłok Magellana", "Droga Mleczna"));
-        addQuestion(new Question("Jaką średnicę ma Mars?", "6794 km", "6894 km", "6994 km", "6694 km"));
-        addQuestion(new Question("Fobos jest księżycem której planety?", "Marsa", "Uranu", "Saturna", "Jowisza"));
-        addQuestion(new Question("Co było pierwszą udaną misją planetarną NASA?", "Zbliżenie się do Wenus", "Zbliżenie się do Słońca", "Zbliżenie się do Plutona", "Zbliżenie się do Marsa"));
+        addQuestion(new Question(0,"Który księżyc jako jedyny w Układzie Słonecznym posiada gęstą atmosferę?", "Tytan", "Księżyc", "Io", "Europa"));
+        addQuestion(new Question(0,"Jądro której galaktyki znajduje się najbliżej Układu Słonecznego?", "Karzeł Wielkiego Psa", "Karzeł Strzelca", "Wielki Obłok Magellana", "Droga Mleczna"));
+        addQuestion(new Question(0,"Jaką średnicę ma Mars?", "6794 km", "6894 km", "6994 km", "6694 km"));
+        addQuestion(new Question(0,"Fobos jest księżycem której planety?", "Marsa", "Uranu", "Saturna", "Jowisza"));
+        addQuestion(new Question(0,"Co było pierwszą udaną misją planetarną NASA?", "Zbliżenie się do Wenus", "Zbliżenie się do Słońca", "Zbliżenie się do Plutona", "Zbliżenie się do Marsa"));
+        addQuestion(new Question(1, "Co pierwsze byda?", "1", "2", "3", "4"));
+        addQuestion(new Question(1, "Co pierwsze byda?", "1", "2", "3", "4"));
+        addQuestion(new Question(1, "Co pierwsze byda?", "1", "2", "3", "4"));
+        addQuestion(new Question(1, "Co pierwsze byda?", "1", "2", "3", "4"));
+        addQuestion(new Question(1, "Co pierwsze byda?", "1", "2", "3", "4"));
     }
 
     private void addQuestion(Question question){

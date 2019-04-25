@@ -10,6 +10,8 @@ public interface QuestionPresenter extends FragmentInitializer{
 
     void onAddSecondsBtnClicked();
 
+    void progressTextClicked();
+
     void onAnswerChoosed(boolean correct);
 
     boolean getAnswersClickable();

@@ -7,7 +7,11 @@ import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 import pl.ziemiakopernika.ziemiakopernika.R;
+import pl.ziemiakopernika.ziemiakopernika.answer.checker.AnswerChecker;
+import pl.ziemiakopernika.ziemiakopernika.answer.checker.AnswerCheckerImpl;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
@@ -15,10 +19,11 @@ import pl.ziemiakopernika.ziemiakopernika.summary.SummaryActivity;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerImpl;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerReact;
 
-public class RoundPresenterImpl implements RoundPresenter {
+public class RoundPresenterImpl implements RoundPresenter{
 
     private Activity activity;
     private RoundView roundView;
+    private AnswerChecker answerChecker;
     private SetOfQuestions setOfQuestions;
     private int numberOfQuestion, reuqestCode, balance;
 
@@ -26,6 +31,7 @@ public class RoundPresenterImpl implements RoundPresenter {
         this.activity = activity;
         this.roundView = roundView;
         setOfQuestions = getSetOfQuestions();
+        answerChecker = new AnswerCheckerImpl(setOfQuestions);
         numberOfQuestion = getNumberOfQuestion();
         reuqestCode = getRequestCode();
     }
@@ -88,14 +94,22 @@ public class RoundPresenterImpl implements RoundPresenter {
     private void addCorrectAndUncorrectViews(){
         for(int i =0; i< numberOfQuestion; i++) {
             View view = getDefaultView();
-            int correctAnswer = setOfQuestions.getAnswers().get(i).getSetOfAnswers().get(0);
-            int choosedAnswer = setOfQuestions.getAnswers().get(i).getChoosedAnswer();
-            if(choosedAnswer==correctAnswer) {
-                view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_green));
-                balance++;
-            }else {
-                view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_red));
-                balance--;
+            if(setOfQuestions.getQuestions().get(i).getTypeOfQuestion() == 0) {
+                if(answerChecker.answerIsCorrect(i)){
+                    view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_green));
+                    balance++;
+                } else {
+                    view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_red));
+                    balance--;
+                }
+            }else{
+                if(answerChecker.answerIsCorrect(i)){
+                    view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_green));
+                    balance++;
+                }else{
+                    view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_red));
+                    balance--;
+                }
             }
             roundView.addViewToLinearLayout(view);
         }

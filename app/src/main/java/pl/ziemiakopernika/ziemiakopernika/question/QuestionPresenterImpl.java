@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
+import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerFragment;
+import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerRowPresenter;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerFragment;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerPresenter;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
@@ -26,7 +29,10 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     private SharedPreferences sharedPreferences;
     private Timer timer, transitionTimer;
 
+    private ArrangeAnswerFragment arrangeAnswerFragment;
+
     private ChooseAnswerPresenter chooseAnswerPresenter;
+    private ArrangeAnswerRowPresenter arrangeAnswerRowPresenter;
 
     private int numberOfCoins, numberOfQuestion, secondsPerQuestion;
     private boolean fiftyFiftyBtnActivated, addSecondsBtnActivated, waitingToStartActivity;
@@ -119,6 +125,12 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     }
 
     @Override
+    public void progressTextClicked() {
+        timer.stopTimer();
+        onFinish();
+    }
+
+    @Override
     public void onAnswerChoosed(boolean correct) {
         timer.stopTimer();
         disactivateButtons();
@@ -181,6 +193,12 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
             chooseAnswerFragment.setNumberOfQuestion(numberOfQuestion);
             chooseAnswerFragment.setQuestionPresenter(this);
             questionView.applyFragment(chooseAnswerFragment);
+        }else{
+            ArrangeAnswerFragment arrangeAnswerFragment = new ArrangeAnswerFragment();
+            arrangeAnswerFragment.setProperties(setOfQuestions, numberOfQuestion);
+            arrangeAnswerFragment.setQuestionPresenter(this);
+            questionView.applyFragment(arrangeAnswerFragment);
+            this.arrangeAnswerFragment = arrangeAnswerFragment;
         }
     }
 
@@ -200,16 +218,21 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     public void onFinish() {
         answersClickable = false;
         disactivateButtons();
-        questionView.animateCorrectness(numberOfQuestion, false);
-        transitionTimer = new TimerImpl(1500, newActivityTimerReact);
-        transitionTimer.startTimer();
         showCorrectAnswer();
     }
 
     private void showCorrectAnswer(){
         if(setOfQuestions.getQuestions().get(numberOfQuestion).getTypeOfQuestion() == 0 &&
                 chooseAnswerPresenter!=null){
+            questionView.animateCorrectness(numberOfQuestion, false);
             chooseAnswerPresenter.showCorrectAnswer();
+            transitionTimer = new TimerImpl(1500, newActivityTimerReact);
+            transitionTimer.startTimer();
+        }else{
+            setOfQuestions.getAnswers().get(numberOfQuestion).setChoosedAnswers
+                    (arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers());
+            arrangeAnswerFragment.getAdapter().notifyDataSetChanged();
+            arrangeAnswerRowPresenter.showCorrectAnswers();
         }
     }
 
@@ -266,5 +289,10 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     @Override
     public void setChooserAnswerPresenter(ChooseAnswerPresenter chooserAnswerPresenter) {
         this.chooseAnswerPresenter = chooserAnswerPresenter;
+    }
+
+    @Override
+    public void setArrangeAnswerRowPresenter(ArrangeAnswerRowPresenter arrangeAnswerRowPresenter) {
+        this.arrangeAnswerRowPresenter = arrangeAnswerRowPresenter;
     }
 }

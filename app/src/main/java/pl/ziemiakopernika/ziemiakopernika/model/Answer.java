@@ -3,10 +3,11 @@ package pl.ziemiakopernika.ziemiakopernika.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Answer implements Serializable {
+public class Answer implements Serializable, Cloneable {
 
     private int choosedAnswer, timeLeft;
     private ArrayList<Integer> setOfAnswers;
+    private ArrayList<Integer> choosedAnswers;
 
     public Answer(){
 
@@ -40,5 +41,21 @@ public class Answer implements Serializable {
 
     public void setSetOfAnswers(ArrayList<Integer> setOfAnswers) {
         this.setOfAnswers = setOfAnswers;
+    }
+
+    public ArrayList<Integer> getChoosedAnswers() {
+        return choosedAnswers;
+    }
+
+    public void setChoosedAnswers(ArrayList<Integer> choosedAnswers) {
+        this.choosedAnswers = choosedAnswers;
+    }
+
+    public String setOfAnswersToString(){
+        return "SetOfAnswers: " + setOfAnswers.get(0) + setOfAnswers.get(1) + setOfAnswers.get(2) + setOfAnswers.get(3);
+    }
+
+    public String choosedAnswersToString(){
+        return "SetOfAnswers: " + choosedAnswers.get(0) + choosedAnswers.get(1) + choosedAnswers.get(2) + choosedAnswers.get(3);
     }
 }

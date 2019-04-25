@@ -43,12 +43,12 @@ public class AnswerPresenterImpl implements AnswerPresenter {
             textView.setText(getRandomAnswerByNumber(i, numberOfQuestion));
         }
 
-        if(correctAnswer!=choosedAnswer && correctAnswer!=ChooseAnswerPresenterImpl.NOT_CHOOSED){
+        if(correctAnswer!=choosedAnswer && choosedAnswer!=ChooseAnswerPresenterImpl.NOT_CHOOSED){
             correctAnswerView.setText("Cienkie zielone");
             correctAnswerView.setText(getSpannable(getRandomAnswerByNumber(i,correctAnswer),
                     activity.getResources().getColor(R.color.colorGreen), false));
             choosedAnswerView.setText(getSpannable(getRandomAnswerByNumber(i,choosedAnswer),
-                    activity.getResources().getColor(R.color.colorGrayDark), true));
+                    activity.getResources().getColor(R.color.colorPrimaryDark), true));
         }else
             correctAnswerView.setText(getSpannable(getRandomAnswerByNumber(i,correctAnswer),
                     activity.getResources().getColor(R.color.colorGreen), correctAnswer==choosedAnswer));

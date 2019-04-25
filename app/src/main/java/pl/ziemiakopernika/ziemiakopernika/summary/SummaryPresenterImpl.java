@@ -2,17 +2,22 @@ package pl.ziemiakopernika.ziemiakopernika.summary;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
+import android.graphics.drawable.Drawable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
+import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
+import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.Answer;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
+import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDao;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerPresenterImpl;
@@ -23,21 +28,22 @@ public class SummaryPresenterImpl implements SummaryPresenter {
     private Activity activity;
     private SummaryView summaryView;
     private StatisticsDao statisticsDao;
+    private QuestionsDao questionsDao;
     private SetOfQuestions setOfQuestions;
     private int correctAnswers, uncorrectAnswers, totalCoins,
              percentageCorrectness, timeLeft;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
-    public static final String GAMES_PLAYED = "gamesPlayed";
-    public static final String PERCENTAGE_TOTAL = "percentageTotal";
-    public static final String CORRECT_ANSWERS = "correctAnswers";
+    private int secondsPerQuestion = 15;
+    private int numberOfQuestions = 5;
 
 
     public SummaryPresenterImpl(Activity activity, SummaryView summaryView){
         this.activity = activity;
         this.summaryView = summaryView;
         setOfQuestions = getSetOfQuestions();
+        questionsDao = new QuestionsDaoImpl(activity);
         statisticsDao = new StatisticsDaoImpl(activity);
         timeLeft = getTimeLeft();
         sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
@@ -57,6 +63,8 @@ public class SummaryPresenterImpl implements SummaryPresenter {
         totalCoins = coinsForTime + coinsForCorrectAnswers;
         summaryView.setRecyclerViewAdapter(new AnswerRowAdapter(new AnswerPresenterImpl(setOfQuestions, activity), activity));
         summaryView.setSummaryBackgroundColor(getBackgroundColor(correctAnswers, uncorrectAnswers));
+        summaryView.setCoinBtnsDrawable(getDrawableColor(correctAnswers, uncorrectAnswers));
+        summaryView.setStatisticsBtnColor(getStatisticsColor(correctAnswers, uncorrectAnswers));
         summaryView.setBadgeText(getBadge(percentageCorrectness));
         summaryView.setTimeLeftText("Pozostały czas: " + timeLeft + " sekund");
         summaryView.setAnswersProportions("Poprawność odpowiedzi: " + correctAnswers + ":" + uncorrectAnswers);
@@ -136,6 +144,24 @@ public class SummaryPresenterImpl implements SummaryPresenter {
             return activity.getResources().getColor(R.color.colorPrimary);
     }
 
+    private Drawable getDrawableColor(int correctAnswers, int uncorrectAnswers){
+        if(correctAnswers>uncorrectAnswers)
+            return activity.getResources().getDrawable(R.drawable.rectangle_button_green);
+        else if(correctAnswers==uncorrectAnswers)
+            return activity.getResources().getDrawable(R.drawable.rectangle_button_yellow);
+        else
+            return activity.getResources().getDrawable(R.drawable.rectangle_button_red);
+    }
+
+    private int getStatisticsColor(int correctAnswers, int uncorrectAnswers){
+        if(correctAnswers>uncorrectAnswers)
+            return activity.getResources().getColor(R.color.colorGreen);
+        else if(correctAnswers==uncorrectAnswers)
+            return activity.getResources().getColor(R.color.colorAccent);
+        else
+            return activity.getResources().getColor(R.color.colorPrimaryDark);
+    }
+
     private void addCoins(int newCoins){
         int coins = sharedPreferences.getInt(QuestionPresenterImpl.COINS, 0);
         editor.putInt(QuestionPresenterImpl.COINS, coins + newCoins);
@@ -161,6 +187,41 @@ public class SummaryPresenterImpl implements SummaryPresenter {
     @Override
     public void onBackPressed() {
         summaryView.setSummaryBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
+    }
+
+    @Override
+    public void onShareBtnClicked() {
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        String shareBodyText = "Wygrałem " + totalCoins + " monet! Pobierz aplikacje do quizowania " +
+                "\"Ziemia Kopernika\" z Google App Store i spróbuj mnie przebić!";
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
+        activity.startActivity(Intent.createChooser(intent, "Udostępnij"));
+    }
+
+    @Override
+    public void onPlayAgainBtnClicked(View view) {
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(activity, view, "transition");
+        SetOfQuestions setOfQuestions = getNewSetOfQuestions();
+        Intent intent = new Intent(activity, RedInfoActivity.class);
+        intent.putExtra(RedInfoActivity.EXTRA_CIRCULAR_REVEAL_X, getRevealX(view));
+        intent.putExtra(RedInfoActivity.EXTRA_CIRCULAR_REVEAL_Y, getRevealY(view));
+        intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
+        ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
+    }
+
+    private SetOfQuestions getNewSetOfQuestions(){
+        return new SetOfQuestions(numberOfQuestions,secondsPerQuestion,
+                questionsDao.getRandomQustions(5), questionsDao.getRandomAnswers(5));
+    }
+
+    private int getRevealX(View view){
+        return (int) (view.getX() + view.getWidth() / 2);
+    }
+
+    private int getRevealY(View view){
+        return (int) (view.getY() + view.getHeight() / 2);
     }
 
 

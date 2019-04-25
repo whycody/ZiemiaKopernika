@@ -31,6 +31,16 @@ public class Question implements Serializable {
         this.answerFour = answerFour;
     }
 
+    public Question(int typeOfQuestion, String question, String answerOne, String answerTwo,
+                    String answerThree, String answerFour) {
+        this.typeOfQuestion = typeOfQuestion;
+        this.question = question;
+        this.answerOne = answerOne;
+        this.answerTwo = answerTwo;
+        this.answerThree = answerThree;
+        this.answerFour = answerFour;
+    }
+
     public int getTypeOfQuestion() {
         return typeOfQuestion;
     }

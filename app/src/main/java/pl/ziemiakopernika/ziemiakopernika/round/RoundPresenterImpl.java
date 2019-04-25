@@ -66,7 +66,7 @@ public class RoundPresenterImpl implements RoundPresenter {
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
                 (activity, view, ViewCompat.getTransitionName(view));
         activity.startActivity(intent, options.toBundle());
-        new TimerImpl(1000, new TimerReact() {
+        new TimerImpl(2000, new TimerReact() {
             @Override
             public void onTick(long l) {
 

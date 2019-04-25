@@ -29,7 +29,7 @@ public class MainPresenterImpl implements MainPresenter{
         this.activity = activity;
         this.activityView = activityView;
         sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
-        questionsDao = new QuestionsDaoImpl();
+        questionsDao = new QuestionsDaoImpl(activity);
     }
 
     @Override

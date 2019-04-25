@@ -1,5 +1,7 @@
 package pl.ziemiakopernika.ziemiakopernika.dao;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,16 +11,22 @@ import pl.ziemiakopernika.ziemiakopernika.model.Question;
 
 public class QuestionsDaoImpl implements QuestionsDao{
 
+    private Context context;
+    private QuestionsDbHelper dbHelper;
+
+    public QuestionsDaoImpl(Context context){
+        this.context = context;
+        dbHelper = new QuestionsDbHelperImpl(context);
+    }
+
     @Override
     public ArrayList<Question> getRandomQustions(int number) {
+        ArrayList<Question> allQuestions = dbHelper.getAllQuestions();
+        Collections.shuffle(allQuestions);
         ArrayList<Question> questions = new ArrayList<>();
-        questions.add(new Question("Który księżyc jako jedyny w Układzie Słonecznym posiada gęstą atmosferę?", "Tytan", "Księżyc", "Io", "Europa"));
-        questions.add(new Question("Jądro której galaktyki znajduje się najbliżej Układu Słonecznego?", "Karzeł Wielkiego Psa", "Karzeł Strzelca", "Wielki Obłok Magellana", "Droga Mleczna"));
-        questions.add(new Question("Jaką średnicę ma Mars?", "6794 km", "6894 km", "6994 km", "6694 km"));
-        questions.add(new Question("Fobos jest księżycem której planety?", "Marsa", "Uranu", "Saturna", "Jowisza"));
-        questions.add(new Question("Co było pierwszą udaną misją planetarną NASA?", "Zbliżenie się do Wenus", "Zbliżenie się do Słońca", "Zbliżenie się do Plutona", "Zbliżenie się do Marsa"));
-        Collections.shuffle(questions);
-        return questions; //TODO retrieve Questions data from Database
+        for(int i =0; i<number; i++)
+            questions.add(allQuestions.get(i));
+        return questions;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package pl.ziemiakopernika.ziemiakopernika.summary;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,15 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
-import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerPresenterImpl;
-import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerRowAdapter;
 
 public class SummaryActivity extends AppCompatActivity implements SummaryView{
 
     private View summaryBackground;
     private LinearLayout roundLayout;
     private TextView badgeText, timeLeftText, answersProportionsText, congratulationsText;
-    private Button coinsForTimeBtn, coinsForCorrectAnswersBtn, totalCoinsBtn;
+    private Button coinsForTimeBtn, coinsForCorrectAnswersBtn, totalCoinsBtn, shareBtn,
+            playAgainBtn, statistitcsBtn;
+    private LinearLayout buttonsLinear;
     private RecyclerView recyclerView;
     private SummaryPresenter summaryPresenter;
 
@@ -37,8 +38,14 @@ public class SummaryActivity extends AppCompatActivity implements SummaryView{
         coinsForTimeBtn = findViewById(R.id.coins_for_time_btn);
         coinsForCorrectAnswersBtn = findViewById(R.id.coins_for_correct_answers_btn);
         totalCoinsBtn = findViewById(R.id.total_coins_btn);
+        shareBtn = findViewById(R.id.share_btn);
+        playAgainBtn = findViewById(R.id.play_again_btn);
+        statistitcsBtn = findViewById(R.id.statistics_btn);
+        buttonsLinear = findViewById(R.id.buttons_linear);
         recyclerView = findViewById(R.id.answers_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        shareBtn.setOnClickListener(onShareBtnClicked);
+        playAgainBtn.setOnClickListener(onPlayAgainBtnClicked);
         summaryPresenter.onCreate();
     }
 
@@ -61,6 +68,18 @@ public class SummaryActivity extends AppCompatActivity implements SummaryView{
     @Override
     public void setBadgeText(String badge) {
         badgeText.setText(badge);
+    }
+
+    @Override
+    public void setCoinBtnsDrawable(Drawable drawable) {
+        coinsForTimeBtn.setBackground(drawable);
+        coinsForCorrectAnswersBtn.setBackground(drawable);
+        totalCoinsBtn.setBackground(drawable);
+    }
+
+    @Override
+    public void setStatisticsBtnColor(int color) {
+        statistitcsBtn.setBackgroundColor(color);
     }
 
     @Override
@@ -97,4 +116,18 @@ public class SummaryActivity extends AppCompatActivity implements SummaryView{
     public void setRecyclerViewAdapter(RecyclerView.Adapter adapter) {
         recyclerView.setAdapter(adapter);
     }
+
+    private View.OnClickListener onShareBtnClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            summaryPresenter.onShareBtnClicked();
+        }
+    };
+
+    private View.OnClickListener onPlayAgainBtnClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            summaryPresenter.onPlayAgainBtnClicked(buttonsLinear);
+        }
+    };
 }

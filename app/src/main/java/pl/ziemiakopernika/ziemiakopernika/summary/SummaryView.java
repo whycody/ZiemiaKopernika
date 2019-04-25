@@ -1,5 +1,6 @@
 package pl.ziemiakopernika.ziemiakopernika.summary;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -10,6 +11,10 @@ public interface SummaryView {
     void addViewToRoundLayout(View view);
 
     void setBadgeText(String badge);
+
+    void setCoinBtnsDrawable(Drawable drawable);
+
+    void setStatisticsBtnColor(int color);
 
     void setTimeLeftText(String time);
 

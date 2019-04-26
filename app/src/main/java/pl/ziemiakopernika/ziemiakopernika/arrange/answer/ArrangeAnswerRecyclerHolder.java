@@ -12,11 +12,12 @@ import pl.ziemiakopernika.ziemiakopernika.R;
 public class ArrangeAnswerRecyclerHolder extends RecyclerView.ViewHolder implements ArrangeAnswerRowView{
 
     private Button answerOneBtn;
-    private ImageView dragImage;
+    private ImageView dragImageLeft, dragImageRight;
 
     ArrangeAnswerRecyclerHolder(@NonNull View itemView) {
         super(itemView);
-        dragImage = itemView.findViewById(R.id.drag_image);
+        dragImageLeft = itemView.findViewById(R.id.drag_image_left);
+        dragImageRight = itemView.findViewById(R.id.drag_image_right);
         answerOneBtn = itemView.findViewById(R.id.answer_btn);
     }
 
@@ -27,12 +28,20 @@ public class ArrangeAnswerRecyclerHolder extends RecyclerView.ViewHolder impleme
 
     @Override
     public void setOnTouchListener(View.OnTouchListener onTouchListener) {
-        dragImage.setOnTouchListener(onTouchListener);
+        dragImageLeft.setOnTouchListener(onTouchListener);
+        dragImageRight.setOnTouchListener(onTouchListener);
+        answerOneBtn.setOnTouchListener(onTouchListener);
     }
 
     @Override
     public void setBtnDrawable(Drawable drawable) {
         answerOneBtn.setBackground(drawable);
+    }
+
+    @Override
+    public void setDragImageVisiblity(int visiblity) {
+        dragImageLeft.setVisibility(visiblity);
+        dragImageRight.setVisibility(visiblity);
     }
 
     @Override

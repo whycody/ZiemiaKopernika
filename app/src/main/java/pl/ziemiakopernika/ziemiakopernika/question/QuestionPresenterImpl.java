@@ -216,18 +216,14 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
 
     @Override
     public void onFinish() {
-        answersClickable = false;
-        disactivateButtons();
         showCorrectAnswer();
     }
 
     private void showCorrectAnswer(){
         if(setOfQuestions.getQuestions().get(numberOfQuestion).getTypeOfQuestion() == 0 &&
                 chooseAnswerPresenter!=null){
-            questionView.animateCorrectness(numberOfQuestion, false);
             chooseAnswerPresenter.showCorrectAnswer();
-            transitionTimer = new TimerImpl(1500, newActivityTimerReact);
-            transitionTimer.startTimer();
+            onAnswerChoosed(false);
         }else{
             setOfQuestions.getAnswers().get(numberOfQuestion).setChoosedAnswers
                     (arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers());

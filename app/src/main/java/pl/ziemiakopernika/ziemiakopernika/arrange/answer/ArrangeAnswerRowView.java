@@ -11,5 +11,7 @@ public interface ArrangeAnswerRowView {
 
     void setBtnDrawable(Drawable drawable);
 
+    void setDragImageVisiblity(int visiblity);
+
     void setBtnTextColor(int color);
 }

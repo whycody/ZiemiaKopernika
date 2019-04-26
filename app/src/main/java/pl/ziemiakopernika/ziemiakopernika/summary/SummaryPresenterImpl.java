@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
+import pl.ziemiakopernika.ziemiakopernika.answer.checker.AnswerChecker;
+import pl.ziemiakopernika.ziemiakopernika.answer.checker.AnswerCheckerImpl;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
@@ -30,6 +32,7 @@ public class SummaryPresenterImpl implements SummaryPresenter {
     private StatisticsDao statisticsDao;
     private QuestionsDao questionsDao;
     private SetOfQuestions setOfQuestions;
+    private AnswerChecker answerChecker;
     private int correctAnswers, uncorrectAnswers, totalCoins,
              percentageCorrectness, timeLeft;
     private SharedPreferences sharedPreferences;
@@ -44,6 +47,7 @@ public class SummaryPresenterImpl implements SummaryPresenter {
         this.summaryView = summaryView;
         setOfQuestions = getSetOfQuestions();
         questionsDao = new QuestionsDaoImpl(activity);
+        answerChecker = new AnswerCheckerImpl(setOfQuestions);
         statisticsDao = new StatisticsDaoImpl(activity);
         timeLeft = getTimeLeft();
         sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
@@ -79,9 +83,7 @@ public class SummaryPresenterImpl implements SummaryPresenter {
     private void addViewsAndSetNumberOfAnswers(){
         for(int i =0; i< setOfQuestions.getNumOfQuestion(); i++) {
             View view = getDefaultView();
-            int correctAnswer = setOfQuestions.getAnswers().get(i).getSetOfAnswers().get(0);
-            int choosedAnswer = setOfQuestions.getAnswers().get(i).getChoosedAnswer();
-            if(choosedAnswer==correctAnswer) {
+            if(answerChecker.answerIsCorrect(i)) {
                 view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_green));
                 correctAnswers++;
             }else {

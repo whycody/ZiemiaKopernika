@@ -57,6 +57,7 @@ public class ArrangeAnswerRowPresenterImpl implements ArrangeAnswerRowPresenter{
     @Override
     public void onBindViewHolder(@NonNull final ArrangeAnswerRecyclerHolder arrangeAnswerRecyclerHolder, int i) {
         if(setOfQuestions.getAnswers().get(numberOfQuestion).getChoosedAnswers()!=null){
+            arrangeAnswerRecyclerHolder.setDragImageVisiblity(View.GONE);
             arrangeAnswerRecyclerHolder.setBtnTextColor(activity.getResources().getColor(android.R.color.white));
             if(setOfQuestions.getAnswers().get(numberOfQuestion).getChoosedAnswers().get(i)==i)
                 arrangeAnswerRecyclerHolder.setBtnDrawable(activity.getResources().getDrawable(R.drawable.rectangle_button_green));

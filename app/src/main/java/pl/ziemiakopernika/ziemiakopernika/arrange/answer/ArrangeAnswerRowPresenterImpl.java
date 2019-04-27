@@ -22,10 +22,13 @@ public class ArrangeAnswerRowPresenterImpl implements ArrangeAnswerRowPresenter{
     private int numberOfQuestion;
     private ArrayList<Question> questions;
     private ArrayList<Answer> answers;
+    private ArrangeAnswerRowAdapter adapter;
     private ItemTouchHelper itemTouchHelper;
     private AnswerChecker answerChecker;
     private QuestionPresenter questionPresenter;
     private Activity activity;
+
+    private boolean fiftyFiftyBtnClicked = false;
 
     public ArrangeAnswerRowPresenterImpl(SetOfQuestions setOfQuestions, int numberOfQuestion){
         this.setOfQuestions = setOfQuestions;
@@ -66,15 +69,20 @@ public class ArrangeAnswerRowPresenterImpl implements ArrangeAnswerRowPresenter{
             arrangeAnswerRecyclerHolder.setBtnAnswer(getAnswerNumber(setOfQuestions.getAnswers()
                     .get(numberOfQuestion).getChoosedAnswers().get(i)));
         }else{
-            arrangeAnswerRecyclerHolder.setBtnAnswer(getAnswerNumber(setOfQuestions.getAnswers()
-                    .get(numberOfQuestion).getSetOfAnswers().get(i)));
-            arrangeAnswerRecyclerHolder.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    itemTouchHelper.startDrag(arrangeAnswerRecyclerHolder);
-                    return false;
-                }
-            });
+            if(fiftyFiftyBtnClicked && (i == 0 || i == 1)) {
+                arrangeAnswerRecyclerHolder.setDragImageVisiblity(View.GONE);
+                arrangeAnswerRecyclerHolder.setBtnAnswer(getAnswerNumber(i));
+            }else {
+                arrangeAnswerRecyclerHolder.setBtnAnswer(getAnswerNumber(setOfQuestions.getAnswers()
+                        .get(numberOfQuestion).getSetOfAnswers().get(i)));
+                arrangeAnswerRecyclerHolder.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        itemTouchHelper.startDrag(arrangeAnswerRecyclerHolder);
+                        return false;
+                    }
+                });
+            }
         }
     }
 
@@ -99,6 +107,11 @@ public class ArrangeAnswerRowPresenterImpl implements ArrangeAnswerRowPresenter{
     @Override
     public void setItemTouchHelper(ItemTouchHelper itemTouchHelper) {
         this.itemTouchHelper = itemTouchHelper;
+    }
+
+    @Override
+    public void setTwoFirstCorrectAnswersBlockedUp() {
+        this.fiftyFiftyBtnClicked = true;
     }
 
     @Override

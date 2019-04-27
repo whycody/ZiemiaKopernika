@@ -1,5 +1,7 @@
 package pl.ziemiakopernika.ziemiakopernika.question;
 
+import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerRowAdapter;
+
 public interface QuestionPresenter extends FragmentInitializer{
 
     void onCreate();

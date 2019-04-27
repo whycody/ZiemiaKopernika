@@ -52,6 +52,10 @@ public class ArrangeAnswerFragment extends Fragment {
         this.questionPresenter = questionPresenter;
     }
 
+    public void setFiftyFiftyBtnClicked(boolean clicked){
+        touchHelper.setFiftyFiftyBtnClicked(clicked);
+    }
+
     public ArrangeAnswerRowAdapter getAdapter() {
         return adapter;
     }

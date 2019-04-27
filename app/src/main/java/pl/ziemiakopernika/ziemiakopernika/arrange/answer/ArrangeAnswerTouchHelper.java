@@ -18,6 +18,7 @@ public class ArrangeAnswerTouchHelper extends ItemTouchHelper.SimpleCallback {
     private ArrangeAnswerRowAdapter adapter;
     private ArrayList<Answer> answers;
     private int numberOfQuestion;
+    private boolean fiftyFiftyBtnClicked = false;
     private SetOfQuestions setOfQuestions;
 
     public ArrangeAnswerTouchHelper(ArrangeAnswerRowAdapter adapter, int numberOfQuestion, SetOfQuestions setOfQuestions){
@@ -56,6 +57,10 @@ public class ArrangeAnswerTouchHelper extends ItemTouchHelper.SimpleCallback {
                           @NonNull RecyclerView.ViewHolder viewHolder1) {
         int positionDragged = viewHolder.getAdapterPosition();
         int positionTarget = viewHolder1.getAdapterPosition();
+        if(fiftyFiftyBtnClicked) {
+            if (positionTarget == 0 || positionTarget == 1)
+                return false;
+        }
         Collections.swap(answers.get(numberOfQuestion).getSetOfAnswers(), positionDragged, positionTarget);
         adapter.notifyItemMoved(positionDragged, positionTarget);
         return true;
@@ -64,5 +69,9 @@ public class ArrangeAnswerTouchHelper extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
+    }
+
+    public void setFiftyFiftyBtnClicked(boolean clicked){
+        fiftyFiftyBtnClicked = clicked;
     }
 }

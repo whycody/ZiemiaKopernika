@@ -18,6 +18,8 @@ public interface ArrangeAnswerRowPresenter {
 
     void setItemTouchHelper(ItemTouchHelper itemTouchHelper);
 
+    void setTwoFirstCorrectAnswersBlockedUp();
+
     void setQuestionPresenter(QuestionPresenter questionPresenter);
 
     void setActivity(Activity activity);

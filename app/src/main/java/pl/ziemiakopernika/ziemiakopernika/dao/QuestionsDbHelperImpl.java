@@ -14,7 +14,7 @@ import pl.ziemiakopernika.ziemiakopernika.model.Question;
 public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements QuestionsDbHelper {
 
     private static final String DATABASE_NAME = "ZiemiaKopernikaDatabse.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 11;
 
     private SQLiteDatabase database;
 

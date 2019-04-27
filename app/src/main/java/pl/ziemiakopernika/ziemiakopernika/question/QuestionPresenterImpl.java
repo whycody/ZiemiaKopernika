@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.Collections;
+
 import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerFragment;
+import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerRowAdapter;
 import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerRowPresenter;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerFragment;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerPresenter;
@@ -100,8 +103,12 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         }
     }
 
+    int positionOfZero, positionOfOne;
+
     @Override
     public void onFiftyFiftyBtnClicked() {
+        positionOfZero = arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().indexOf(0);
+        positionOfOne = arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().indexOf(1);
         if(fiftyFiftyBtnActivated){
             disactivateFiftyFiftyBtn();
             numberOfCoins = numberOfCoins - 5;
@@ -109,8 +116,28 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
             questionView.setCoinsNumber(numberOfCoins);
             if(setOfQuestions.getQuestions().get(numberOfQuestion).getTypeOfQuestion() == 0){
                 chooseAnswerPresenter.disappearTwoUncorrectAnswers();
+            }else{
+                arrangeAnswerFragment.setFiftyFiftyBtnClicked(true);
+                setTwoFirstCorrectAnswersBlockedUp();
+                arrangeAnswerRowPresenter.setTwoFirstCorrectAnswersBlockedUp();
+                arrangeAnswerFragment.getAdapter().notifyItemChanged(0);
+                arrangeAnswerFragment.getAdapter().notifyItemChanged(1);
             }
         }
+    }
+
+
+    private void setTwoFirstCorrectAnswersBlockedUp(){
+        arrangeAnswerFragment.getAdapter().notifyItemMoved(positionOfZero,0);
+        Integer integer = arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().get(positionOfZero);
+        arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().remove(positionOfZero);
+        arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().add(0, integer);
+
+        positionOfOne = arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().indexOf(1);
+        arrangeAnswerFragment.getAdapter().notifyItemMoved(positionOfOne, 1);
+        Integer integerTwo = arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().get(positionOfOne);
+        arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().remove(positionOfOne);
+        arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().add(1, integerTwo);
     }
 
     @Override

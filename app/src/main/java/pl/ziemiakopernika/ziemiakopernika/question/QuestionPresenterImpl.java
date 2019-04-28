@@ -107,8 +107,6 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
 
     @Override
     public void onFiftyFiftyBtnClicked() {
-        positionOfZero = arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().indexOf(0);
-        positionOfOne = arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().indexOf(1);
         if(fiftyFiftyBtnActivated){
             disactivateFiftyFiftyBtn();
             numberOfCoins = numberOfCoins - 5;
@@ -117,6 +115,8 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
             if(setOfQuestions.getQuestions().get(numberOfQuestion).getTypeOfQuestion() == 0){
                 chooseAnswerPresenter.disappearTwoUncorrectAnswers();
             }else{
+                positionOfZero = arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().indexOf(0);
+                positionOfOne = arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().indexOf(1);
                 arrangeAnswerFragment.setFiftyFiftyBtnClicked(true);
                 setTwoFirstCorrectAnswersBlockedUp();
                 arrangeAnswerRowPresenter.setTwoFirstCorrectAnswersBlockedUp();

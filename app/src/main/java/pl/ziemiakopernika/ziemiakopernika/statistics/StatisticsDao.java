@@ -16,6 +16,8 @@ public interface StatisticsDao {
 
     int getGamesPlayedStatistics();
 
+    int getQuestionsAnsweredStatistics();
+
     int getTimeLeftTotalStatistics();
 
     double getTimeLeftPerQuestionStatistics();
@@ -28,6 +30,10 @@ public interface StatisticsDao {
 
     int getEarnedCoinsStatistics();
 
+    int getCoinsStatistics();
+
     int getSpentCoinsStatistics();
+
+    int getPercentageOfCoinsHaveStatistics();
 
 }

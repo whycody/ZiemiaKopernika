@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".summary.SummaryActivity"></activity>
+        <activity android:name=".statistics.StatisticsActivity"
+            android:theme="@style/StatisticsTheme"/>
+        <activity android:name=".summary.SummaryActivity" />
         <activity android:name=".round.RoundActivity" />
         <activity
             android:name=".question.QuestionActivity"

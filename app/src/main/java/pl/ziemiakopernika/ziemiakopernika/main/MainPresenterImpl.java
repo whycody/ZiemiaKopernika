@@ -12,6 +12,7 @@ import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsActivity;
 
 public class MainPresenterImpl implements MainPresenter{
 
@@ -90,6 +91,7 @@ public class MainPresenterImpl implements MainPresenter{
 
     @Override
     public void statisticsClicked() {
-
+        Intent intent = new Intent(activity, StatisticsActivity.class);
+        activity.startActivity(intent);
     }
 }

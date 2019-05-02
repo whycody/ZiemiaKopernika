@@ -62,6 +62,11 @@ public class StatisticsDaoImpl implements StatisticsDao {
     }
 
     @Override
+    public int getQuestionsAnsweredStatistics() {
+        return getGamesPlayedStatistics() * 5;
+    }
+
+    @Override
     public int getTimeLeftTotalStatistics() {
         return sharedPreferences.getInt(TIME_LEFT, 0);
     }
@@ -70,7 +75,7 @@ public class StatisticsDaoImpl implements StatisticsDao {
     public double getTimeLeftPerQuestionStatistics() {
         int timeLeftTotal = getTimeLeftTotalStatistics();
         int gamesPlayed = getGamesPlayedStatistics();
-        return (double) Math.round(timeLeftTotal / gamesPlayed * 10) / 10;
+        return (double) Math.round(timeLeftTotal / gamesPlayed * 10) / 50;
     }
 
     @Override
@@ -96,9 +101,19 @@ public class StatisticsDaoImpl implements StatisticsDao {
     }
 
     @Override
+    public int getCoinsStatistics() {
+        return sharedPreferences.getInt(QuestionPresenterImpl.COINS, 20);
+    }
+
+    @Override
     public int getSpentCoinsStatistics() {
-        int coins = sharedPreferences.getInt(QuestionPresenterImpl.COINS, 20);
+        int coins = getCoinsStatistics();
         int coinsInGame = getEarnedCoinsStatistics() + 20;
         return coinsInGame - coins;
+    }
+
+    @Override
+    public int getPercentageOfCoinsHaveStatistics(){
+        return (getCoinsStatistics()*100)/getEarnedCoinsStatistics();
     }
 }

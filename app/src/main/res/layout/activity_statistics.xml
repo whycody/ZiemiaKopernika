@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    tools:context=".statistics.StatisticsActivity">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="160dp"
+            android:background="@drawable/rectangle_layout_white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/rounds_played_text"
+                    style="@style/SummaryTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Udało Ci się rozegrać 15 rund." />
+
+                <TextView
+                    android:id="@+id/questions_answered_text"
+                    android:layout_marginTop="10dp"
+                    style="@style/SummaryTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Odpowiedziałeś przy tym na 75 pytań." />
+
+                <ProgressBar
+                    android:id="@+id/correct_answers_progress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginTop="30dp"
+                    android:indeterminate="false"
+                    android:progress="30"
+                    android:progressDrawable="@drawable/progress_drawable" />
+
+                <TextView
+                    android:id="@+id/correct_answers_text"
+                    android:layout_marginTop="30dp"
+                    style="@style/SummaryTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="Aż 29 z nich było prawidłowych, gratulacje!" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorGray"
+                    android:layout_marginTop="40dp"/>
+
+                <TextView
+                    android:id="@+id/earned_coins_text"
+                    android:layout_marginTop="40dp"
+                    style="@style/SummaryTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="W ciągu całej gry zarobiłeś 131 monet" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="40dp">
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <ProgressBar
+                            android:id="@+id/earned_coins_progress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:max="1000"
+                            android:padding="5dp"
+                            android:progress="800"
+                            android:progressDrawable="@drawable/statistics_progress_bar"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:alpha="0.1"
+                            android:padding="5dp"
+                            android:progress="100"
+                            android:progressDrawable="@drawable/statistics_progress_bar"
+                            app:layout_constraintBottom_toBottomOf="@+id/earned_coins_progress"
+                            app:layout_constraintEnd_toEndOf="@+id/earned_coins_progress"
+                            app:layout_constraintStart_toStartOf="@+id/earned_coins_progress"
+                            app:layout_constraintTop_toTopOf="@+id/earned_coins_progress" />
+
+                    </android.support.constraint.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/spent_coins_text"
+                        style="@style/SummaryTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:lineSpacingExtra="2sp"
+                        android:letterSpacing="0.03"
+                        android:paddingRight="20dp"
+                        android:text="Wydałeś już 42 z nich i posiadasz 68% z całej zgromadzonej sumy" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="30dp">
+
+                    <TextView
+                        android:id="@+id/lifebuoy_text"
+                        style="@style/SummaryTextStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:lineSpacingExtra="2sp"
+                        android:letterSpacing="0.03"
+                        android:paddingLeft="20dp"
+                        android:text="Co około 5 pytanie sięgałeś po koło ratunkowe 50/50 lub +20" />
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <Button
+                            android:id="@+id/fifty_fifty_btn"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginStart="32dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/circle_button_activated_default"
+                            android:fontFamily="@font/ropasans"
+                            android:text="50/50"
+                            android:textColor="@android:color/white"
+                            android:textSize="25sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Button
+                            android:id="@+id/add_seconds_btn"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/circle_button_activated_default"
+                            android:fontFamily="@font/ropasans"
+                            android:text="+20"
+                            android:textColor="@android:color/white"
+                            android:textSize="27sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/fifty_fifty_btn"
+                            app:layout_constraintTop_toTopOf="@+id/fifty_fifty_btn" />
+
+                    </android.support.constraint.ConstraintLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorGray"
+                    android:layout_marginTop="40dp"/>
+
+                <TextView
+                    android:id="@+id/seconds_left_per_question_text"
+                    style="@style/SummaryTextStyle"
+                    android:layout_marginTop="40dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="Średnio na pytanie zostawało ci jeszcze aż 9 sekund!" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorGray"
+                    android:layout_marginTop="40dp"/>
+
+                <LinearLayout
+                    android:id="@+id/buttons_linear"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/back_btn"
+                        style="@style/YellowButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="6dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_weight="1"
+                        android:text="Wróć" />
+
+                    <Button
+                        android:id="@+id/play_again_btn"
+                        style="@style/RedButtonStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_weight="1"
+                        android:text="Graj ponownie" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

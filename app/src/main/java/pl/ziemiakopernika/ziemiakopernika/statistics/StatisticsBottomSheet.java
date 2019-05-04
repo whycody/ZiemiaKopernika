@@ -1,41 +1,44 @@
 package pl.ziemiakopernika.ziemiakopernika.statistics;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
 
-public class StatisticsActivity extends AppCompatActivity implements StatisticsView{
+public class StatisticsBottomSheet extends BottomSheetDialogFragment implements StatisticsView{
 
     private StatisticsPresenter presenter;
     private TextView roundsPlayedText, questionsAnsweredText, correctAnswersText, earnedCoinsText,
             spentCoinsText, lifebuoyText, secondsLeftPerQuestionText;
     private ProgressBar correctAnswersProgress, earnedCoinsProgress;
-    private Button backBtn, playAgainBtn;
+    private Button playAgainBtn;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_statistics);
-        presenter = new StatisticsPresenterImpl(this, this);
-        roundsPlayedText = findViewById(R.id.rounds_played_text);
-        questionsAnsweredText = findViewById(R.id.questions_answered_text);
-        correctAnswersText = findViewById(R.id.correct_answers_text);
-        earnedCoinsText = findViewById(R.id.earned_coins_text);
-        spentCoinsText = findViewById(R.id.spent_coins_text);
-        lifebuoyText = findViewById(R.id.lifebuoy_text);
-        secondsLeftPerQuestionText = findViewById(R.id.seconds_left_per_question_text);
-        correctAnswersProgress = findViewById(R.id.correct_answers_progress);
-        earnedCoinsProgress = findViewById(R.id.earned_coins_progress);
-        backBtn = findViewById(R.id.back_btn);
-        playAgainBtn = findViewById(R.id.play_again_btn);
-        backBtn.setOnClickListener(onBackBtnClicked);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_statistics, container);
+        presenter = new StatisticsPresenterImpl(getActivity(), this);
+        roundsPlayedText = view.findViewById(R.id.rounds_played_text);
+        questionsAnsweredText = view.findViewById(R.id.questions_answered_text);
+        correctAnswersText = view.findViewById(R.id.correct_answers_text);
+        earnedCoinsText = view.findViewById(R.id.earned_coins_text);
+        spentCoinsText = view.findViewById(R.id.spent_coins_text);
+        lifebuoyText = view.findViewById(R.id.lifebuoy_text);
+        secondsLeftPerQuestionText = view.findViewById(R.id.seconds_left_per_question_text);
+        correctAnswersProgress = view.findViewById(R.id.correct_answers_progress);
+        earnedCoinsProgress = view.findViewById(R.id.earned_coins_progress);
+        playAgainBtn = view.findViewById(R.id.play_again_btn);
         playAgainBtn.setOnClickListener(onPlayAgainClicked);
         presenter.onCreate();
+        return view;
     }
 
     @Override
@@ -84,13 +87,6 @@ public class StatisticsActivity extends AppCompatActivity implements StatisticsV
         earnedCoinsProgress.setMax(maxValue);
         earnedCoinsProgress.setProgress(progress);
     }
-
-    private View.OnClickListener onBackBtnClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            presenter.onBackBtnClicked();
-        }
-    };
 
     private View.OnClickListener onPlayAgainClicked = new View.OnClickListener() {
         @Override

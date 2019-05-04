@@ -80,11 +80,6 @@ public class StatisticsPresenterImpl implements StatisticsPresenter {
     }
 
     @Override
-    public void onBackBtnClicked() {
-        activity.finish();
-    }
-
-    @Override
     public void onPlayAgainBtnClicked(View view) {
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
                 .makeSceneTransitionAnimation(activity, view, "transition");

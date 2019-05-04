@@ -46,6 +46,7 @@ public class SummaryActivity extends AppCompatActivity implements SummaryView{
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         shareBtn.setOnClickListener(onShareBtnClicked);
         playAgainBtn.setOnClickListener(onPlayAgainBtnClicked);
+        statistitcsBtn.setOnClickListener(onStatisticsBtnClicked);
         summaryPresenter.onCreate();
     }
 
@@ -128,6 +129,13 @@ public class SummaryActivity extends AppCompatActivity implements SummaryView{
         @Override
         public void onClick(View view) {
             summaryPresenter.onPlayAgainBtnClicked(buttonsLinear);
+        }
+    };
+
+    private View.OnClickListener onStatisticsBtnClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            summaryPresenter.onStatisticsBtnClicked();
         }
     };
 }

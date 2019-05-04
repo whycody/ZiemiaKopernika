@@ -12,11 +12,12 @@ import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
-import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsActivity;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsBottomSheet;
 
 public class MainPresenterImpl implements MainPresenter{
 
-    private Activity activity;
+    private MainActivity activity;
+    private Context context;
     private MainActivityView activityView;
     private SharedPreferences sharedPreferences;
     private QuestionsDao questionsDao;
@@ -27,7 +28,7 @@ public class MainPresenterImpl implements MainPresenter{
     private int numberOfQuestions = 5;
 
     MainPresenterImpl(Activity activity, MainActivityView activityView){
-        this.activity = activity;
+        this.activity = (MainActivity)activity;
         this.activityView = activityView;
         sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
         questionsDao = new QuestionsDaoImpl(activity);
@@ -91,7 +92,7 @@ public class MainPresenterImpl implements MainPresenter{
 
     @Override
     public void statisticsClicked() {
-        Intent intent = new Intent(activity, StatisticsActivity.class);
-        activity.startActivity(intent);
+        StatisticsBottomSheet bottomSheet = new StatisticsBottomSheet();
+        bottomSheet.show(activity.getSupportFragmentManager(), "fragmentManager");
     }
 }

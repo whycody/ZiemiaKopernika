@@ -11,4 +11,6 @@ public interface SummaryPresenter {
     void onShareBtnClicked();
 
     void onPlayAgainBtnClicked(View view);
+
+    void onStatisticsBtnClicked();
 }

@@ -6,7 +6,5 @@ public interface StatisticsPresenter {
 
     void onCreate();
 
-    void onBackBtnClicked();
-
     void onPlayAgainBtnClicked(View view);
 }

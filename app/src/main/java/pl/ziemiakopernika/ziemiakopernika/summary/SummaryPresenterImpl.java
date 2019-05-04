@@ -20,6 +20,7 @@ import pl.ziemiakopernika.ziemiakopernika.model.Answer;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsBottomSheet;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDao;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerPresenterImpl;
@@ -27,7 +28,7 @@ import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerRowAdapter;
 
 public class SummaryPresenterImpl implements SummaryPresenter {
 
-    private Activity activity;
+    private SummaryActivity activity;
     private SummaryView summaryView;
     private StatisticsDao statisticsDao;
     private QuestionsDao questionsDao;
@@ -43,7 +44,7 @@ public class SummaryPresenterImpl implements SummaryPresenter {
 
 
     public SummaryPresenterImpl(Activity activity, SummaryView summaryView){
-        this.activity = activity;
+        this.activity = (SummaryActivity)activity;
         this.summaryView = summaryView;
         setOfQuestions = getSetOfQuestions();
         questionsDao = new QuestionsDaoImpl(activity);
@@ -211,6 +212,13 @@ public class SummaryPresenterImpl implements SummaryPresenter {
         intent.putExtra(RedInfoActivity.EXTRA_CIRCULAR_REVEAL_Y, getRevealY(view));
         intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
         ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
+        activity.finish();
+    }
+
+    @Override
+    public void onStatisticsBtnClicked() {
+        StatisticsBottomSheet bottomSheet = new StatisticsBottomSheet();
+        bottomSheet.show(activity.getSupportFragmentManager(), "fragmentManager");
     }
 
     private SetOfQuestions getNewSetOfQuestions(){

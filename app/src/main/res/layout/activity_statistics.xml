@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    tools:context=".statistics.StatisticsActivity">
+    android:background="@drawable/rectangle_layout_white">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="160dp"
-            android:background="@drawable/rectangle_layout_white">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -195,42 +192,15 @@
                     android:layout_marginLeft="20dp"
                     android:text="Średnio na pytanie zostawało ci jeszcze aż 9 sekund!" />
 
-                <View
+                <Button
+                    android:id="@+id/play_again_btn"
+                    style="@style/RedButtonStyle"
+                    android:background="@color/colorPrimaryDark"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorGray"
-                    android:layout_marginTop="40dp"/>
-
-                <LinearLayout
-                    android:id="@+id/buttons_linear"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/back_btn"
-                        style="@style/YellowButtonStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="6dp"
-                        android:layout_marginBottom="20dp"
-                        android:layout_weight="1"
-                        android:text="Wróć" />
-
-                    <Button
-                        android:id="@+id/play_again_btn"
-                        style="@style/RedButtonStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginBottom="20dp"
-                        android:layout_weight="1"
-                        android:text="Graj ponownie" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:layout_weight="1"
+                    android:text="Graj ponownie" />
 
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
+import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
@@ -39,8 +42,26 @@ public class StatisticsPresenterImpl implements StatisticsPresenter {
         statisticsView.setSecondsLeftPerQuestionText(getSecondsLeftPerQuestionText());
         statisticsView.setCorrectAnswersProgress(statisticsDao.getQuestionsAnsweredStatistics(),
                 statisticsDao.getCorrectAnswersNumberStatistics());
+        startCorrectAnswersProgressBarAnimation();
         statisticsView.setEarnedCoinsProgress(statisticsDao.getEarnedCoinsStatistics()+20,
                 statisticsDao.getCoinsStatistics());
+        startEarnedCoinsProgressBarAnimation();
+    }
+
+    private void startCorrectAnswersProgressBarAnimation(){
+        ProgressBarAnimation progressBarAnimation = new ProgressBarAnimation(statisticsView.getCorrectAnswersProgressBar(),
+                0, statisticsDao.getCorrectAnswersNumberStatistics());
+        progressBarAnimation.setDuration(1000);
+        statisticsView.getCorrectAnswersProgressBar().startAnimation(progressBarAnimation);
+        if((statisticsDao.getQuestionsAnsweredStatistics()*100)/statisticsDao.getCorrectAnswersNumberStatistics()>5)
+            statisticsView.getCorrectAnswersProgressBar().setProgressDrawable
+                    (activity.getResources().getDrawable(R.drawable.progress_rounded_drawable));
+    }
+
+    private void startEarnedCoinsProgressBarAnimation(){
+        Animation rotateAnimation = AnimationUtils.loadAnimation(activity, R.anim.rotate_earth);
+        rotateAnimation.setDuration(5000);
+        statisticsView.getEarnedCoinsProgressBar().startAnimation(rotateAnimation);
     }
 
     private String getGamesPlayedText(){

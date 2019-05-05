@@ -40,7 +40,14 @@ public class MainPresenterImpl implements MainPresenter{
     }
 
     @Override
+    public void onResume() {
+        if(!activityView.getPulsatorLayout().isStarted())
+            activityView.getPulsatorLayout().start();
+    }
+
+    @Override
     public void startGameClicked(View view) {
+        activityView.getPulsatorLayout().stop();
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
                 .makeSceneTransitionAnimation(activity, view, "transition");
         startGameActivity(view,optionsCompat);

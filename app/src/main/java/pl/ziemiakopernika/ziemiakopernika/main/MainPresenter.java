@@ -6,6 +6,8 @@ public interface MainPresenter {
 
     void onCreate();
 
+    void onResume();
+
     void startGameClicked(View view);
 
     void muteClicked();

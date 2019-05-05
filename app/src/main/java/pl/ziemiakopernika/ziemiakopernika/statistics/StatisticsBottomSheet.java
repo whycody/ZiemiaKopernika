@@ -7,6 +7,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -86,6 +87,16 @@ public class StatisticsBottomSheet extends BottomSheetDialogFragment implements 
     public void setEarnedCoinsProgress(int maxValue, int progress) {
         earnedCoinsProgress.setMax(maxValue);
         earnedCoinsProgress.setProgress(progress);
+    }
+
+    @Override
+    public ProgressBar getCorrectAnswersProgressBar() {
+        return correctAnswersProgress;
+    }
+
+    @Override
+    public ProgressBar getEarnedCoinsProgressBar() {
+        return earnedCoinsProgress;
     }
 
     private View.OnClickListener onPlayAgainClicked = new View.OnClickListener() {

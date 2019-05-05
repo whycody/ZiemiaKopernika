@@ -25,6 +25,9 @@ import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDao;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.summary.recycler.AnswerRowAdapter;
+import pl.ziemiakopernika.ziemiakopernika.timer.Timer;
+import pl.ziemiakopernika.ziemiakopernika.timer.TimerImpl;
+import pl.ziemiakopernika.ziemiakopernika.timer.TimerReact;
 
 public class SummaryPresenterImpl implements SummaryPresenter {
 
@@ -197,7 +200,7 @@ public class SummaryPresenterImpl implements SummaryPresenter {
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
         intent.setType("text/plain");
         String shareBodyText = "Wygrałem " + totalCoins + " monet! Pobierz aplikacje do quizowania " +
-                "\"Ziemia Kopernika\" z Google App Store i spróbuj mnie przebić!";
+                "Ziemia Kopernika i spróbuj mnie przebić!";
         intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
         activity.startActivity(Intent.createChooser(intent, "Udostępnij"));
     }
@@ -212,7 +215,22 @@ public class SummaryPresenterImpl implements SummaryPresenter {
         intent.putExtra(RedInfoActivity.EXTRA_CIRCULAR_REVEAL_Y, getRevealY(view));
         intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
         ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
-        activity.finish();
+        startTimerToCloseActivity();
+    }
+
+    private void startTimerToCloseActivity(){
+        Timer timer = new TimerImpl(3000, new TimerReact() {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                activity.finish();
+            }
+        });
+        timer.startTimer();
     }
 
     @Override

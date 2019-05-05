@@ -11,6 +11,7 @@
         android:id="@+id/show_again_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:buttonTint="@android:color/black"
         android:text="Nie pokazuj więcej" />
 
 </LinearLayout>

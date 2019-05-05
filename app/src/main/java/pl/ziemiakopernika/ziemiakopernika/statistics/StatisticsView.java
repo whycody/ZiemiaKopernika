@@ -1,5 +1,8 @@
 package pl.ziemiakopernika.ziemiakopernika.statistics;
 
+import android.view.animation.Animation;
+import android.widget.ProgressBar;
+
 public interface StatisticsView {
 
     void setRoundsPlayedText(String text);
@@ -19,5 +22,9 @@ public interface StatisticsView {
     void setCorrectAnswersProgress(int maxValue, int progress);
 
     void setEarnedCoinsProgress(int maxValue, int progress);
+
+    ProgressBar getCorrectAnswersProgressBar();
+
+    ProgressBar getEarnedCoinsProgressBar();
 
 }

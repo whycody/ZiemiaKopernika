@@ -42,7 +42,8 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     private ArrangeAnswerRowPresenter arrangeAnswerRowPresenter;
 
     private int numberOfCoins, numberOfQuestion, secondsPerQuestion;
-    private boolean fiftyFiftyBtnActivated, addSecondsBtnActivated, waitingToStartActivity;
+    private boolean fiftyFiftyBtnActivated, addSecondsBtnActivated, waitingToStartActivity,
+            lifebuoyStatisticSaved;
     private boolean answersClickable, progressTextEnabled = true;
     public static final String COINS = "coins";
     public static final String NUMBER_OF_QUESTION = "numberOfQuestion";
@@ -95,16 +96,20 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
         builder.setPositiveButton("Wyjdź", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if(transitionTimer!=null) {
-                    transitionTimer.setFinishMethodIsCallable(false);
-                    transitionTimer.stopTimer();
-                }
-                timer.setFinishMethodIsCallable(false);
-                timer.stopTimer();
-                activity.finish();
+                closeTimersAndActivity();
             }
         }).setNegativeButton("Anuluj", null);
         builder.show();
+    }
+
+    private void closeTimersAndActivity(){
+        if(transitionTimer!=null) {
+            transitionTimer.setFinishMethodIsCallable(false);
+            transitionTimer.stopTimer();
+        }
+        timer.setFinishMethodIsCallable(false);
+        timer.stopTimer();
+        activity.finish();
     }
 
     private void setButtonsActivatedBooleans(boolean addSecondsBtnActivated, boolean fiftyFiftyBtnActivated){
@@ -128,7 +133,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     @Override
     public void onFiftyFiftyBtnClicked() {
         if(fiftyFiftyBtnActivated){
-            statisticsDao.saveLifebuoyStatistics();
+            saveLifebuoyStatistic();
             disactivateFiftyFiftyBtn();
             numberOfCoins = numberOfCoins - 5;
             saveNumberOfCoins(numberOfCoins);
@@ -163,12 +168,19 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     @Override
     public void onAddSecondsBtnClicked() {
         if(addSecondsBtnActivated){
-            statisticsDao.saveLifebuoyStatistics();
+            saveLifebuoyStatistic();
             disactivateAddSecondsBtn();
             numberOfCoins = numberOfCoins - 3;
             saveNumberOfCoins(numberOfCoins);
             startNewTimer(timer.getSeconds()+20);
             questionView.setCoinsNumber(numberOfCoins);
+        }
+    }
+
+    private void saveLifebuoyStatistic(){
+        if(!lifebuoyStatisticSaved) {
+            statisticsDao.saveLifebuoyStatistics();
+            lifebuoyStatisticSaved = true;
         }
     }
 
@@ -199,8 +211,9 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
 
     @Override
     public void showNextQuestion() {
-        answersClickable=true;
-        progressTextEnabled=true;
+        answersClickable = true;
+        progressTextEnabled = true;
+        lifebuoyStatisticSaved = false;
         questionView.setQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getQuestion());
         setButtonsActivated();
         questionView.setTimeProgress(secondsPerQuestion*1000, secondsPerQuestion);

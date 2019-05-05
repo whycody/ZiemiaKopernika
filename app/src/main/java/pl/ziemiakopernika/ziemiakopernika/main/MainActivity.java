@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         statisticsBtn.setOnClickListener(statisticsOnClick);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mainPresenter.onResume();
+    }
+
     private void startEarthAnimation(){
         Animation rotateEarth = AnimationUtils.loadAnimation(this, R.anim.rotate_earth);
         earthView.startAnimation(rotateEarth);
@@ -84,5 +90,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             muteBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_muteon));
         else
             muteBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_muteoff));
+    }
+
+    @Override
+    public PulsatorLayout getPulsatorLayout() {
+        return pulsatorLayout;
     }
 }

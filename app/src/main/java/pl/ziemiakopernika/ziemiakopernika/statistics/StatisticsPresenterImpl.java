@@ -68,7 +68,11 @@ public class StatisticsPresenterImpl implements StatisticsPresenter {
     }
 
     private String getLifebuoyText(){
-        return "Co około " + 5 + " pytanie sięgałeś po koło ratunkowe 50/50 lub +20";
+        if(statisticsDao.getLifebuoysPerQuestionStatistics()==0)
+            return "Nie skorzystałeś jeszcze z żadnego koła ratunkowego. Do dzieła!";
+        else
+            return "Co około " + statisticsDao.getLifebuoysPerQuestionStatistics() +
+                    " pytanie sięgałeś po koło ratunkowe 50/50 lub +20";
     }
 
     private String getSecondsLeftPerQuestionText(){

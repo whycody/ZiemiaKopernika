@@ -4,6 +4,8 @@ public interface StatisticsDao {
 
     void saveGamesPlayedStatistics();
 
+    void saveLifebuoyStatistics();
+
     void saveTimeLeftStatistics(int timeLeft);
 
     void saveCorrectAnswersNumberStatistics(int correctAnswers);
@@ -15,6 +17,8 @@ public interface StatisticsDao {
     void saveEarnedCoinsStatistics(int earnedCoins);
 
     int getGamesPlayedStatistics();
+
+    int getLifebuoysPerQuestionStatistics();
 
     int getQuestionsAnsweredStatistics();
 

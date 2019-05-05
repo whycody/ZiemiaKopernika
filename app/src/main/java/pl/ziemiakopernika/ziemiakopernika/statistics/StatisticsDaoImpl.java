@@ -18,6 +18,7 @@ public class StatisticsDaoImpl implements StatisticsDao {
     private static final String UNCORRECT_ANSWERS = "uncorrectAnswers";
     private static final String PERCENTAGE_TOTAL = "percentageTotal";
     private static final String EARNED_COINS = "earnedCoins";
+    private static final String LIFEBUOYS_TAKED = "lifebuoysTaked";
 
     public StatisticsDaoImpl(Activity activity){
         this.activity = activity;
@@ -29,6 +30,11 @@ public class StatisticsDaoImpl implements StatisticsDao {
     @Override
     public void saveGamesPlayedStatistics() {
         editor.putInt(GAMES_PLAYED, sharedPreferences.getInt(GAMES_PLAYED, 0)+1).commit();
+    }
+
+    @Override
+    public void saveLifebuoyStatistics() {
+        editor.putInt(LIFEBUOYS_TAKED, sharedPreferences.getInt(LIFEBUOYS_TAKED, 0)+1).commit();
     }
 
     @Override
@@ -59,6 +65,14 @@ public class StatisticsDaoImpl implements StatisticsDao {
     @Override
     public int getGamesPlayedStatistics() {
         return sharedPreferences.getInt(GAMES_PLAYED, 0);
+    }
+
+    @Override
+    public int getLifebuoysPerQuestionStatistics() {
+        if(sharedPreferences.getInt(LIFEBUOYS_TAKED, 0)==0)
+            return 0;
+        else
+            return getQuestionsAnsweredStatistics()/sharedPreferences.getInt(LIFEBUOYS_TAKED, 0);
     }
 
     @Override

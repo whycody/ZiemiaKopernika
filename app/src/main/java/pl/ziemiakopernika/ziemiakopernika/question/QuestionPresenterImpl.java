@@ -1,18 +1,19 @@
 package pl.ziemiakopernika.ziemiakopernika.question;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-
-import java.util.Collections;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerFragment;
-import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerRowAdapter;
 import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerRowPresenter;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerFragment;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerPresenter;
@@ -20,32 +21,35 @@ import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.Question;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.round.RoundActivity;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDao;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.timer.Timer;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerImpl;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerReact;
 
-public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
+public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, CompoundButton.OnCheckedChangeListener {
 
     private Activity activity;
     private QuestionView questionView;
     private SetOfQuestions setOfQuestions;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor preferencesEditor;
     private Timer timer, transitionTimer;
+    private StatisticsDao statisticsDao;
 
     private ArrangeAnswerFragment arrangeAnswerFragment;
-
     private ChooseAnswerPresenter chooseAnswerPresenter;
     private ArrangeAnswerRowPresenter arrangeAnswerRowPresenter;
 
     private int numberOfCoins, numberOfQuestion, secondsPerQuestion;
     private boolean fiftyFiftyBtnActivated, addSecondsBtnActivated, waitingToStartActivity;
     private boolean answersClickable = true;
-
     public static final String COINS = "coins";
     public static final String NUMBER_OF_QUESTION = "numberOfQuestion";
     public static final String REQUEST_CODE = "requestCode";
-    public static final int SHOW_NUMBER_OF_ROUND = 0;
-    public static final int SHOW_FINAL_OF_ROUNDS = 1;
+    private static final String SHOW_DIALOG_CLICK_TIME = "showDialogClickTime";
+    private static final int SHOW_NUMBER_OF_ROUND = 0;
+    private static final int SHOW_FINAL_OF_ROUNDS = 1;
     private int waitingActivityRequestCode, secondsLeft;
 
     QuestionPresenterImpl(Activity activity, QuestionView questionView){
@@ -54,9 +58,13 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         this.setOfQuestions = getSetOfQuestions();
         secondsPerQuestion = setOfQuestions.getSecondsPerQuestion();
         sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        preferencesEditor = sharedPreferences.edit();
         numberOfCoins = getNumberOfCoins();
         timer = new TimerImpl(secondsPerQuestion*1000+1000, this);
+        statisticsDao = new StatisticsDaoImpl(activity);
         timer.startTimer();
+        timer.setFinishMethodIsCallable(false);
+        timer.stopTimer();
     }
 
     private SetOfQuestions getSetOfQuestions(){
@@ -69,9 +77,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
 
     @Override
     public void onCreate() {
-        questionView.setQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getQuestion());
         questionView.setCoinsNumber(numberOfCoins);
-        applyFragment();
         setButtonsActivated();
         addViewsToLinearLayout();
         startNewActivity(SHOW_NUMBER_OF_ROUND);
@@ -108,6 +114,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     @Override
     public void onFiftyFiftyBtnClicked() {
         if(fiftyFiftyBtnActivated){
+            statisticsDao.saveLifebuoyStatistics();
             disactivateFiftyFiftyBtn();
             numberOfCoins = numberOfCoins - 5;
             saveNumberOfCoins(numberOfCoins);
@@ -126,7 +133,6 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         }
     }
 
-
     private void setTwoFirstCorrectAnswersBlockedUp(){
         arrangeAnswerFragment.getAdapter().notifyItemMoved(positionOfZero,0);
         Integer integer = arrangeAnswerRowPresenter.getAnswers().get(numberOfQuestion).getSetOfAnswers().get(positionOfZero);
@@ -143,6 +149,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     @Override
     public void onAddSecondsBtnClicked() {
         if(addSecondsBtnActivated){
+            statisticsDao.saveLifebuoyStatistics();
             disactivateAddSecondsBtn();
             numberOfCoins = numberOfCoins - 3;
             saveNumberOfCoins(numberOfCoins);
@@ -178,8 +185,8 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         answersClickable=true;
         questionView.setQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getQuestion());
         setButtonsActivated();
-        applyFragment();
-        startNewTimer(secondsPerQuestion+1);
+        questionView.setTimeProgress(secondsPerQuestion*1000, secondsPerQuestion);
+        applyFragmentAndStartNewTimer();
     }
 
     @Override
@@ -213,20 +220,46 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
         timer.startTimer();
     }
 
-    private void applyFragment(){
+    private void applyFragmentAndStartNewTimer(){
         if(setOfQuestions.getQuestions().get(numberOfQuestion).getTypeOfQuestion() == 0){
             ChooseAnswerFragment chooseAnswerFragment = new ChooseAnswerFragment();
             chooseAnswerFragment.setSetOfQuestions(setOfQuestions);
             chooseAnswerFragment.setNumberOfQuestion(numberOfQuestion);
             chooseAnswerFragment.setQuestionPresenter(this);
             questionView.applyFragment(chooseAnswerFragment);
+            startNewTimer(secondsPerQuestion+1);
         }else{
+            if(sharedPreferences.getBoolean(SHOW_DIALOG_CLICK_TIME, true))
+                showDialogClickTime();
+            else
+                startNewTimer(secondsPerQuestion+1);
             ArrangeAnswerFragment arrangeAnswerFragment = new ArrangeAnswerFragment();
             arrangeAnswerFragment.setProperties(setOfQuestions, numberOfQuestion);
             arrangeAnswerFragment.setQuestionPresenter(this);
             questionView.applyFragment(arrangeAnswerFragment);
             this.arrangeAnswerFragment = arrangeAnswerFragment;
         }
+    }
+
+    private void showDialogClickTime(){
+        questionView.setQuestion("Uporządkuj...");
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_click_time, null);
+        CheckBox showAgainCheckBox = view.findViewById(R.id.show_again_checkbox);
+        showAgainCheckBox.setOnCheckedChangeListener(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage("Gdy już ułożysz płytki w odpowiedniej kolejności kliknij na czas aby go zatrzymać");
+        builder.setView(view);
+        builder.setPositiveButton("Rozumiem", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                startNewTimer(secondsPerQuestion+1);
+                questionView.setQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getQuestion());
+            }
+        });
+        Dialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     private void saveNumberOfCoins(int numberOfCoins){
@@ -317,5 +350,11 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact {
     @Override
     public void setArrangeAnswerRowPresenter(ArrangeAnswerRowPresenter arrangeAnswerRowPresenter) {
         this.arrangeAnswerRowPresenter = arrangeAnswerRowPresenter;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        preferencesEditor.putBoolean(SHOW_DIALOG_CLICK_TIME, !b);
+        preferencesEditor.apply();
     }
 }

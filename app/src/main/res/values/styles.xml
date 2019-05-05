@@ -9,6 +9,7 @@
         <item name="android:statusBarColor">@color/colorTransparent</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
     </style>
 
     <style name="SplashTheme" parent="AppTheme">
@@ -27,8 +28,8 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-    <style name="StatisticsTheme" parent="AppTheme">
-
+    <style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">@android:color/black</item>
     </style>
 
     <style name="YellowButtonStyle">

@@ -32,6 +32,11 @@ public class RoundActivity extends AppCompatActivity implements RoundView, Timer
     }
 
     @Override
+    public void onBackPressed() {
+
+    }
+
+    @Override
     public void setRoundText(String roundText) {
         roundView.setText(roundText);
     }

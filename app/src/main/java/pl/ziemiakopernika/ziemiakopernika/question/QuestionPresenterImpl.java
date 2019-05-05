@@ -43,7 +43,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
 
     private int numberOfCoins, numberOfQuestion, secondsPerQuestion;
     private boolean fiftyFiftyBtnActivated, addSecondsBtnActivated, waitingToStartActivity;
-    private boolean answersClickable = true;
+    private boolean answersClickable, progressTextEnabled = true;
     public static final String COINS = "coins";
     public static final String NUMBER_OF_QUESTION = "numberOfQuestion";
     public static final String REQUEST_CODE = "requestCode";
@@ -85,12 +85,26 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
 
     @Override
     public void onBackPressed() {
-        if(transitionTimer!=null) {
-            transitionTimer.setFinishMethodIsCallable(false);
-            transitionTimer.stopTimer();
-        }
-        timer.setFinishMethodIsCallable(false);
-        timer.stopTimer();
+        showCloseActivityDialog();
+    }
+
+    private void showCloseActivityDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Wyjdź z gry");
+        builder.setMessage("Czy na pewno chcesz zakończyć bieżącą grę?");
+        builder.setPositiveButton("Wyjdź", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(transitionTimer!=null) {
+                    transitionTimer.setFinishMethodIsCallable(false);
+                    transitionTimer.stopTimer();
+                }
+                timer.setFinishMethodIsCallable(false);
+                timer.stopTimer();
+                activity.finish();
+            }
+        }).setNegativeButton("Anuluj", null);
+        builder.show();
     }
 
     private void setButtonsActivatedBooleans(boolean addSecondsBtnActivated, boolean fiftyFiftyBtnActivated){
@@ -160,8 +174,11 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
 
     @Override
     public void progressTextClicked() {
-        timer.stopTimer();
-        onFinish();
+        if(progressTextEnabled) {
+            timer.stopTimer();
+            onFinish();
+            progressTextEnabled = false;
+        }
     }
 
     @Override
@@ -183,6 +200,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     @Override
     public void showNextQuestion() {
         answersClickable=true;
+        progressTextEnabled=true;
         questionView.setQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getQuestion());
         setButtonsActivated();
         questionView.setTimeProgress(secondsPerQuestion*1000, secondsPerQuestion);

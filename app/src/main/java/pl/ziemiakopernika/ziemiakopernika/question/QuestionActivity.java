@@ -66,7 +66,6 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
 
     @Override
     public void onBackPressed() {
-       finish();
        questionPresenter.onBackPressed();
     }
 

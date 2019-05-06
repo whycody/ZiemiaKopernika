@@ -7,10 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerFragment;
@@ -43,7 +45,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
 
     private int numberOfCoins, numberOfQuestion, secondsPerQuestion;
     private boolean fiftyFiftyBtnActivated, addSecondsBtnActivated, waitingToStartActivity,
-            lifebuoyStatisticSaved;
+            lifebuoyStatisticSaved, muteEnabled;
     private boolean answersClickable, progressTextEnabled = true;
     public static final String COINS = "coins";
     public static final String NUMBER_OF_QUESTION = "numberOfQuestion";
@@ -61,6 +63,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
         sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
         preferencesEditor = sharedPreferences.edit();
         numberOfCoins = getNumberOfCoins();
+        muteEnabled = getMuteEnabled();
         timer = new TimerImpl(secondsPerQuestion*1000+1000, this);
         statisticsDao = new StatisticsDaoImpl(activity);
         timer.startTimer();
@@ -74,6 +77,10 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
 
     private int getNumberOfCoins(){
         return sharedPreferences.getInt(COINS, 20);
+    }
+
+    private boolean getMuteEnabled(){
+        return sharedPreferences.getBoolean(MainPresenterImpl.MUTE_ENABLED, true);
     }
 
     @Override
@@ -202,6 +209,18 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
         questionView.animateCorrectness(numberOfQuestion, correct);
         transitionTimer = new TimerImpl(1000, newActivityTimerReact);
         transitionTimer.startTimer();
+        playSoundIfMuteDisabled(correct);
+    }
+
+    private void playSoundIfMuteDisabled(boolean correct){
+        if(!muteEnabled){
+            MediaPlayer mediaPlayer;
+            if(correct)
+                mediaPlayer = MediaPlayer.create(activity, R.raw.corrects);
+            else
+                mediaPlayer = MediaPlayer.create(activity, R.raw.wrongs);
+            mediaPlayer.start();
+        }
     }
 
     @Override

@@ -4,45 +4,72 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
 
+import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsBottomSheet;
 
-public class MainPresenterImpl implements MainPresenter{
+public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletionListener {
 
     private MainActivity activity;
     private Context context;
     private MainActivityView activityView;
     private SharedPreferences sharedPreferences;
     private QuestionsDao questionsDao;
+    private MediaPlayer mediaPlayer;
 
-    private static String MUTE_ENABLED = "mute_enabled";
+    public static String MUTE_ENABLED = "mute_enabled";
     public static final String QUESTION_SET = "QuestionSet";
     private int secondsPerQuestion = 15;
     private int numberOfQuestions = 5;
+    private boolean muteEnabled;
 
     MainPresenterImpl(Activity activity, MainActivityView activityView){
         this.activity = (MainActivity)activity;
         this.activityView = activityView;
-        sharedPreferences = activity.getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
         questionsDao = new QuestionsDaoImpl(activity);
+        mediaPlayer = MediaPlayer.create(activity, R.raw.backgrounds);
+        mediaPlayer.setOnCompletionListener(this);
+        muteEnabled = getMuteBoolean();
+    }
+
+    private boolean getMuteBoolean(){
+        return sharedPreferences.getBoolean(MUTE_ENABLED, true);
     }
 
     @Override
     public void onCreate() {
-        activityView.showMuteIcon(getMuteBoolean());
+        activityView.showMuteIcon(muteEnabled);
+        if(!muteEnabled)
+            mediaPlayer.start();
+    }
+
+    private boolean songWasPlayed = false;
+
+    @Override
+    public void onPause() {
+        if(mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            songWasPlayed = true;
+        }
     }
 
     @Override
     public void onResume() {
         if(!activityView.getPulsatorLayout().isStarted())
             activityView.getPulsatorLayout().start();
+        if(songWasPlayed) {
+            mediaPlayer.start();
+            songWasPlayed = !songWasPlayed;
+        }
     }
 
     @Override
@@ -77,13 +104,15 @@ public class MainPresenterImpl implements MainPresenter{
 
     @Override
     public void muteClicked() {
-        boolean muteEnabled = getMuteBoolean();
-        activityView.showMuteIcon(!muteEnabled);
-        setMute(!muteEnabled);
-    }
-
-    private boolean getMuteBoolean(){
-        return sharedPreferences.getBoolean(MUTE_ENABLED, true);
+        muteEnabled = !muteEnabled;
+        activityView.showMuteIcon(muteEnabled);
+        setMute(muteEnabled);
+        if(muteEnabled)
+            mediaPlayer.stop();
+        else{
+            mediaPlayer.prepareAsync();
+            mediaPlayer.start();
+        }
     }
 
     private void setMute(boolean enabled){
@@ -101,5 +130,10 @@ public class MainPresenterImpl implements MainPresenter{
     public void statisticsClicked() {
         StatisticsBottomSheet bottomSheet = new StatisticsBottomSheet();
         bottomSheet.show(activity.getSupportFragmentManager(), "fragmentManager");
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        mediaPlayer.start();
     }
 }

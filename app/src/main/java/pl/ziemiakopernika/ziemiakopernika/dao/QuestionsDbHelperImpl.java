@@ -14,7 +14,7 @@ import pl.ziemiakopernika.ziemiakopernika.model.Question;
 public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements QuestionsDbHelper {
 
     private static final String DATABASE_NAME = "ZiemiaKopernikaDatabse.db";
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 17;
 
     private SQLiteDatabase database;
 
@@ -151,6 +151,57 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
         addQuestion(new Question(0, "Co w Rosji tradycyjnie musi zrobić kosmonauta zanim wyleci w kosmos?", "Zasadzić drzewo", "Pozdrowić władzę na Kremlu", "Stanąć na rękach", "Zaśpiewać hymn"));
         addQuestion(new Question(0, "Naukowcy odkryli, że na Uranie i Neptunie występują deszcze", "Diamentowe", "Metanowe", "Siarkowe", "Wodorowe"));
         addQuestion(new Question(0, "Czyimi imionami są nazwy księżyców Urana, jak Ariel, Umbriel, Tytania, Oberon i Miranda?", "Bohaterów sztuk Szekspira", "Bogów rzymskich", "Postaci z legend arturiańskich", "Cesarzy rzymskich i ich żon"));
+
+        addQuestion(new Question(0, "Ile wyróżniamy praw Keplera?", "Trzy", "Jedno", "Dwa", "Cztery"));
+        addQuestion(new Question(0, "W którym roku wydano dzieło \"O obrotach sfer niebieskich\"?", "1543", "1521", "1566", "1511"));
+        addQuestion(new Question(0, "Kto wydał wielkie dzieło \"O obrotach sfer niebieskich\"?", "Mikołaj Kopernik", "Johannes Kepler", "Izaak Newton", "Galileo Galilei"));
+        addQuestion(new Question(0, "Przez około 1400 lat poprzedzających rewolucję kopernikańską panowała geocentryczna teoria..", "Ptolemeusza", "Pitagorasa", "Arystotelesa", "Talesa"));
+        addQuestion(new Question(0, "\"Nic piękniejszego nad niebo, które przecież ogarnia wszystko, co piękne\" - kto jest autorem tych słów?", "Mikołaj Kopernik", "Izaak Newton", "Johannes Keplera", "Stephen Hawking"));
+        addQuestion(new Question(0, "\"Próżnowaniem poniża się dary natury\" - kto jest autorem tych słów?", "Mikołaj Kopernik", "Izaak Newton", "Johannes Keplera", "Stephen Hawking"));
+        addQuestion(new Question(0, "O Mikołaju Koperniku mówi się, że..", "Wstrzymał Słońce, ruszył Ziemię", "Wstrzymał Słońce, wstrzymał Ziemię", "Wstrzymał Ziemię, ruszył Słońce", "Ruszył Ziemię, ruszył Słońce"));
+        addQuestion(new Question(0, "\"Co my wiemy, to tylko kropelka. Czego nie wiemy, to cały ocean\" - kto jest autorem tych słów?", "Izaak Newton", "Mikołaj Kopernik", "Johannes Kepler", "Stephen Hawking"));
+        addQuestion(new Question(0, "\"Odkryte przeze mnie prawa są bardzo proste. Formułowałem je szybko, ale przedtem bardzo długo myślałem\" - kto jest autorem tych słów?", "Izaak Newton", "Mikołaj Kopernik", "Johannes Kepler", "Stephen Hawking"));
+        addQuestion(new Question(0, "\"Bóg jest matematykiem\" - kto jest autorem tych słów?", "Johannes Kepler", "Mikołaj Kopernik", "Izaak Newton", "Stephen Hawking"));
+        addQuestion(new Question(0, "\"Radość jest potrzebą, siłą i wartością życia\" - kto jest autorem tych słów?", "Johannes Kepler", "Mikołaj Kopernik", "Izaak Newton", "Stephen Hawking"));
+        addQuestion(new Question(0, "Kto sformułował prawo powszechnej grawitacji?", "Izaak Newton", "Mikołaj Kopernik", "Johannes Hepler", "Nikt z nich"));
+        addQuestion(new Question(0, "Był pierwszym uczonym, który rozumiał rolę doświadczenia w badaniu zjawisk przyrody i wykonywał eksperymenty fizyczne. Kto to?", "Galileusz", "Pitagoras", "Arystoteles", "Tales"));
+        addQuestion(new Question(0, "Spadanie swobodne to ruch ciała, na które..", "Działa tylko siła grawitacji", "Nie działa żadna siła", "Działa siła grawitacji i opór powietrza", "Działa tylko opór powietrza"));
+        addQuestion(new Question(0, "Co spadnie szybciej w próżni - ruda miedzi czy węgla?", "Spadną w takim samym czasie", "Nie da sie tego ustalić", "Ruda miedzi", "Ruda węgla"));
+        addQuestion(new Question(0, "W którym roku została założona organizacja NASA?", "1958", "1889", "1934", "1979"));
+        addQuestion(new Question(0, "Czym jest albedo?", "Stosunek ilości promieniowania odbitego do padającego", "Stosunek masy do objętości planety", "Stosunek powierzchni do masy planety", "Stosunek powierzchni do objętości planety"));
+        addQuestion(new Question(0, "Która planeta w Układzie Słonecznym ma najwyższe albedo?", "Wenus", "Merkury", "Jowisz", "Ziemia"));
+        addQuestion(new Question(0, "Co w większości ochrania Ziemię przed wiatrem słonecznym?", "Pole magnetyczne", "Heliosfera", "Atmosfera", "Grawitacja Jowisza"));
+        addQuestion(new Question(0, "Która sonda kosmiczna znajduje się obecnie najdalej Ziemi?", "Voyager 1", "Rosetta", "New Horizons", "Genesis"));
+        addQuestion(new Question(0, "Czym są Plejady?", "Gromadą otwartą", "Gromadą zamkniętą", "Gromadą podwójną", "Gwiazdozbiorem"));
+        addQuestion(new Question(0, "Czy znajdziemy na asteroidach wodę?", "Tylko w stanie stałym", "Tylko w stanie ciekłym", "Nie", "Tak, we wszystkich stanach"));
+        addQuestion(new Question(0, "Ilu astronautów uczestniczyło w pechowej misji Apollo 13?", "3", "4", "6", "5"));
+        addQuestion(new Question(0, "Od którego roku na północnym biegunie Saturna trwa nieprzerwanie dzień?", "Od 2007", "Od 2015", "Od 1993", "Od 1997"));
+        addQuestion(new Question(0, "Czym jest Kasjopeja", "Gwiazdozbiorem", "Gwiazdą", "Planetoidem", "Kometą"));
+        addQuestion(new Question(0, "Ile jest stwierdzonych przypuszczalnych czarnych dziur w centrum naszej galaktyki?", "Około 10 000", "Około 3", "Około 100", "Tylko jedna"));
+        addQuestion(new Question(0, "Od którego roku działa Planetarium w Toruniu?", "1994", "2002", "1950", "1989"));
+        addQuestion(new Question(0, "W której planecie pole magnetyczne tworzy się z ruchów jądra wewnętrznego?", "Ziemia", "Wenus", "Neptun", "Jowisz"));
+        addQuestion(new Question(0, "Na ilu planetach istnieje zjawisko zorzy planetarnej?", "Na pięciu", "Na siedmiu", "Tylko na jednej", "Na trzech"));
+        addQuestion(new Question(0, "Czym jest Astrolabium?", "Przyrządem astronomicznym używanym w nawigacji", "Czasem astralnym", "Coroczną nagrodą dla astronomów", "Niezbadaną przestrzenią kosmiczną"));
+        addQuestion(new Question(0, "Który astronom jest znany z opisania oraz zrobienia dokładnych map Księżyca?", "Jan Heweliusz", "Edmund Halley", "Ludwik Pasteur", "Bohdan Paczyński"));
+        addQuestion(new Question(0, "Przed czym chroni nas pole magnetyczne?", "Przed promieniowaniem", "Przed meteorami", "Przed gorącem", "Przed asteroidami"));
+        addQuestion(new Question(0, "Czym jest \"spadająca gwiazda\"?", "Okruchem skalnym", "Zepsutym satelitą", "Fragmentem atmosfery", "Wszystkie odpowiedzi są niepoprawne"));
+        addQuestion(new Question(0, "W którym roku założono Polskie Towarzystwo Astronomiczne?", "1923", "2014", "1951", "1970"));
+        addQuestion(new Question(0, "Ile czasu trwa pełen obrót Wenus (wokół wlasnej osi)?", "243 dni ziemskich", "115 dni ziemskich", "161 dni ziemskich", "41 dni ziemskich"));
+        addQuestion(new Question(0, "Ile razy w przybliżeniu średnica Jowisza jest większa niż Ziemi?", "11", "4", "2", "7"));
+        addQuestion(new Question(0, "Kto opracował metodę pozwalającą odkrywać planety pozasłoneczne?", "Bohdan Paczyński", "Mikołaj Kopernik", "Aleksander Wolszczan", "Mirosław Hermaszewski"));
+        addQuestion(new Question(0, "Gdzie możemy znaleźć Ocean Burz?", "Na Księżycu", "Na Marsie", "Na Merkurym", "Na Wenusie"));
+        addQuestion(new Question(0, "Co jest Gwiazdą Zaranną?", "Wenus", "Słońce", "Mars", "Proxima Centauri"));
+        addQuestion(new Question(0, "Gdzie występuje promieniowanie Hawkinga?", "W czarnej dziurze", "W mgławicach", "W gwiazdach neutronowych", "W pulsarach"));
+        addQuestion(new Question(0, "Masa której planety była źle opisana przez co krążyly spekulacje o kolejnej planecie?", "Neptuna", "Urana", "Jowisza", "Marsa"));
+        addQuestion(new Question(0, "W której misji na Księżyc usłyszeliśmy słynne słowa \"Houston we have a problem\"?", "Apollo 13", "Apollo 11", "Apollo 12", "Apollo 14"));
+        addQuestion(new Question(0, "Jak nazywał się ostatni człowiek na Księżycu?", "Eugene Cernan", "Neil Armstrong", "Virgil Grissom", "Alan Sherpard"));
+        addQuestion(new Question(0, "Jak nazywała się sonda która jako pierwsza dotarła do Urana i Neptuna?", "Voyager 2", "New Horizons", "Voyager 1", "Giotto"));
+        addQuestion(new Question(0, "Ile lat trwała misja sondy Cassini?", "20", "10", "25", "15"));
+        addQuestion(new Question(1, "Które kraje miały najwcześniej swoich astronautów w kosmosie? Uporządkuj", "ZSRR", "Stany Zjednoczone", "Czechosłowacja", "Polska"));
+        addQuestion(new Question(1, "Które kraje miały najwcześniej swoich astronautów w kosmosie? Uporządkuj", "Polska", "NRD", "Bułgaria", "Węgry"));
+        addQuestion(new Question(1, "Które kraje miały najwcześniej swoich astronautów w kosmosie? Uporządkuj", "ZSRR", "Czechosłowacja", "NRD", "Węgry"));
+        addQuestion(new Question(0, "Jakie katastrofy naturalne występują na Księżycu?", "Trzęsienia gruntu", "Trąby powietrzne", "Powodzie", "Burze pyłowe"));
+        addQuestion(new Question(0, "Jak nazywa się największa odkryta galaktyka?", "IC 1101", "M 82", "NGC 234", "IC 879"));
     }
 
     private void addQuestion(Question question){

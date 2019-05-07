@@ -172,7 +172,7 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
         addQuestion(new Question(0, "Która planeta w Układzie Słonecznym ma najwyższe albedo?", "Wenus", "Merkury", "Jowisz", "Ziemia"));
         addQuestion(new Question(0, "Co w większości ochrania Ziemię przed wiatrem słonecznym?", "Pole magnetyczne", "Heliosfera", "Atmosfera", "Grawitacja Jowisza"));
         addQuestion(new Question(0, "Która sonda kosmiczna znajduje się obecnie najdalej Ziemi?", "Voyager 1", "Rosetta", "New Horizons", "Genesis"));
-        addQuestion(new Question(0, "Czym są Plejady?", "Gromadą otwartą", "Gromadą zamkniętą", "Gromadą podwójną", "Gwiazdozbiorem"));
+        addQuestion(new Question(0, "Która planeta ma wsteczną rotację niż pozostałe planety Układu Słonecznego?", "Wenus", "Uran", "Ziemia", "Jowisz"));
         addQuestion(new Question(0, "Czy znajdziemy na asteroidach wodę?", "Tylko w stanie stałym", "Tylko w stanie ciekłym", "Nie", "Tak, we wszystkich stanach"));
         addQuestion(new Question(0, "Ilu astronautów uczestniczyło w pechowej misji Apollo 13?", "3", "4", "6", "5"));
         addQuestion(new Question(0, "Od którego roku na północnym biegunie Saturna trwa nieprzerwanie dzień?", "Od 2007", "Od 2015", "Od 1993", "Od 1997"));

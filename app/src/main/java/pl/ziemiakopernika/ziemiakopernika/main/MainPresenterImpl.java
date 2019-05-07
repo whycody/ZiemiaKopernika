@@ -110,9 +110,15 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
         if(muteEnabled)
             mediaPlayer.stop();
         else{
-            mediaPlayer.prepareAsync();
+            tryPrepareAsync();
             mediaPlayer.start();
         }
+    }
+
+    private void tryPrepareAsync(){
+        try {
+            mediaPlayer.prepareAsync();
+        }catch(Exception ignored){ }
     }
 
     private void setMute(boolean enabled){

@@ -1,5 +1,7 @@
 package pl.ziemiakopernika.ziemiakopernika.redinfo;
 
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
+import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 
 public class RedInfoActivity extends AppCompatActivity implements Animation.AnimationListener, RedInfoView {
 
@@ -33,6 +36,19 @@ public class RedInfoActivity extends AppCompatActivity implements Animation.Anim
         redInfoPresenter.startAnimation(findViewById(R.id.red_info_activity), savedInstanceState);
         redInfoPresenter.onCreate();
         startAllAnimations();
+        playSongIfMuteDisabled();
+    }
+
+    private void playSongIfMuteDisabled(){
+        if(!getMuteEnabled()) {
+            MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.redsong);
+            mediaPlayer.start();
+        }
+    }
+
+    private boolean getMuteEnabled(){
+        SharedPreferences sharedPreferences = this.getSharedPreferences("preferences", MODE_PRIVATE);
+        return sharedPreferences.getBoolean(MainPresenterImpl.MUTE_ENABLED, false);
     }
 
     private void startAllAnimations(){

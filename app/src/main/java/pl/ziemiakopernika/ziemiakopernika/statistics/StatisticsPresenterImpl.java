@@ -121,7 +121,7 @@ public class StatisticsPresenterImpl implements StatisticsPresenter {
         int secondsPerQuestion = 15;
         QuestionsDao questionsDao = new QuestionsDaoImpl(activity);
         return new SetOfQuestions(numberOfQuestions, secondsPerQuestion,
-                questionsDao.getRandomQustions(numberOfQuestions), questionsDao.getRandomAnswers(numberOfQuestions));
+                questionsDao.getRandomNotShowedQuestions(numberOfQuestions), questionsDao.getRandomAnswers(numberOfQuestions));
     }
 
     private int getRevealX(View view){

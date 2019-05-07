@@ -14,7 +14,7 @@ import pl.ziemiakopernika.ziemiakopernika.model.Question;
 public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements QuestionsDbHelper {
 
     private static final String DATABASE_NAME = "ZiemiaKopernikaDatabse.db";
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 24;
 
     private SQLiteDatabase database;
 
@@ -34,7 +34,8 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
                 QuestionsTable.ANSWER_ONE + " TEXT, " +
                 QuestionsTable.ANSWER_TWO + " TEXT, " +
                 QuestionsTable.ANSWER_THREE + " TEXT, " +
-                QuestionsTable.ANSWER_FOUR + " TEXT" + ")";
+                QuestionsTable.ANSWER_FOUR + " TEXT, " +
+                QuestionsTable.SHOWED_TIMES + " INTEGER" + ")";
         database.execSQL(SQL_CREATE_QUESTIONS_TABLE);
         fillQuestionsTable();
     }
@@ -212,6 +213,7 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
         contentValues.put(QuestionsTable.ANSWER_TWO, question.getAnswerTwo());
         contentValues.put(QuestionsTable.ANSWER_THREE, question.getAnswerThree());
         contentValues.put(QuestionsTable.ANSWER_FOUR, question.getAnswerFour());
+        contentValues.put(QuestionsTable.SHOWED_TIMES, question.getShowedTimes());
         database.insert(QuestionsTable.TABLE_NAME, null, contentValues);
     }
 
@@ -236,6 +238,8 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
                 question.setAnswerTwo(cursor.getString(cursor.getColumnIndex(QuestionsTable.ANSWER_TWO)));
                 question.setAnswerThree(cursor.getString(cursor.getColumnIndex(QuestionsTable.ANSWER_THREE)));
                 question.setAnswerFour(cursor.getString(cursor.getColumnIndex(QuestionsTable.ANSWER_FOUR)));
+                question.setShowedTimes(cursor.getInt(cursor.getColumnIndex(QuestionsTable.SHOWED_TIMES)));
+                question.setId(cursor.getInt(cursor.getColumnIndex(QuestionsTable._ID)));
                 questionsList.add(question);
             }while(cursor.moveToNext());
         }
@@ -243,5 +247,47 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
         return questionsList;
     }
 
+    @Override
+    public void addShowedTimeToSongWithID(int id) {
+        Question targetQuestion = new Question();
+        for(Question question: getAllQuestions()) {
+            if (question.getId() == id)
+                targetQuestion = question;
+        }
+        database.execSQL("UPDATE " + QuestionsTable.TABLE_NAME + " SET "
+                + QuestionsTable.SHOWED_TIMES + " = " + (targetQuestion.getShowedTimes()+1) + " WHERE "
+                + QuestionsTable._ID + " = " + id);
+    }
 
+    @Override
+    public int getMinShowedTimes() {
+        database = getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT MIN(" + QuestionsTable.SHOWED_TIMES + ") FROM " + QuestionsTable.TABLE_NAME, null);
+        cursor.moveToFirst();
+        return cursor.getInt(0);
+    }
+
+    @Override
+    public ArrayList<Question> getQuestionsByShowedTimes(int number) {
+        ArrayList<Question> questionsList = new ArrayList<>();
+        database = getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + QuestionsTable.TABLE_NAME + " WHERE "
+                        + QuestionsTable.SHOWED_TIMES + " = " + number, null);
+        if(cursor.moveToFirst()){
+            do{
+                Question question = new Question();
+                question.setTypeOfQuestion(cursor.getInt(cursor.getColumnIndex(QuestionsTable.TYPE_OF_QUESTION)));
+                question.setQuestion(cursor.getString(cursor.getColumnIndex(QuestionsTable.QUESTION)));
+                question.setAnswerOne(cursor.getString(cursor.getColumnIndex(QuestionsTable.ANSWER_ONE)));
+                question.setAnswerTwo(cursor.getString(cursor.getColumnIndex(QuestionsTable.ANSWER_TWO)));
+                question.setAnswerThree(cursor.getString(cursor.getColumnIndex(QuestionsTable.ANSWER_THREE)));
+                question.setAnswerFour(cursor.getString(cursor.getColumnIndex(QuestionsTable.ANSWER_FOUR)));
+                question.setShowedTimes(cursor.getInt(cursor.getColumnIndex(QuestionsTable.SHOWED_TIMES)));
+                question.setId(cursor.getInt(cursor.getColumnIndex(QuestionsTable._ID)));
+                questionsList.add(question);
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        return questionsList;
+    }
 }

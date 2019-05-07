@@ -19,6 +19,8 @@ import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerFragment;
 import pl.ziemiakopernika.ziemiakopernika.arrange.answer.ArrangeAnswerRowPresenter;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerFragment;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerPresenter;
+import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
+import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.Question;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
@@ -33,6 +35,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
 
     private Activity activity;
     private QuestionView questionView;
+    private QuestionsDao questionsDao;
     private SetOfQuestions setOfQuestions;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor preferencesEditor;
@@ -62,6 +65,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
         secondsPerQuestion = setOfQuestions.getSecondsPerQuestion();
         sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
         preferencesEditor = sharedPreferences.edit();
+        questionsDao = new QuestionsDaoImpl(activity);
         numberOfCoins = getNumberOfCoins();
         muteEnabled = getMuteEnabled();
         timer = new TimerImpl(secondsPerQuestion*1000+1000, this);
@@ -233,6 +237,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
         answersClickable = true;
         progressTextEnabled = true;
         lifebuoyStatisticSaved = false;
+        questionsDao.addShowedTimeToQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getId());
         questionView.setQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getQuestion());
         setButtonsActivated();
         questionView.setTimeProgress(secondsPerQuestion*1000, secondsPerQuestion);

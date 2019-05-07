@@ -4,22 +4,22 @@ import java.io.Serializable;
 
 public class Question implements Serializable {
 
-    private int typeOfQuestion, imageID = 0;
+    private int typeOfQuestion, showedTimes, id = 0;
     private String question, answerOne, answerTwo, answerThree, answerFour;
 
     public Question(){
 
     }
 
-    public Question(int typeOfQuestion, int imageID, String question, String answerOne,
-                    String answerTwo, String answerThree, String answerFour) {
+    public Question(int typeOfQuestion, String question, String answerOne, String answerTwo,
+                    String answerThree, String answerFour, int showedTimes) {
         this.typeOfQuestion = typeOfQuestion;
-        this.imageID = imageID;
         this.question = question;
         this.answerOne = answerOne;
         this.answerTwo = answerTwo;
         this.answerThree = answerThree;
         this.answerFour = answerFour;
+        this.showedTimes = showedTimes;
     }
 
     public Question(String question, String answerOne, String answerTwo,
@@ -49,12 +49,12 @@ public class Question implements Serializable {
         this.typeOfQuestion = typeOfQuestion;
     }
 
-    public int getImageID() {
-        return imageID;
+    public int getShowedTimes() {
+        return showedTimes;
     }
 
-    public void setImageID(int imageID) {
-        this.imageID = imageID;
+    public void setShowedTimes(int showedTimes) {
+        this.showedTimes = showedTimes;
     }
 
     public String getQuestion() {
@@ -95,5 +95,13 @@ public class Question implements Serializable {
 
     public void setAnswerFour(String answerFour) {
         this.answerFour = answerFour;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

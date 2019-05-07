@@ -241,7 +241,7 @@ public class SummaryPresenterImpl implements SummaryPresenter {
 
     private SetOfQuestions getNewSetOfQuestions(){
         return new SetOfQuestions(numberOfQuestions,secondsPerQuestion,
-                questionsDao.getRandomQustions(numberOfQuestions), questionsDao.getRandomAnswers(numberOfQuestions));
+                questionsDao.getRandomNotShowedQuestions(numberOfQuestions), questionsDao.getRandomAnswers(numberOfQuestions));
     }
 
     private int getRevealX(View view){

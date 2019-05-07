@@ -16,5 +16,6 @@ public final class QuestionsContract {
         public static final String ANSWER_TWO = "answer_two";
         public static final String ANSWER_THREE = "answer_three";
         public static final String ANSWER_FOUR = "answer_four";
+        public static final String SHOWED_TIMES = "showed_times";
     }
 }

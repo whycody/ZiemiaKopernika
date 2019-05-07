@@ -1,9 +1,9 @@
 package pl.ziemiakopernika.ziemiakopernika.dao;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 import pl.ziemiakopernika.ziemiakopernika.model.Answer;
@@ -30,6 +30,29 @@ public class QuestionsDaoImpl implements QuestionsDao{
     }
 
     @Override
+    public ArrayList<Question> getRandomNotShowedQuestions(int number){
+        int min = dbHelper.getMinShowedTimes();
+        ArrayList<Question> minShowedTimesQuestions = dbHelper.getQuestionsByShowedTimes(min);
+        Collections.shuffle(minShowedTimesQuestions);
+        if(minShowedTimesQuestions.size()<number){
+            int addedSongs = 0;
+            ArrayList<Question> oneMoreShowedTimesQuestions = dbHelper.getQuestionsByShowedTimes(min+1);
+            Collections.shuffle(oneMoreShowedTimesQuestions);
+            while(minShowedTimesQuestions.size()<number) {
+                minShowedTimesQuestions.add(oneMoreShowedTimesQuestions.get(addedSongs));
+                addedSongs++;
+            }
+        }else{
+            ArrayList<Question> questions = new ArrayList<>();
+            Collections.shuffle(minShowedTimesQuestions);
+            for(int i = 0; i<number; i++)
+                questions.add(minShowedTimesQuestions.get(i));
+            return questions;
+        }
+        return minShowedTimesQuestions;
+    }
+
+    @Override
     public ArrayList<Answer> getRandomAnswers(int number) {
         ArrayList<Answer> answers = new ArrayList<>();
         for(int i =1; i<=number; i++){
@@ -42,6 +65,11 @@ public class QuestionsDaoImpl implements QuestionsDao{
             answers.add(new Answer(0,0, integers));
         }
         return answers;
+    }
+
+    @Override
+    public void addShowedTimeToQuestion(int id) {
+        dbHelper.addShowedTimeToSongWithID(id);
     }
 
 }

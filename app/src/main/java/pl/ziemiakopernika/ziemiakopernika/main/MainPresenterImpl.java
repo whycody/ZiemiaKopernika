@@ -99,7 +99,7 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
 
     private SetOfQuestions getSetOfQuestions(){
         return new SetOfQuestions(numberOfQuestions,secondsPerQuestion,
-                questionsDao.getRandomQustions(5), questionsDao.getRandomAnswers(5));
+                questionsDao.getRandomNotShowedQuestions(5), questionsDao.getRandomAnswers(5));
     }
 
     @Override

@@ -8,17 +8,19 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 import pl.ziemiakopernika.ziemiakopernika.R;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView{
+public class MainActivity extends AppCompatActivity implements MainView {
 
     private ImageView earthView;
     private ImageButton muteBtn, settingsBtn, statisticsBtn;
     private Button startGameBtn;
     private PulsatorLayout pulsatorLayout;
     private View animationView;
+    private TextView curiosityView;
 
     private MainPresenter mainPresenter;
 
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
         pulsatorLayout = findViewById(R.id.pulsator);
         startGameBtn = findViewById(R.id.start_game_btn);
         animationView = findViewById(R.id.animation_view);
+        curiosityView = findViewById(R.id.curiosity_text);
 
         mainPresenter = new MainPresenterImpl(this, this);
         mainPresenter.onCreate();
@@ -96,6 +99,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView{
             muteBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_muteon));
         else
             muteBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_muteoff));
+    }
+
+    @Override
+    public void setCuriosityText(String text) {
+        curiosityView.setText(text);
     }
 
     @Override

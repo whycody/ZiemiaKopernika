@@ -9,17 +9,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".summary.SummaryActivity" />
-        <activity android:name=".round.RoundActivity" />
+        <activity android:name=".summary.SummaryActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".round.RoundActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".question.QuestionActivity"
-            android:theme="@style/QuestionTheme" />
+            android:theme="@style/QuestionTheme"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".redinfo.RedInfoActivity"
-            android:theme="@style/RedInfoTheme" />
+            android:theme="@style/RedInfoTheme"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -28,7 +38,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.MainActivity" />
+        <activity android:name=".main.MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

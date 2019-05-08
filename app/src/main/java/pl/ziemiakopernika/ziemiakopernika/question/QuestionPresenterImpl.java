@@ -213,7 +213,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
         questionView.animateCorrectness(numberOfQuestion, correct);
         transitionTimer = new TimerImpl(1000, newActivityTimerReact);
         transitionTimer.startTimer();
-        playSoundIfMuteDisabled(correct);
+//        playSoundIfMuteDisabled(correct);
     }
 
     private void playSoundIfMuteDisabled(boolean correct){

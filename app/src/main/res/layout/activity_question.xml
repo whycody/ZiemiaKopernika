@@ -39,7 +39,7 @@
         android:letterSpacing="0.1"
         android:padding="10dp"
         android:textColor="@android:color/white"
-        android:textSize="26sp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coins_number_view" />
@@ -54,19 +54,7 @@
         android:paddingTop="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question_view">
-
-        <!--<ImageView-->
-            <!--android:id="@+id/imageView4"-->
-            <!--android:layout_width="10dp"-->
-            <!--android:layout_height="10dp"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:layout_marginTop="1dp"-->
-            <!--android:layout_marginRight="5dp"-->
-            <!--android:layout_weight="0"-->
-            <!--app:srcCompat="@drawable/circle_button_activated_default" />-->
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/question_view"/>
 
     <FrameLayout
         android:id="@+id/fragment_container"

@@ -9,6 +9,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
@@ -19,8 +22,7 @@ import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsBottomSheet;
 public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletionListener {
 
     private MainActivity activity;
-    private Context context;
-    private MainActivityView activityView;
+    private MainView mainView;
     private SharedPreferences sharedPreferences;
     private QuestionsDao questionsDao;
     private MediaPlayer mediaPlayer;
@@ -31,9 +33,9 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
     private int numberOfQuestions = 5;
     private boolean muteEnabled;
 
-    MainPresenterImpl(Activity activity, MainActivityView activityView){
+    MainPresenterImpl(Activity activity, MainView mainView){
         this.activity = (MainActivity)activity;
-        this.activityView = activityView;
+        this.mainView = mainView;
         sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
         questionsDao = new QuestionsDaoImpl(activity);
         mediaPlayer = MediaPlayer.create(activity, R.raw.backgrounds);
@@ -47,9 +49,31 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
 
     @Override
     public void onCreate() {
-        activityView.showMuteIcon(muteEnabled);
+        mainView.showMuteIcon(muteEnabled);
         if(!muteEnabled)
             mediaPlayer.start();
+        mainView.setCuriosityText(getRandomCuriosity());
+    }
+
+    private String getRandomCuriosity(){
+        Random random = new Random();
+        ArrayList<String> curiosities = getCuriosities();
+        return curiosities.get(random.nextInt(curiosities.size()));
+    }
+
+    private ArrayList<String> getCuriosities(){
+        ArrayList<String> curiosities = new ArrayList<>();
+        curiosities.add("Obecnie rękopis dzieła Kopernika przechowywany jest w Bibliotece Jagielońskiej");
+        curiosities.add("Mikołaj Kopernik zmarł na skutek wylewu krwi do mózgu");
+        curiosities.add("Od roku 1616 do 1822 dzieło Kopernika było figurantem wykazu ksiąg zakazanych");
+        curiosities.add("Pierwszy wydruk „O obrotach sfer niebieskich” pojawił się w 1543 roku, tuż przed śmiercią Kopernika");
+        curiosities.add("Na cześć astronoma nazwano jeden z kraterów na księżycu i na marsie, oraz planetoidę Coppernicus");
+        curiosities.add("W 1965 roku NBP wyprodukował banknot z wizerunkiem Mikołaja Kopernika");
+        curiosities.add("W 2010 na cześć Kopernika nazwano pierwiastek chemiczny");
+        curiosities.add("Kopenik znał tylko podstawy języka polskiego");
+        curiosities.add("Kopernik nie miał lunety ani teleskopu do obserwacji astronomicznych");
+        curiosities.add("W Toruniu znajduje się Dom Kopernika będący muzeum poświęconym astronomowi");
+        return curiosities;
     }
 
     private boolean songWasPlayed = false;
@@ -64,8 +88,8 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
 
     @Override
     public void onResume() {
-        if(!activityView.getPulsatorLayout().isStarted())
-            activityView.getPulsatorLayout().start();
+        if(!mainView.getPulsatorLayout().isStarted())
+            mainView.getPulsatorLayout().start();
         if(songWasPlayed) {
             mediaPlayer.start();
             songWasPlayed = !songWasPlayed;
@@ -74,7 +98,7 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
 
     @Override
     public void startGameClicked(View view) {
-        activityView.getPulsatorLayout().stop();
+        mainView.getPulsatorLayout().stop();
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat
                 .makeSceneTransitionAnimation(activity, view, "transition");
         startGameActivity(view,optionsCompat);
@@ -105,7 +129,7 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
     @Override
     public void muteClicked() {
         muteEnabled = !muteEnabled;
-        activityView.showMuteIcon(muteEnabled);
+        mainView.showMuteIcon(muteEnabled);
         setMute(muteEnabled);
         if(muteEnabled)
             mediaPlayer.stop();

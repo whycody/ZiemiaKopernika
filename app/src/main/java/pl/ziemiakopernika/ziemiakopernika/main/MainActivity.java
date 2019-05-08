@@ -16,7 +16,7 @@ import pl.ziemiakopernika.ziemiakopernika.R;
 public class MainActivity extends AppCompatActivity implements MainView {
 
     private ImageView earthView;
-    private ImageButton muteBtn, settingsBtn, statisticsBtn;
+    private ImageButton muteBtn, creditsBtn, statisticsBtn;
     private Button startGameBtn;
     private PulsatorLayout pulsatorLayout;
     private View animationView;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         setContentView(R.layout.activity_main);
         earthView = findViewById(R.id.earth_view);
         muteBtn = findViewById(R.id.mute_btn);
-        settingsBtn = findViewById(R.id.settings_btn);
+        creditsBtn = findViewById(R.id.credits_btn);
         statisticsBtn = findViewById(R.id.statistics_btn);
         pulsatorLayout = findViewById(R.id.pulsator);
         startGameBtn = findViewById(R.id.start_game_btn);
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         pulsatorLayout.start();
         startGameBtn.setOnClickListener(startGameOnClick);
         muteBtn.setOnClickListener(muteOnClick);
-        settingsBtn.setOnClickListener(settingsOnClick);
+        creditsBtn.setOnClickListener(creditsOnClicked);
         statisticsBtn.setOnClickListener(statisticsOnClick);
     }
 
@@ -79,10 +79,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
     };
 
-    private View.OnClickListener settingsOnClick = new View.OnClickListener() {
+    private View.OnClickListener creditsOnClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mainPresenter.settingsClicked();
+            mainPresenter.creditsClicked();
         }
     };
 

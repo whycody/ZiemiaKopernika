@@ -14,7 +14,7 @@ public interface MainPresenter {
 
     void muteClicked();
 
-    void settingsClicked();
+    void creditsClicked();
 
     void statisticsClicked();
 }

@@ -154,14 +154,14 @@
                     android:scaleType="fitCenter" />
 
                 <ImageButton
-                    android:id="@+id/settings_btn"
+                    android:id="@+id/credits_btn"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:background="@drawable/gray_button_selector"
                     android:padding="10dp"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/ic_settings" />
+                    app:srcCompat="@drawable/ic_info" />
 
                 <ImageButton
                     android:id="@+id/statistics_btn"

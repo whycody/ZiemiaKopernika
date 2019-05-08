@@ -89,7 +89,9 @@ public class StatisticsDaoImpl implements StatisticsDao {
     public double getTimeLeftPerQuestionStatistics() {
         int timeLeftTotal = getTimeLeftTotalStatistics();
         int gamesPlayed = getGamesPlayedStatistics();
-        return (double) Math.round(timeLeftTotal / gamesPlayed * 10) / 50;
+        if(timeLeftTotal!=0 && gamesPlayed!=0)
+            return (double) Math.round(timeLeftTotal / gamesPlayed * 10) / 50;
+        else return 0;
     }
 
     @Override
@@ -128,6 +130,9 @@ public class StatisticsDaoImpl implements StatisticsDao {
 
     @Override
     public int getPercentageOfCoinsHaveStatistics(){
-        return (getCoinsStatistics()*100)/getEarnedCoinsStatistics();
+        if(getEarnedCoinsStatistics()!=0 && getCoinsStatistics() != 0)
+            return (getCoinsStatistics()*100)/getEarnedCoinsStatistics();
+        else
+            return 100;
     }
 }

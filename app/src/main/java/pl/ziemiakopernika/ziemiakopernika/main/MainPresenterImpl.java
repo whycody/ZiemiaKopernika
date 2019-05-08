@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import pl.ziemiakopernika.ziemiakopernika.R;
+import pl.ziemiakopernika.ziemiakopernika.credits.CreditsBottomSheet;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
@@ -44,7 +45,7 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
     }
 
     private boolean getMuteBoolean(){
-        return sharedPreferences.getBoolean(MUTE_ENABLED, true);
+        return sharedPreferences.getBoolean(MUTE_ENABLED, false);
     }
 
     @Override
@@ -152,8 +153,9 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
     }
 
     @Override
-    public void settingsClicked() {
-
+    public void creditsClicked() {
+        CreditsBottomSheet creditsBottomSheet = new CreditsBottomSheet();
+        creditsBottomSheet.show(activity.getSupportFragmentManager(), "fragmentManager");
     }
 
     @Override

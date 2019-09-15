@@ -64,7 +64,7 @@
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cardView"
-        app:srcCompat="@drawable/ic_earth"/>
+        app:srcCompat="@drawable/ic_new_earth"/>
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"

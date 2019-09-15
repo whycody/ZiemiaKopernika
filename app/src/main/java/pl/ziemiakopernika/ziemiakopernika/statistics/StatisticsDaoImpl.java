@@ -118,20 +118,20 @@ public class StatisticsDaoImpl implements StatisticsDao {
 
     @Override
     public int getCoinsStatistics() {
-        return sharedPreferences.getInt(QuestionPresenterImpl.COINS, 20);
+        return sharedPreferences.getInt(QuestionPresenterImpl.COINS, 0);
     }
 
     @Override
     public int getSpentCoinsStatistics() {
         int coins = getCoinsStatistics();
-        int coinsInGame = getEarnedCoinsStatistics() + 20;
+        int coinsInGame = getEarnedCoinsStatistics();
         return coinsInGame - coins;
     }
 
     @Override
     public int getPercentageOfCoinsHaveStatistics(){
         if(getEarnedCoinsStatistics()!=0 && getCoinsStatistics() != 0)
-            return (getCoinsStatistics()*100)/getEarnedCoinsStatistics();
+            return (getCoinsStatistics()*100)/(getEarnedCoinsStatistics());
         else
             return 100;
     }

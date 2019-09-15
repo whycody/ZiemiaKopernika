@@ -22,6 +22,7 @@ public class StatisticsPresenterImpl implements StatisticsPresenter {
     private StatisticsDao statisticsDao;
 
     private int correctAnswers, uncorrectAnswers;
+    private int coinsOnStart = 30;
 
     public StatisticsPresenterImpl(Activity activity, StatisticsView statisticsView){
         this.activity = activity;
@@ -40,17 +41,17 @@ public class StatisticsPresenterImpl implements StatisticsPresenter {
         statisticsView.setSpentCoinsText(getSpentCoinsText());
         statisticsView.setLifebuoyText(getLifebuoyText());
         statisticsView.setSecondsLeftPerQuestionText(getSecondsLeftPerQuestionText());
-        statisticsView.setCorrectAnswersProgress(statisticsDao.getQuestionsAnsweredStatistics(),
-                statisticsDao.getCorrectAnswersNumberStatistics());
+        statisticsView.setCorrectAnswersProgress(statisticsDao.getQuestionsAnsweredStatistics()*1000,
+                statisticsDao.getCorrectAnswersNumberStatistics()*1000);
         startCorrectAnswersProgressBarAnimation();
-        statisticsView.setEarnedCoinsProgress(statisticsDao.getEarnedCoinsStatistics()+20,
+        statisticsView.setEarnedCoinsProgress(statisticsDao.getEarnedCoinsStatistics(),
                 statisticsDao.getCoinsStatistics());
         startEarnedCoinsProgressBarAnimation();
     }
 
     private void startCorrectAnswersProgressBarAnimation(){
         ProgressBarAnimation progressBarAnimation = new ProgressBarAnimation(statisticsView.getCorrectAnswersProgressBar(),
-                0, statisticsDao.getCorrectAnswersNumberStatistics());
+                0, statisticsDao.getCorrectAnswersNumberStatistics()*1000);
         progressBarAnimation.setDuration(1000);
         statisticsView.getCorrectAnswersProgressBar().startAnimation(progressBarAnimation);
         if (statisticsDao.getQuestionsAnsweredStatistics()!=0) {
@@ -82,17 +83,21 @@ public class StatisticsPresenterImpl implements StatisticsPresenter {
     }
 
     private String getEarnedCoinsText(){
-        return "W ciągu całej gry zarobiłeś " + statisticsDao.getEarnedCoinsStatistics() + " monet";
+        if(statisticsDao.getEarnedCoinsStatistics()==coinsOnStart)
+            return "To czas na rozgrywkę!";
+        else
+            return "W ciągu całej gry zgromadziłeś " + (statisticsDao.getEarnedCoinsStatistics()) +
+                " monet, z czego " + 30 + " otrzymałeś na start.";
     }
 
     private String getSpentCoinsText(){
-        if(statisticsDao.getEarnedCoinsStatistics()!=0 && statisticsDao.getSpentCoinsStatistics()!=0)
+        if(statisticsDao.getEarnedCoinsStatistics()!=coinsOnStart && statisticsDao.getSpentCoinsStatistics()!=0)
             return "Wydałeś już " + statisticsDao.getSpentCoinsStatistics() + " z nich i posiadasz "
                 + statisticsDao.getPercentageOfCoinsHaveStatistics() + "% z całej zgromadzonej sumy";
-        else if(statisticsDao.getEarnedCoinsStatistics()!=0 && statisticsDao.getSpentCoinsStatistics()==0)
-            return "Nie wydałeś jeszcze nic z nich i posiadasz "
+        else if(statisticsDao.getEarnedCoinsStatistics()!=coinsOnStart && statisticsDao.getSpentCoinsStatistics()==0)
+            return "Nie wydałeś jeszcze żadnej z nich i posiadasz "
                     + statisticsDao.getPercentageOfCoinsHaveStatistics() + "% z całej zgromadzonej sumy";
-        else if(statisticsDao.getEarnedCoinsStatistics()==0 && statisticsDao.getSpentCoinsStatistics()==0)
+        else if(statisticsDao.getEarnedCoinsStatistics()==coinsOnStart && statisticsDao.getSpentCoinsStatistics()==0)
             return "Nie wydałeś jeszcze żadnej monety ani żadnej nie zarobiłeś. Czas rozegrać rundę!";
         else
             return "Jeszcze nic nie zarobiłeś. Na co czekasz?";

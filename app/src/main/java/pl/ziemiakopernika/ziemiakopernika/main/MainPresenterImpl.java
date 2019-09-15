@@ -16,21 +16,29 @@ import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.credits.CreditsBottomSheet;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
+import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsBottomSheet;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDao;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDaoImpl;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsPresenter;
+import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsPresenterImpl;
 
 public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletionListener {
 
     private MainActivity activity;
     private MainView mainView;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor preferencesEditor;
+    private StatisticsDao statisticsDao;
     private QuestionsDao questionsDao;
     private MediaPlayer mediaPlayer;
 
-    public static String MUTE_ENABLED = "mute_enabled";
+    public static final String MUTE_ENABLED = "mute_enabled";
     public static final String QUESTION_SET = "QuestionSet";
-    private int secondsPerQuestion = 15;
+    public static final String FIRST_LOGIN = "FirstLogin";
+    private int secondsPerQuestion = 20;
     private int numberOfQuestions = 5;
     private boolean muteEnabled;
 
@@ -38,6 +46,8 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
         this.activity = (MainActivity)activity;
         this.mainView = mainView;
         sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        preferencesEditor = sharedPreferences.edit();
+        statisticsDao = new StatisticsDaoImpl(activity);
         questionsDao = new QuestionsDaoImpl(activity);
         mediaPlayer = MediaPlayer.create(activity, R.raw.backgrounds);
         mediaPlayer.setOnCompletionListener(this);
@@ -54,6 +64,16 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
         if(!muteEnabled)
             mediaPlayer.start();
         mainView.setCuriosityText(getRandomCuriosity());
+        checkFirstLogin();
+    }
+
+    private void checkFirstLogin(){
+        if(sharedPreferences.getBoolean(FIRST_LOGIN, true)){
+            statisticsDao.saveEarnedCoinsStatistics(30);
+            preferencesEditor.putInt(QuestionPresenterImpl.COINS, 30);
+            preferencesEditor.putBoolean(FIRST_LOGIN, false);
+            preferencesEditor.apply();
+        }
     }
 
     private String getRandomCuriosity(){

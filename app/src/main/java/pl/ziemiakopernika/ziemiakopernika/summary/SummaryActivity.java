@@ -1,5 +1,6 @@
 package pl.ziemiakopernika.ziemiakopernika.summary;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

@@ -42,7 +42,7 @@ public class SummaryPresenterImpl implements SummaryPresenter {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
-    private int secondsPerQuestion = 15;
+    private int secondsPerQuestion = 20;
     private int numberOfQuestions = 5;
 
 

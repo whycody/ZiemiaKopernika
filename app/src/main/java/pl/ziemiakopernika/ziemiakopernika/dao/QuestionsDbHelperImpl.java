@@ -41,16 +41,6 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
     }
 
     private void fillQuestionsTable(){
-//        addQuestion(new Question(0,"Który księżyc jako jedyny w Układzie Słonecznym posiada gęstą atmosferę?", "Tytan", "Księżyc", "Io", "Europa"));
-//        addQuestion(new Question(0,"Jądro której galaktyki znajduje się najbliżej Układu Słonecznego?", "Karzeł Wielkiego Psa", "Karzeł Strzelca", "Wielki Obłok Magellana", "Droga Mleczna"));
-//        addQuestion(new Question(0,"Jaką średnicę ma Mars?", "6794 km", "6894 km", "6994 km", "6694 km"));
-//        addQuestion(new Question(0,"Fobos jest księżycem której planety?", "Marsa", "Uranu", "Saturna", "Jowisza"));
-//        addQuestion(new Question(0,"Co było pierwszą udaną misją planetarną NASA?", "Zbliżenie się do Wenus", "Zbliżenie się do Słońca", "Zbliżenie się do Plutona", "Zbliżenie się do Marsa"));
-//        addQuestion(new Question(1, "Co pierwsze byda?", "1", "2", "3", "4"));
-//        addQuestion(new Question(1, "Co pierwsze byda?", "1", "2", "3", "4"));
-//        addQuestion(new Question(1, "Co pierwsze byda?", "1", "2", "3", "4"));
-//        addQuestion(new Question(1, "Co pierwsze byda?", "1", "2", "3", "4"));
-//        addQuestion(new Question(1, "Co pierwsze byda?", "1", "2", "3", "4"));
         addQuestion(new Question(1, "Uporządkuj planety od najbliżej znajdującej się słońca", "Merkury", "Wenus", "Ziemia", "Mars"));
         addQuestion(new Question(1, "Uporządkuj planety od najbliżej znajdującej się słońca", "Merkury", "Jowisz", "Uran", "Neptun"));
         addQuestion(new Question(1, "Uporządkuj planety od najbliżej znajdującej się słońca", "Wenus", "Ziemia", "Jowisz", "Neptun"));
@@ -146,7 +136,7 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
         addQuestion(new Question(0, "Na których planetach Układu Słonecznego występują zorze?", "Na Ziemi, Jowiszu, Saturnie, Uranie i Neptunie", "Tylko na Ziemi", "Na wszystkich", "Na Ziemi, Merkurym, Wenus i Marsie"));
         addQuestion(new Question(0, "W 1973 NASA wysłała w kosmos Anitę i Arabellę. Były to..?", "Samice pająka krzyżaka", "Myszki polne", "Szympanse", "Rybki akwariowe"));
         addQuestion(new Question(0, "Jaką prędkość musi osiągnąć rakieta, by mogła osiągnąć przestrzeń kosmiczną?", "vI = 7,91 km/s", "vII = 11,19 km/s", "vIII = 16,7 km/s", "Zależy od masy rakiety"));
-        addQuestion(new Question(0, "Jak miał na imię pierwszy szympans który znalazł się na orbicie ziemskiej?", "Enos", "Pussy", "Ham", "Washoe"));
+        addQuestion(new Question(0, "Jak miał na imię pierwszy szympans który znalazł się na orbicie ziemskiej?", "Enos", "Berg", "Ham", "Washoe"));
         addQuestion(new Question(0, "Jak nazywał się pojazd kosmiczny, w którym zginęło pierwszych trzech kosmonautów?", "Apollo 1", "Challenger", "Sojuz 1", "Columbia"));
         addQuestion(new Question(0, "Zamontowania czego domagali się pierwsi amerykańscy astronauci?", "Okna", "Katapulty ratunkowej", "Dodatkowego spadochronu", "Włazu bezpieczeństwa"));
         addQuestion(new Question(0, "Co w Rosji tradycyjnie musi zrobić kosmonauta zanim wyleci w kosmos?", "Zasadzić drzewo", "Pozdrowić władzę na Kremlu", "Stanąć na rękach", "Zaśpiewać hymn"));

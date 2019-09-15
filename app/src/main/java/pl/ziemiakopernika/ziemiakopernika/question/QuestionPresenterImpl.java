@@ -80,7 +80,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     }
 
     private int getNumberOfCoins(){
-        return sharedPreferences.getInt(COINS, 20);
+        return sharedPreferences.getInt(COINS, 0);
     }
 
     private boolean getMuteEnabled(){

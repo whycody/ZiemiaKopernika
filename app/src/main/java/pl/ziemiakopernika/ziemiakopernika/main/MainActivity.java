@@ -1,5 +1,6 @@
 package pl.ziemiakopernika.ziemiakopernika.main;
 
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         earthView = findViewById(R.id.earth_view);
         muteBtn = findViewById(R.id.mute_btn);
         creditsBtn = findViewById(R.id.credits_btn);

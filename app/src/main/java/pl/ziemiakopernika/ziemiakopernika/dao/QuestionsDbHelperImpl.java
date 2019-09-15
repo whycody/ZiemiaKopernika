@@ -14,7 +14,7 @@ import pl.ziemiakopernika.ziemiakopernika.model.Question;
 public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements QuestionsDbHelper {
 
     private static final String DATABASE_NAME = "ZiemiaKopernikaDatabse.db";
-    private static final int DATABASE_VERSION = 24;
+    private static final int DATABASE_VERSION = 25;
 
     private SQLiteDatabase database;
 
@@ -37,7 +37,7 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
                 QuestionsTable.ANSWER_FOUR + " TEXT, " +
                 QuestionsTable.SHOWED_TIMES + " INTEGER" + ")";
         database.execSQL(SQL_CREATE_QUESTIONS_TABLE);
-        fillQuestionsTable();
+        fillExampleQuestionsTable();
     }
 
     private void fillQuestionsTable(){
@@ -193,6 +193,14 @@ public class QuestionsDbHelperImpl extends SQLiteOpenHelper implements Questions
         addQuestion(new Question(1, "Które kraje miały najwcześniej swoich astronautów w kosmosie? Uporządkuj", "ZSRR", "Czechosłowacja", "NRD", "Węgry"));
         addQuestion(new Question(0, "Jakie katastrofy naturalne występują na Księżycu?", "Trzęsienia gruntu", "Trąby powietrzne", "Powodzie", "Burze pyłowe"));
         addQuestion(new Question(0, "Jak nazywa się największa odkryta galaktyka?", "IC 1101", "M 82", "NGC 234", "IC 879"));
+    }
+
+    private void fillExampleQuestionsTable(){
+        addQuestion(new Question(1, "Uporządkuj od 1 do 4", "1", "2", "3", "4"));
+        addQuestion(new Question(1, "Uporządkuj planety od 4 do 1", "4", "3", "2", "1"));
+        addQuestion(new Question(1, "Uporządkuj planety od najbliżej znajdującej się słońca", "Merkury", "Wenus", "Ziemia", "Mars"));
+        addQuestion(new Question(0, "Jak nazywa się największa odkryta galaktyka?", "IC 1101", "M 82", "NGC 234", "IC 879"));
+        addQuestion(new Question(0, "Która odpowiedź jest prawidłowa?", "Prawidłowa", "Nieprawidłowa", "Nieprawidłowa", "Nieprawidłowa"));
     }
 
     private void addQuestion(Question question){

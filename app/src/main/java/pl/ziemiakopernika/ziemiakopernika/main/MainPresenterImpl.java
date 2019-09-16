@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.credits.CreditsBottomSheet;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
+import pl.ziemiakopernika.ziemiakopernika.model.Question;
+import pl.ziemiakopernika.ziemiakopernika.model.SetOfRounds;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
@@ -40,6 +43,7 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
     public static final String FIRST_LOGIN = "FirstLogin";
     private int secondsPerQuestion = 20;
     private int numberOfQuestions = 5;
+    private int numberOfRounds = 3;
     private boolean muteEnabled;
 
     MainPresenterImpl(Activity activity, MainView mainView){
@@ -142,9 +146,43 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
         return (int) (view.getY() + view.getHeight() / 2);
     }
 
+    private SetOfRounds getSetOfRounds(){
+        SetOfRounds setOfRounds = new SetOfRounds();
+        setOfRounds.setNumOfRounds(numberOfRounds);
+        ArrayList<SetOfQuestions> setsOfQuestions = new ArrayList<>();
+        ArrayList notShowedQuestions = questionsDao.getRandomNotShowedQuestions(numberOfQuestions*numberOfRounds);
+        for(int i=0;i<numberOfQuestions*numberOfRounds;i+=numberOfQuestions){
+            ArrayList newQuestions = new ArrayList();
+            for(int j=i; j<numberOfQuestions+i; j++)
+                newQuestions.add(notShowedQuestions.get(j));
+            setsOfQuestions.add(getSetOfQuestions(newQuestions));
+        }
+        setOfRounds.setSetOfQuestions(setsOfQuestions);
+
+        printDebbuging(setOfRounds);
+        return setOfRounds;
+    }
+
+    private void printDebbuging(SetOfRounds setOfRounds){
+        for(int i=0;i<setOfRounds.getNumOfRounds();i++){
+            SetOfQuestions setOfQuestions = setOfRounds.getSetOfQuestions().get(i);
+            Log.d("MOJTAG", "SetOFQuestion: " + (i+1));
+            for(int j=0; j<setOfQuestions.getNumOfQuestion(); j++) {
+                Log.d("MOJTAG", setOfQuestions.getQuestions().get(j).getQuestion() + " " + setOfQuestions.getQuestions().get(j).getAnswerOne()
+                        + ", " + setOfQuestions.getQuestions().get(j).getAnswerTwo() + ", " + setOfQuestions.getQuestions().get(j).getAnswerThree()
+                        + ", " + setOfQuestions.getQuestions().get(j).getAnswerFour());
+            }
+        }
+    }
+
+    private SetOfQuestions getSetOfQuestions(ArrayList<Question> questions){
+        return new SetOfQuestions(numberOfQuestions,secondsPerQuestion,
+                questions, questionsDao.getRandomAnswers(numberOfQuestions));
+    }
+
     private SetOfQuestions getSetOfQuestions(){
         return new SetOfQuestions(numberOfQuestions,secondsPerQuestion,
-                questionsDao.getRandomNotShowedQuestions(5), questionsDao.getRandomAnswers(5));
+                questionsDao.getRandomNotShowedQuestions(numberOfQuestions), questionsDao.getRandomAnswers(numberOfQuestions));
     }
 
     @Override
@@ -152,8 +190,7 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
         muteEnabled = !muteEnabled;
         mainView.showMuteIcon(muteEnabled);
         setMute(muteEnabled);
-        if(muteEnabled)
-            mediaPlayer.stop();
+        if(muteEnabled) mediaPlayer.stop();
         else{
             tryPrepareAsync();
             mediaPlayer.start();

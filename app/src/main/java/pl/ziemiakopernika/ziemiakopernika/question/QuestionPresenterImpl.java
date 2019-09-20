@@ -21,9 +21,11 @@ import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerFragment;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerPresenter;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDao;
 import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
+import pl.ziemiakopernika.ziemiakopernika.finish.round.FinishRoundActivity;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.Question;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
+import pl.ziemiakopernika.ziemiakopernika.model.SetOfRounds;
 import pl.ziemiakopernika.ziemiakopernika.round.RoundActivity;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDao;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDaoImpl;
@@ -37,6 +39,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     private QuestionView questionView;
     private QuestionsDao questionsDao;
     private SetOfQuestions setOfQuestions;
+    private SetOfRounds setOfRounds;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor preferencesEditor;
     private Timer timer, transitionTimer;
@@ -54,14 +57,16 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     public static final String NUMBER_OF_QUESTION = "numberOfQuestion";
     public static final String REQUEST_CODE = "requestCode";
     private static final String SHOW_DIALOG_CLICK_TIME = "showDialogClickTime";
-    private static final int SHOW_NUMBER_OF_ROUND = 0;
-    private static final int SHOW_FINAL_OF_ROUNDS = 1;
+    public static final int FINISH_ROUND_REQUEST_CODE = 41;
+    public static final int SHOW_NUMBER_OF_ROUND = 0;
+    public static final int SHOW_FINAL_OF_ROUNDS = 1;
     private int waitingActivityRequestCode, secondsLeft;
 
     QuestionPresenterImpl(Activity activity, QuestionView questionView){
         this.activity = activity;
         this.questionView = questionView;
-        this.setOfQuestions = getSetOfQuestions();
+        setOfRounds = getSetOfRounds();
+        setOfQuestions = setOfRounds.getSetOfQuestions().get(setOfRounds.getNumOfRound());
         secondsPerQuestion = setOfQuestions.getSecondsPerQuestion();
         sharedPreferences = activity.getSharedPreferences("preferences", Context.MODE_PRIVATE);
         preferencesEditor = sharedPreferences.edit();
@@ -77,6 +82,10 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
 
     private SetOfQuestions getSetOfQuestions(){
         return (SetOfQuestions)activity.getIntent().getSerializableExtra(MainPresenterImpl.QUESTION_SET);
+    }
+
+    private SetOfRounds getSetOfRounds(){
+        return (SetOfRounds)activity.getIntent().getSerializableExtra(MainPresenterImpl.ROUND_SET);
     }
 
     private int getNumberOfCoins(){
@@ -219,10 +228,8 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     private void playSoundIfMuteDisabled(boolean correct){
         if(!muteEnabled){
             MediaPlayer mediaPlayer;
-            if(correct)
-                mediaPlayer = MediaPlayer.create(activity, R.raw.corrects);
-            else
-                mediaPlayer = MediaPlayer.create(activity, R.raw.wrongs);
+            if(correct) mediaPlayer = MediaPlayer.create(activity, R.raw.corrects);
+            else mediaPlayer = MediaPlayer.create(activity, R.raw.wrongs);
             mediaPlayer.start();
         }
     }
@@ -237,11 +244,19 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
         answersClickable = true;
         progressTextEnabled = true;
         lifebuoyStatisticSaved = false;
+        setOfQuestions = setOfRounds.getSetOfQuestions().get(setOfRounds.getNumOfRound());
         questionsDao.addShowedTimeToQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getId());
         questionView.setQuestion(setOfQuestions.getQuestions().get(numberOfQuestion).getQuestion());
         setButtonsActivated();
         questionView.setTimeProgress(secondsPerQuestion*1000, secondsPerQuestion);
         applyFragmentAndStartNewTimer();
+    }
+
+    @Override
+    public void showNextRound() {
+        numberOfQuestion = 0;
+        setOfRounds.setNumOfRound(setOfRounds.getNumOfRound()+1);
+        startNewActivity(SHOW_NUMBER_OF_ROUND);
     }
 
     @Override
@@ -356,9 +371,11 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
         @Override
         public void onFinish() {
             numberOfQuestion++;
-            if(numberOfQuestion-1<setOfQuestions.getQuestions().size()-1)
+            if(numberOfQuestion<setOfQuestions.getQuestions().size())
                 startNewActivityIfNotPaused(SHOW_NUMBER_OF_ROUND);
-            else {
+            else if(setOfRounds.getNumOfRound()<setOfRounds.getSetOfQuestions().size()-1){
+                startNewActivityIfNotPaused(FINISH_ROUND_REQUEST_CODE);
+            } else {
                 startNewActivityIfNotPaused(SHOW_FINAL_OF_ROUNDS);
                 activity.finish();
             }
@@ -367,7 +384,8 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
 
     private void startNewActivityIfNotPaused(int requestCode){
         if (!questionView.getActivityPaused())
-            startNewActivity(requestCode);
+            if(requestCode == FINISH_ROUND_REQUEST_CODE) startFinishRoundActivity();
+            else startNewActivity(requestCode);
         else {
             waitingToStartActivity = true;
             waitingActivityRequestCode = requestCode;
@@ -377,9 +395,17 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     private void startNewActivity(int requestCode){
         Intent intent = new Intent(activity, RoundActivity.class);
         intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
+        intent.putExtra(MainPresenterImpl.ROUND_SET, setOfRounds);
         intent.putExtra(NUMBER_OF_QUESTION, numberOfQuestion);
         intent.putExtra(REQUEST_CODE, requestCode);
         activity.startActivityForResult(intent, requestCode);
+    }
+
+    private void startFinishRoundActivity(){
+        Intent intent = new Intent(activity, FinishRoundActivity.class);
+        intent.putExtra(MainPresenterImpl.ROUND_SET, setOfRounds);
+        intent.putExtra(REQUEST_CODE, FINISH_ROUND_REQUEST_CODE);
+        activity.startActivityForResult(intent, FINISH_ROUND_REQUEST_CODE);
     }
 
     private void disactivateButtons(){

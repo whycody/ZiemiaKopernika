@@ -5,24 +5,24 @@ import java.util.ArrayList;
 
 public class SetOfRounds implements Serializable {
 
-    private int numOfRounds;
+    private int numOfRound = 0;
     private ArrayList<SetOfQuestions> setOfQuestions;
 
     public SetOfRounds(){
 
     }
 
-    public SetOfRounds(int numOfRounds, ArrayList<SetOfQuestions> setOfQuestions) {
-        this.numOfRounds = numOfRounds;
+    public SetOfRounds(int numOfRound, ArrayList<SetOfQuestions> setOfQuestions) {
+        this.numOfRound = numOfRound;
         this.setOfQuestions = setOfQuestions;
     }
 
-    public int getNumOfRounds() {
-        return numOfRounds;
+    public int getNumOfRound() {
+        return numOfRound;
     }
 
-    public void setNumOfRounds(int numOfRounds) {
-        this.numOfRounds = numOfRounds;
+    public void setNumOfRound(int numOfRound) {
+        this.numOfRound = numOfRound;
     }
 
     public ArrayList<SetOfQuestions> getSetOfQuestions() {

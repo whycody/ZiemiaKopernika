@@ -14,6 +14,7 @@ import pl.ziemiakopernika.ziemiakopernika.answer.checker.AnswerChecker;
 import pl.ziemiakopernika.ziemiakopernika.answer.checker.AnswerCheckerImpl;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
+import pl.ziemiakopernika.ziemiakopernika.model.SetOfRounds;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.summary.SummaryActivity;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerImpl;
@@ -25,12 +26,14 @@ public class RoundPresenterImpl implements RoundPresenter{
     private RoundView roundView;
     private AnswerChecker answerChecker;
     private SetOfQuestions setOfQuestions;
+    private SetOfRounds setOfRounds;
     private int numberOfQuestion, reuqestCode, balance;
 
     public RoundPresenterImpl(Activity activity, RoundView roundView){
         this.activity = activity;
         this.roundView = roundView;
-        setOfQuestions = getSetOfQuestions();
+        setOfRounds = getSetOfRounds();
+        setOfQuestions = setOfRounds.getSetOfQuestions().get(setOfRounds.getNumOfRound());
         answerChecker = new AnswerCheckerImpl(setOfQuestions);
         numberOfQuestion = getNumberOfQuestion();
         reuqestCode = getRequestCode();
@@ -44,31 +47,34 @@ public class RoundPresenterImpl implements RoundPresenter{
         return (SetOfQuestions)activity.getIntent().getSerializableExtra(MainPresenterImpl.QUESTION_SET);
     }
 
+    private SetOfRounds getSetOfRounds(){
+        return (SetOfRounds) activity.getIntent().getSerializableExtra(MainPresenterImpl.ROUND_SET);
+    }
+
     private int getNumberOfQuestion(){
         return activity.getIntent().getIntExtra(QuestionPresenterImpl.NUMBER_OF_QUESTION, 0);
     }
 
     @Override
     public void onCreate() {
-        if(reuqestCode==0)
-            roundView.setRoundText("Runda " + (numberOfQuestion+1));
-        else
-            roundView.setRoundText("Koniec gry");
+        if(reuqestCode==0){
+            if(numberOfQuestion == 0) roundView.setRoundText("Runda " + (setOfRounds.getNumOfRound()+1));
+            else roundView.setRoundText("Pytanie " + (numberOfQuestion+1));
+        }else roundView.setRoundText("Koniec gry");
         addViewsToLinearLayout();
     }
 
     @Override
     public void onFinish() {
         activity.setResult(Activity.RESULT_OK);
-        if(reuqestCode==1)
-            startSummaryActivity(roundView.getSummaryView());
-        else
-            activity.finish();
+        if(reuqestCode==1) startSummaryActivity(roundView.getSummaryView());
+        else activity.finish();
     }
 
     private void startSummaryActivity(View view){
         Intent intent = new Intent(activity, SummaryActivity.class);
         intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
+        intent.putExtra(MainPresenterImpl.ROUND_SET, setOfRounds);
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
                 (activity, view, ViewCompat.getTransitionName(view));
         activity.startActivity(intent, options.toBundle());

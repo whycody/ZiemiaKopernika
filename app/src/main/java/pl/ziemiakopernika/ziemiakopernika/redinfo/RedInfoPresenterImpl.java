@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
@@ -15,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
+import pl.ziemiakopernika.ziemiakopernika.model.SetOfRounds;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionActivity;
 
 public class RedInfoPresenterImpl implements RedInfoPresenter {
@@ -22,33 +24,50 @@ public class RedInfoPresenterImpl implements RedInfoPresenter {
     private Activity activity;
     private RedInfoView redInfoView;
     private SetOfQuestions setOfQuestions;
+    private SetOfRounds setOfRounds;
 
     RedInfoPresenterImpl(Activity activity, RedInfoView redInfoView){
         this.activity = activity;
         this.redInfoView = redInfoView;
         this.setOfQuestions = getSetOfQuestions();
+        setOfRounds = getSetOfRounds();
     }
 
     @Override
     public void onCreate() {
-        int numberOfQuestions = setOfQuestions.getNumOfQuestion();
-        if(numberOfQuestions<10)
-            redInfoView.setQuestionsNumber("0" + numberOfQuestions);
-        else
-            redInfoView.setQuestionsNumber(setOfQuestions.getNumOfQuestion() + "");
-        redInfoView.setSecondsNumber(setOfQuestions.getSecondsPerQuestion() + "");
+        int numberOfQuestions = setOfRounds.getSetOfQuestions().get(0).getNumOfQuestion();
+        if(numberOfQuestions<10) redInfoView.setQuestionsNumber("0" + numberOfQuestions);
+        else redInfoView.setQuestionsNumber(setOfQuestions.getNumOfQuestion() + "");
+        redInfoView.setSecondsNumber(setOfRounds.getSetOfQuestions().get(0).getSecondsPerQuestion() + "");
     }
 
     @Override
     public void onAnimationEnded() {
         Intent intent = new Intent(activity, QuestionActivity.class);
         intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
+        intent.putExtra(MainPresenterImpl.ROUND_SET, setOfRounds);
         activity.startActivity(intent);
         activity.finish();
     }
 
+    private void printDebbuging(SetOfRounds setOfRounds){
+        for(int i = 0; i<setOfRounds.getSetOfQuestions().size(); i++){
+            SetOfQuestions setOfQuestions = setOfRounds.getSetOfQuestions().get(i);
+            Log.d("REDTAG", "SetOFQuestion: " + (i+1));
+            for(int j=0; j<setOfQuestions.getNumOfQuestion(); j++) {
+                Log.d("REDTAG", setOfQuestions.getQuestions().get(j).getQuestion() + " " + setOfQuestions.getQuestions().get(j).getAnswerOne()
+                        + ", " + setOfQuestions.getQuestions().get(j).getAnswerTwo() + ", " + setOfQuestions.getQuestions().get(j).getAnswerThree()
+                        + ", " + setOfQuestions.getQuestions().get(j).getAnswerFour());
+            }
+        }
+    }
+
     private SetOfQuestions getSetOfQuestions(){
         return (SetOfQuestions)activity.getIntent().getSerializableExtra(MainPresenterImpl.QUESTION_SET);
+    }
+
+    private SetOfRounds getSetOfRounds(){
+        return (SetOfRounds)activity.getIntent().getSerializableExtra(MainPresenterImpl.ROUND_SET);
     }
 
     @Override

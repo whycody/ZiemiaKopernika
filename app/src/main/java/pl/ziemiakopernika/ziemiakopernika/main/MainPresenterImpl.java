@@ -25,8 +25,6 @@ import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsBottomSheet;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDao;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDaoImpl;
-import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsPresenter;
-import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsPresenterImpl;
 
 public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletionListener {
 
@@ -40,6 +38,7 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
 
     public static final String MUTE_ENABLED = "mute_enabled";
     public static final String QUESTION_SET = "QuestionSet";
+    public static final String ROUND_SET = "RoundSet";
     public static final String FIRST_LOGIN = "FirstLogin";
     private int secondsPerQuestion = 20;
     private int numberOfQuestions = 5;
@@ -130,11 +129,11 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
     }
 
     private void startGameActivity(View view, ActivityOptionsCompat optionsCompat){
-        SetOfQuestions setOfQuestions = getSetOfQuestions();
         Intent intent = new Intent(activity, RedInfoActivity.class);
         intent.putExtra(RedInfoActivity.EXTRA_CIRCULAR_REVEAL_X, getRevealX(view));
         intent.putExtra(RedInfoActivity.EXTRA_CIRCULAR_REVEAL_Y, getRevealY(view));
-        intent.putExtra(QUESTION_SET, setOfQuestions);
+        intent.putExtra(QUESTION_SET, getSetOfQuestions());
+        intent.putExtra(ROUND_SET, getSetOfRounds());
         ActivityCompat.startActivity(activity, intent, optionsCompat.toBundle());
     }
 
@@ -148,7 +147,6 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
 
     private SetOfRounds getSetOfRounds(){
         SetOfRounds setOfRounds = new SetOfRounds();
-        setOfRounds.setNumOfRounds(numberOfRounds);
         ArrayList<SetOfQuestions> setsOfQuestions = new ArrayList<>();
         ArrayList notShowedQuestions = questionsDao.getRandomNotShowedQuestions(numberOfQuestions*numberOfRounds);
         for(int i=0;i<numberOfQuestions*numberOfRounds;i+=numberOfQuestions){
@@ -159,12 +157,12 @@ public class MainPresenterImpl implements MainPresenter, MediaPlayer.OnCompletio
         }
         setOfRounds.setSetOfQuestions(setsOfQuestions);
 
-        printDebbuging(setOfRounds);
+//        printDebbuging(setOfRounds);
         return setOfRounds;
     }
 
     private void printDebbuging(SetOfRounds setOfRounds){
-        for(int i=0;i<setOfRounds.getNumOfRounds();i++){
+        for(int i = 0; i<setOfRounds.getSetOfQuestions().size(); i++){
             SetOfQuestions setOfQuestions = setOfRounds.getSetOfQuestions().get(i);
             Log.d("MOJTAG", "SetOFQuestion: " + (i+1));
             for(int j=0; j<setOfQuestions.getNumOfQuestion(); j++) {

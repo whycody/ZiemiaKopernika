@@ -18,6 +18,7 @@ import pl.ziemiakopernika.ziemiakopernika.dao.QuestionsDaoImpl;
 import pl.ziemiakopernika.ziemiakopernika.main.MainPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.Answer;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
+import pl.ziemiakopernika.ziemiakopernika.model.SetOfRounds;
 import pl.ziemiakopernika.ziemiakopernika.question.QuestionPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.redinfo.RedInfoActivity;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsBottomSheet;
@@ -36,6 +37,7 @@ public class SummaryPresenterImpl implements SummaryPresenter {
     private StatisticsDao statisticsDao;
     private QuestionsDao questionsDao;
     private SetOfQuestions setOfQuestions;
+    private SetOfRounds setOfRounds;
     private AnswerChecker answerChecker;
     private int correctAnswers, uncorrectAnswers, totalCoins,
              percentageCorrectness, timeLeft;
@@ -50,6 +52,7 @@ public class SummaryPresenterImpl implements SummaryPresenter {
         this.activity = (SummaryActivity)activity;
         this.summaryView = summaryView;
         setOfQuestions = getSetOfQuestions();
+        setOfRounds = getSetOfRounds();
         questionsDao = new QuestionsDaoImpl(activity);
         answerChecker = new AnswerCheckerImpl(setOfQuestions);
         statisticsDao = new StatisticsDaoImpl(activity);
@@ -60,6 +63,10 @@ public class SummaryPresenterImpl implements SummaryPresenter {
 
     private SetOfQuestions getSetOfQuestions(){
         return (SetOfQuestions)activity.getIntent().getSerializableExtra(MainPresenterImpl.QUESTION_SET);
+    }
+
+    private SetOfRounds getSetOfRounds(){
+        return (SetOfRounds)activity.getIntent().getSerializableExtra(MainPresenterImpl.ROUND_SET);
     }
 
     @Override

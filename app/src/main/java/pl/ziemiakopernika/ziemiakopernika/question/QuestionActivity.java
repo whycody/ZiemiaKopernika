@@ -60,8 +60,21 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode==RESULT_OK)
-            questionPresenter.showNextQuestion();
+        if(requestCode == QuestionPresenterImpl.FINISH_ROUND_REQUEST_CODE){
+            if(resultCode == RESULT_OK) {
+                questionPresenter.showNextRound();
+                resetViewsToGray();
+            }else if (resultCode == RESULT_CANCELED) finish();
+        }else if(requestCode == QuestionPresenterImpl.SHOW_FINAL_OF_ROUNDS ||
+                requestCode == QuestionPresenterImpl.SHOW_NUMBER_OF_ROUND){
+            if(resultCode == RESULT_OK) questionPresenter.showNextQuestion();
+        }
+    }
+
+    private void resetViewsToGray(){
+        for (int i = 0; i < wheelsContainer.getChildCount(); i++) {
+            wheelsContainer.getChildAt(i).setBackground(getResources().getDrawable(R.drawable.circle_button_non_activated));
+        }
     }
 
     @Override

@@ -20,5 +20,7 @@ public interface QuestionPresenter extends FragmentInitializer{
 
     void showNextQuestion();
 
+    void showNextRound();
+
     void onResume();
 }

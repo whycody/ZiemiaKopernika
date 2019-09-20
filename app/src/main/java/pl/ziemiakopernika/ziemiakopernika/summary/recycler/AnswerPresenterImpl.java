@@ -16,10 +16,12 @@ import pl.ziemiakopernika.ziemiakopernika.answer.checker.AnswerCheckerImpl;
 import pl.ziemiakopernika.ziemiakopernika.choose.answer.ChooseAnswerPresenterImpl;
 import pl.ziemiakopernika.ziemiakopernika.model.Answer;
 import pl.ziemiakopernika.ziemiakopernika.model.SetOfQuestions;
+import pl.ziemiakopernika.ziemiakopernika.model.SetOfRounds;
 
 public class AnswerPresenterImpl implements AnswerPresenter {
 
     private SetOfQuestions setOfQuestions;
+    private SetOfRounds setOfRounds;
     private ArrayList<Answer> answersList;
     private Activity activity;
     private AnswerChecker answerChecker;
@@ -31,10 +33,23 @@ public class AnswerPresenterImpl implements AnswerPresenter {
         answerChecker = new AnswerCheckerImpl(setOfQuestions);
     }
 
+    public AnswerPresenterImpl(SetOfRounds setOfRounds, Activity activity){
+        this.setOfRounds = setOfRounds;
+        this.answersList = setOfQuestions.getAnswers();
+        this.activity = activity;
+        answerChecker = new AnswerCheckerImpl(setOfQuestions);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull SummaryRecyclerHolder summaryRecyclerHolder, int i) {
         Answer currentAnswer = answersList.get(i);
         summaryRecyclerHolder.setQuestionText(setOfQuestions.getQuestions().get(i).getQuestion());
+        if(setOfRounds!=null){
+            setOfQuestions = setOfRounds.getSetOfQuestions().get(i/
+                    (setOfRounds.getSetOfQuestions().size()*setOfRounds.getSetOfQuestions().get(0).getQuestions().size()));
+            i -= (i/ (setOfRounds.getSetOfQuestions().size()*setOfRounds.getSetOfQuestions().get(0).getQuestions().size()))
+                    *setOfRounds.getSetOfQuestions().get(0).getQuestions().size();
+        }
 
         if(setOfQuestions.getQuestions().get(i).getTypeOfQuestion()==0) {
             int correctAnswer = currentAnswer.getSetOfAnswers().get(0);
@@ -106,6 +121,7 @@ public class AnswerPresenterImpl implements AnswerPresenter {
 
     @Override
     public int getItemCount() {
+        if(setOfRounds!=null) return setOfRounds.getSetOfQuestions().size()*setOfRounds.getSetOfQuestions().get(0).getQuestions().size();
         return setOfQuestions.getAnswers().size();
     }
 }

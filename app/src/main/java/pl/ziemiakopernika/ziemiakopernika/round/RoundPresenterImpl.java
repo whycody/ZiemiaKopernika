@@ -7,8 +7,6 @@ import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import java.util.ArrayList;
-
 import pl.ziemiakopernika.ziemiakopernika.R;
 import pl.ziemiakopernika.ziemiakopernika.answer.checker.AnswerChecker;
 import pl.ziemiakopernika.ziemiakopernika.answer.checker.AnswerCheckerImpl;
@@ -27,7 +25,7 @@ public class RoundPresenterImpl implements RoundPresenter{
     private AnswerChecker answerChecker;
     private SetOfQuestions setOfQuestions;
     private SetOfRounds setOfRounds;
-    private int numberOfQuestion, reuqestCode, balance;
+    private int numberOfQuestion, requestCode, balance;
 
     public RoundPresenterImpl(Activity activity, RoundView roundView){
         this.activity = activity;
@@ -36,7 +34,7 @@ public class RoundPresenterImpl implements RoundPresenter{
         setOfQuestions = setOfRounds.getSetOfQuestions().get(setOfRounds.getNumOfRound());
         answerChecker = new AnswerCheckerImpl(setOfQuestions);
         numberOfQuestion = getNumberOfQuestion();
-        reuqestCode = getRequestCode();
+        requestCode = getRequestCode();
     }
 
     private int getRequestCode() {
@@ -57,9 +55,12 @@ public class RoundPresenterImpl implements RoundPresenter{
 
     @Override
     public void onCreate() {
-        if(reuqestCode==0){
-            if(numberOfQuestion == 0) roundView.setRoundText("Runda " + (setOfRounds.getNumOfRound()+1));
-            else roundView.setRoundText("Pytanie " + (numberOfQuestion+1));
+        if(requestCode ==0) {
+            if (numberOfQuestion == 0)
+                roundView.setRoundText("Runda " + (setOfRounds.getNumOfRound() + 1));
+            else roundView.setRoundText("Pytanie " + (numberOfQuestion + 1));
+        }else if(requestCode==3){
+            roundView.setRoundText("Pytanie " + (numberOfQuestion + 1));
         }else roundView.setRoundText("Koniec gry");
         addViewsToLinearLayout();
     }
@@ -67,8 +68,19 @@ public class RoundPresenterImpl implements RoundPresenter{
     @Override
     public void onFinish() {
         activity.setResult(Activity.RESULT_OK);
-        if(reuqestCode==1) startSummaryActivity(roundView.getSummaryView());
+        if(requestCode ==1) startSummaryActivity(roundView.getSummaryView());
+        else if(requestCode == 0 && numberOfQuestion == 0) {
+            startAgainActivity();
+            activity.finish();
+        }
         else activity.finish();
+    }
+
+    private void startAgainActivity(){
+        Intent intent = new Intent(activity, RoundActivity.class);
+        intent.putExtra(MainPresenterImpl.ROUND_SET, setOfRounds);
+        intent.putExtra(QuestionPresenterImpl.REQUEST_CODE, 3);
+        activity.startActivityForResult(intent, 3);
     }
 
     private void startSummaryActivity(View view){

@@ -105,7 +105,7 @@ public class RoundPresenterImpl implements RoundPresenter{
 
     private void addViewsToLinearLayout(){
         addCorrectAndUncorrectViews();
-        setSummaryViewDrawable();
+        if(numberOfQuestion!=0 || setOfRounds.getNumOfRound()!=0) setSummaryViewDrawable();
         addDefaultViews();
     }
 
@@ -130,6 +130,20 @@ public class RoundPresenterImpl implements RoundPresenter{
                 }
             }
             roundView.addViewToLinearLayout(view);
+        }
+        setBalanceOfAllSetOfQuestions();
+    }
+
+    private void setBalanceOfAllSetOfQuestions(){
+        if(setOfRounds.getNumOfRound()!=0){
+            for(int i=0; i<setOfRounds.getNumOfRound(); i++){
+                SetOfQuestions setOfQuestions = setOfRounds.getSetOfQuestions().get(i);
+                AnswerChecker newAnswerChecker = new AnswerCheckerImpl(setOfQuestions);
+                for(int j =0; j< setOfQuestions.getNumOfQuestion(); j++) {
+                    if(newAnswerChecker.answerIsCorrect(j)) balance++;
+                    else balance--;
+                }
+            }
         }
     }
 

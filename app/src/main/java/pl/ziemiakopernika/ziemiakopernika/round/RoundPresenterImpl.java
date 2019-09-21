@@ -112,22 +112,12 @@ public class RoundPresenterImpl implements RoundPresenter{
     private void addCorrectAndUncorrectViews(){
         for(int i =0; i< numberOfQuestion; i++) {
             View view = getDefaultView();
-            if(setOfQuestions.getQuestions().get(i).getTypeOfQuestion() == 0) {
-                if(answerChecker.answerIsCorrect(i)){
-                    view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_green));
-                    balance++;
-                } else {
-                    view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_red));
-                    balance--;
-                }
+            if(answerChecker.answerIsCorrect(i)){
+                view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_green));
+                balance++;
             }else{
-                if(answerChecker.answerIsCorrect(i)){
-                    view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_green));
-                    balance++;
-                }else{
-                    view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_red));
-                    balance--;
-                }
+                view.setBackground(activity.getResources().getDrawable(R.drawable.circle_button_red));
+                balance--;
             }
             roundView.addViewToLinearLayout(view);
         }

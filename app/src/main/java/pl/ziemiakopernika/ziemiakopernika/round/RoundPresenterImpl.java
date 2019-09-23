@@ -68,12 +68,9 @@ public class RoundPresenterImpl implements RoundPresenter{
     @Override
     public void onFinish() {
         activity.setResult(Activity.RESULT_OK);
-        if(requestCode ==1) startSummaryActivity(roundView.getSummaryView());
-        else if(requestCode == 0 && numberOfQuestion == 0) {
+        if(requestCode == 0 && numberOfQuestion == 0)
             startAgainActivity();
-            activity.finish();
-        }
-        else activity.finish();
+        activity.finish();
     }
 
     private void startAgainActivity(){
@@ -81,26 +78,6 @@ public class RoundPresenterImpl implements RoundPresenter{
         intent.putExtra(MainPresenterImpl.ROUND_SET, setOfRounds);
         intent.putExtra(QuestionPresenterImpl.REQUEST_CODE, 3);
         activity.startActivityForResult(intent, 3);
-    }
-
-    private void startSummaryActivity(View view){
-        Intent intent = new Intent(activity, SummaryActivity.class);
-        intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
-        intent.putExtra(MainPresenterImpl.ROUND_SET, setOfRounds);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation
-                (activity, view, ViewCompat.getTransitionName(view));
-        activity.startActivity(intent, options.toBundle());
-        new TimerImpl(2000, new TimerReact() {
-            @Override
-            public void onTick(long l) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                activity.finish();
-            }
-        }).startTimer();
     }
 
     private void addViewsToLinearLayout(){

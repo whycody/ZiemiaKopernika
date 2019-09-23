@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -64,11 +65,13 @@ public class QuestionActivity extends AppCompatActivity implements QuestionView 
             if(resultCode == RESULT_OK) {
                 questionPresenter.showNextRound();
                 resetViewsToGray();
-            }else if (resultCode == RESULT_CANCELED) finish();
-        }else if(requestCode == QuestionPresenterImpl.SHOW_FINAL_OF_ROUNDS ||
-                requestCode == QuestionPresenterImpl.SHOW_NUMBER_OF_ROUND){
+            }else if (resultCode == RESULT_CANCELED){
+                questionPresenter.startNewActivityIfNotPaused(QuestionPresenterImpl.SHOW_FINAL_OF_ROUNDS);
+            }
+        }else if(requestCode == QuestionPresenterImpl.SHOW_NUMBER_OF_ROUND){
             if(resultCode == RESULT_OK) questionPresenter.showNextQuestion();
-        }
+        }else if(requestCode == QuestionPresenterImpl.SHOW_FINAL_OF_ROUNDS)
+            questionPresenter.startNewActivityIfNotPaused(QuestionPresenterImpl.SHOW_SUMMARY);
     }
 
     private void resetViewsToGray(){

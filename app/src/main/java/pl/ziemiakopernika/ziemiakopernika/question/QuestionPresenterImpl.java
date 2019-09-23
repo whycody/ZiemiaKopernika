@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -29,6 +30,7 @@ import pl.ziemiakopernika.ziemiakopernika.model.SetOfRounds;
 import pl.ziemiakopernika.ziemiakopernika.round.RoundActivity;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDao;
 import pl.ziemiakopernika.ziemiakopernika.statistics.StatisticsDaoImpl;
+import pl.ziemiakopernika.ziemiakopernika.summary.SummaryActivity;
 import pl.ziemiakopernika.ziemiakopernika.timer.Timer;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerImpl;
 import pl.ziemiakopernika.ziemiakopernika.timer.TimerReact;
@@ -60,6 +62,7 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     public static final int FINISH_ROUND_REQUEST_CODE = 41;
     public static final int SHOW_NUMBER_OF_ROUND = 0;
     public static final int SHOW_FINAL_OF_ROUNDS = 1;
+    public static final int SHOW_SUMMARY = 2;
     private int waitingActivityRequestCode, secondsLeft;
 
     QuestionPresenterImpl(Activity activity, QuestionView questionView){
@@ -377,12 +380,12 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
                 startNewActivityIfNotPaused(FINISH_ROUND_REQUEST_CODE);
             } else {
                 startNewActivityIfNotPaused(SHOW_FINAL_OF_ROUNDS);
-                activity.finish();
             }
         }
     };
 
-    private void startNewActivityIfNotPaused(int requestCode){
+    @Override
+    public void startNewActivityIfNotPaused(int requestCode){
         if (!questionView.getActivityPaused())
             if(requestCode == FINISH_ROUND_REQUEST_CODE) startFinishRoundActivity();
             else startNewActivity(requestCode);
@@ -393,12 +396,16 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     }
 
     private void startNewActivity(int requestCode){
-        Intent intent = new Intent(activity, RoundActivity.class);
+        Intent intent;
+        if(requestCode == SHOW_SUMMARY) intent = new Intent(activity, SummaryActivity.class);
+        else intent = new Intent(activity, RoundActivity.class);
         intent.putExtra(MainPresenterImpl.QUESTION_SET, setOfQuestions);
         intent.putExtra(MainPresenterImpl.ROUND_SET, setOfRounds);
         intent.putExtra(NUMBER_OF_QUESTION, numberOfQuestion);
         intent.putExtra(REQUEST_CODE, requestCode);
         activity.startActivityForResult(intent, requestCode);
+        if(requestCode==SHOW_SUMMARY) activity.finish();
+
     }
 
     private void startFinishRoundActivity(){

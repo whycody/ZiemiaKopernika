@@ -266,7 +266,8 @@ public class QuestionPresenterImpl implements QuestionPresenter, TimerReact, Com
     public void onResume() {
         if(waitingToStartActivity){
             waitingToStartActivity = false;
-            startNewActivity(waitingActivityRequestCode);
+            if(waitingActivityRequestCode == FINISH_ROUND_REQUEST_CODE) startFinishRoundActivity();
+            else startNewActivity(waitingActivityRequestCode);
         }
     }
 
